@@ -1374,7 +1374,7 @@ plot_space_time <- function(time_cycle_length, space_cycle_length, f0, k0, major
   grid <- base::expand.grid(time = time_values, space = space_values)
 
   # Define a wave pattern as a function of time and space
-  grid$amplitude <- base::sin(2 * base::pi * relative_f0 * grid$time - 2 * base::pi * relative_k0 * grid$space)
+  grid$amplitude <- base::cos(2 * base::pi * relative_f0 * grid$time - 2 * base::pi * relative_k0 * grid$space)
 
   # Define scaling factors to adjust the axis labels
   scale_time <- time_range / time_cycle_length * (1 / f0)
