@@ -6,8 +6,6 @@
 #'   \code{hrep::sparse_fr_spectrum}. For more details, see
 #'   \href{https://github.com/pmcharrison/hrep/blob/master/R/sparse-fr-spectrum.R}{hrep::sparse_fr_spectrum documentation}.
 #' @param cochlear_amplifier_num_harmonics Number of harmonics to include for the stimulus-frequency otoacoustic emission.
-#' @param space_uncertainty Optional space uncertainty value for finding rational fractions.
-#' @param time_uncertainty Optional time uncertainty value for finding rational fractions.
 #' @param integer_harmonics_tolerance Optional tolerance for harmonics to deviate from perfect integers.
 #' @param metadata User-provided list of metadata that accompanies each call. Useful for analysis and plots.
 #' @param verbose Determines the amount of data to return from chord evaluation. Options are:
@@ -25,8 +23,6 @@
 mami.codi <- function(
     x,
     cochlear_amplifier_num_harmonics = COCHLEAR_AMPLIFIER_NUM_HARMONICS,
-    space_uncertainty                = UNCERTAINTY_LIMIT,
-    time_uncertainty                 = UNCERTAINTY_LIMIT,
     integer_harmonics_tolerance      = INTEGER_HARMONICS_TOLERANCE,
     metadata                         = NA,
     verbose                          = FALSE,
@@ -45,15 +41,12 @@ mami.codi <- function(
     ) %>%
     # Frequency Domain
     compute_fundamental_beat(
-      space_uncertainty,
       integer_harmonics_tolerance
     ) %>%
     compute_fundamental_wavenumber(
-      space_uncertainty,
       integer_harmonics_tolerance
     ) %>%
     compute_fundamental_frequency(
-      time_uncertainty,
       integer_harmonics_tolerance
     ) %>%
     # Psychophysical Domain
@@ -189,7 +182,6 @@ generate_beats <- function(
 #' Computes the fundamental beat from a beat spectrum.
 #'
 #' @param x Wavelength spectrum that include stimulus, beat, and cochlear emission tones.
-#' @param space_uncertainty Uncertainty factor applied when creating rational approximations for spatial wavelength.
 #' @param integer_harmonics_tolerance Allowable deviation for harmonics that are not perfect integers.
 #'
 #' @return Fundamental wavenumber of a complex waveform.
@@ -198,7 +190,6 @@ generate_beats <- function(
 #' @export
 compute_fundamental_beat <- function(
     x,
-    space_uncertainty,
     integer_harmonics_tolerance
 ) {
 
@@ -212,7 +203,6 @@ compute_fundamental_beat <- function(
     compute_fundamental_cycle(
       l/min(l),
       DIMENSION$BEAT,
-      space_uncertainty,
       integer_harmonics_tolerance
     ),
 
@@ -222,7 +212,6 @@ compute_fundamental_beat <- function(
     beat_wavelength_spectrum    = list(beat_wavelength_spectrum),
     beat_wavelengths            = list(l),
     beat_wavenumbers            = list(k),
-    space_uncertainty,
     integer_harmonics_tolerance
   )
 
@@ -234,7 +223,6 @@ compute_fundamental_beat <- function(
 #' includes stimulus, beat, and cochlear emission tones.
 #'
 #' @param x Wavelength spectrum that include stimulus, beat, and cochlear emission tones.
-#' @param space_uncertainty Uncertainty factor applied when creating rational approximations for spatial wavelength.
 #' @param integer_harmonics_tolerance Allowable deviation for harmonics that are not perfect integers.
 #'
 #' @return Fundamental wavenumber of a complex waveform.
@@ -243,7 +231,6 @@ compute_fundamental_beat <- function(
 #' @export
 compute_fundamental_wavenumber <- function(
     x,
-    space_uncertainty,
     integer_harmonics_tolerance
 ) {
 
@@ -261,7 +248,6 @@ compute_fundamental_wavenumber <- function(
     compute_fundamental_cycle(
       l/min(l),
       DIMENSION$SPACE,
-      space_uncertainty,
       integer_harmonics_tolerance
     ),
 
@@ -271,7 +257,6 @@ compute_fundamental_wavenumber <- function(
     wavelength_spectrum    = list(wavelength_spectrum),
     wavelengths            = list(l),
     wavenumbers            = list(k),
-    space_uncertainty,
     integer_harmonics_tolerance
   )
 
@@ -283,7 +268,6 @@ compute_fundamental_wavenumber <- function(
 #' includes stimulus, beat, and cochlear emission tones.
 #'
 #' @param x Wavelength spectrum that include stimulus, beat, and cochlear emission tones.
-#' @param time_uncertainty Uncertainty factor applied when creating rational approximations for temporal frequency.
 #' @param integer_harmonics_tolerance Allowable deviation for harmonics that are not perfect integers.
 #'
 #' @return Fundamental temporal frequency of a complex waveform.
@@ -292,7 +276,6 @@ compute_fundamental_wavenumber <- function(
 #' @export
 compute_fundamental_frequency <- function(
     x,
-    time_uncertainty,
     integer_harmonics_tolerance
 ) {
 
@@ -309,7 +292,6 @@ compute_fundamental_frequency <- function(
     compute_fundamental_cycle(
       f/min(f),
       DIMENSION$TIME,
-      time_uncertainty,
       integer_harmonics_tolerance
     ),
 
@@ -318,8 +300,7 @@ compute_fundamental_frequency <- function(
     # Store the values
     frequency_spectrum     = list(frequency_spectrum),
     frequencies            = list(f),
-    periods                = list(P),
-    time_uncertainty
+    periods                = list(P)
 
   )
 
@@ -329,16 +310,15 @@ compute_fundamental_frequency <- function(
 #'
 #' @param x Spectrum representing a complex waveform
 #' @param dimension Space or time, used to label the output
-#' @param uncertainty Precision for creating rational approximations
 #' @param integer_harmonics_tolerance Allowable toleance for approximating least common multiples (LCM).
 #'
 #' @return Estimated cycle length of the complex waveform.
 #'
 #' @rdname compute_fundamental_cycle
 #' @export
-compute_fundamental_cycle <- function(x, dimension, uncertainty, integer_harmonics_tolerance) {
+compute_fundamental_cycle <- function(x, dimension, integer_harmonics_tolerance) {
 
-  fractions = approximate_rational_fractions(x, uncertainty, integer_harmonics_tolerance)
+  fractions = approximate_rational_fractions(x, integer_harmonics_tolerance, UNCERTAINTY_LIMIT)
 
   t = tibble::tibble_row(
     cycle_length = lcm_integers(fractions$den),

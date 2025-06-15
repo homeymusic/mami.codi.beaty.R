@@ -165,8 +165,8 @@ p = params %>% purrr::map(\(p) {
   cat(description)
   cochlear_amplifier_num_harmonics = chords$cochlear_amplifier_num_harmonics %>% max()
   beat_pass_filter  = chords$beat_pass_filter[1]
-  t_v = chords$time_uncertainty %>% max()
-  s_v = chords$space_uncertainty %>% max()
+  t_v = UNCERTAINTY_LIMIT
+  s_v = UNCERTAINTY_LIMIT
   p_o = chords$space_fractions[[1]]$pseudo_octave %>% max() 
   print(knitr::kable(tibble::tibble_row(
     cochlear_amplifier_num_harmonics = cochlear_amplifier_num_harmonics,
