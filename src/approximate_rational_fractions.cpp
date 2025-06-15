@@ -4,17 +4,17 @@
 using namespace Rcpp;
 
 //' stern_brocot
- //'
- //' Approximates a floating-point number to arbitrary uncertainty.
- //'
- //' @param x Number to convert to rational fraction
- //' @param uncertainty Binary search stops once the desired uncertainty is reached
- //'
- //' @return A ratio of num / den
- //'
- //' @export
- // [[Rcpp::export]]
- NumericVector stern_brocot(const double x, const double uncertainty,
+//'
+//' Approximates a floating-point number to arbitrary uncertainty.
+//'
+//' @param x Number to convert to rational fraction
+//' @param uncertainty Binary search stops once the desired uncertainty is reached
+//'
+//' @return A ratio of num / den
+//'
+//' @export
+// [[Rcpp::export]]
+NumericVector stern_brocot(const double x, const double uncertainty,
                             const std::string& metadata = "") {
    // Ensure x is positive and uncertainty is non-negative
    if (x <= 0) {
@@ -81,28 +81,28 @@ using namespace Rcpp;
    }
 
    return NumericVector::create(mediant_num, mediant_den);
- }
+}
 
- //' compute_pseudo_octave
- //'
- //' Find the highest fundamental freq
- //'
- //' @param fn freq to eval
- //' @param f0 fundamental freq
- //' @param n  harmonic number
- //'
- //' @return Calculated pseudo octave
- //'
- //' @export
- // [[Rcpp::export]]
- const double compute_pseudo_octave(const double fn, const double f0, const int n) {
+//' compute_pseudo_octave
+//'
+//' Find the highest fundamental freq
+//'
+//' @param fn freq to eval
+//' @param f0 fundamental freq
+//' @param n  harmonic number
+//'
+//' @return Calculated pseudo octave
+//'
+//' @export
+// [[Rcpp::export]]
+const double compute_pseudo_octave(const double fn, const double f0, const int n) {
    if (n==1) {
      return 1.0;
    } else {
      const int r = 1000000;
      return std::round(r * pow(2, log(fn / f0) / log(n))) / r;
    }
- }
+}
 
  //' approximate_harmonics
  //'
@@ -115,7 +115,7 @@ using namespace Rcpp;
  //'
  //' @export
  // [[Rcpp::export]]
- DataFrame approximate_harmonics(const NumericVector x,
+DataFrame approximate_harmonics(const NumericVector x,
                                  const double deviation) {
    const int x_size   = x.size();
    const double f_max = max(x);
@@ -239,7 +239,7 @@ using namespace Rcpp;
  }
 
 #include <Rcpp.h>
- using namespace Rcpp;
+using namespace Rcpp;
 
  //' Calculate Beats from Frequencies
  //'
@@ -251,7 +251,7 @@ using namespace Rcpp;
  //' @return A DataFrame containing the spectrum, wavelengths, and amplitudes of the beats.
  //' @export
  // [[Rcpp::export]]
- DataFrame compute_beats(NumericVector wavelength, NumericVector amplitude) {
+DataFrame compute_beats(NumericVector wavelength, NumericVector amplitude) {
 
    const int n = wavelength.size();
 

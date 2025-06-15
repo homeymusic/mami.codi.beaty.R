@@ -2,12 +2,30 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' stern_brocot
-NULL
-
+#'
+#' Approximates a floating-point number to arbitrary uncertainty.
+#'
+#' @param x Number to convert to rational fraction
+#' @param uncertainty Binary search stops once the desired uncertainty is reached
+#'
+#' @return A ratio of num / den
+#'
+#' @export
 stern_brocot <- function(x, uncertainty, metadata = "") {
     .Call(`_mami_codi_R_stern_brocot`, x, uncertainty, metadata)
 }
 
+#' compute_pseudo_octave
+#'
+#' Find the highest fundamental freq
+#'
+#' @param fn freq to eval
+#' @param f0 fundamental freq
+#' @param n  harmonic number
+#'
+#' @return Calculated pseudo octave
+#'
+#' @export
 compute_pseudo_octave <- function(fn, f0, n) {
     .Call(`_mami_codi_R_compute_pseudo_octave`, fn, f0, n)
 }
