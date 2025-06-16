@@ -104,6 +104,8 @@ generate_stimulus <- function(
 # spatial extent then it should probably be wavelength sensitive, which means beats
 # which means the missing fundamental would create an emission response.
 
+# TODO: How to handle octave stretching and compressing?
+
 #' Generate tones emitted from the cochlea in response to frequency stimulation
 #'
 #' @param x Wavelength and frequency spectra representing the stimulus and beat tones.
@@ -176,43 +178,27 @@ generate_beats <- function(
     x, beat_pass_filter
 ) {
 
-  max_stimulus_wavelength = x$stimulus_wavelength_spectrum[[1]]$wavelength %>% max()
-
-  stimulus_and_cochlear_amplifier_wavelength_spectrum = combine_spectra(
-    x$stimulus_wavelength_spectrum[[1]],
-    x$cochlear_amplifier_wavelength_spectrum[[1]]
+  stimulus_and_cochlear_amplifier_frequency_spectrum = combine_spectra(
+    x$stimulus_frequency_spectrum[[1]],
+    x$cochlear_amplifier_frequency_spectrum[[1]]
   )
 
-  all_beats_wavelength_spectrum = compute_beats(
-    wavelength = stimulus_and_cochlear_amplifier_wavelength_spectrum$wavelength,
-    amplitude  = stimulus_and_cochlear_amplifier_wavelength_spectrum$amplitude
+  beats_frequency_spectrum = compute_beats(
+    frequency = stimulus_and_cochlear_amplifier_frequency_spectrum$frequency,
+    amplitude  = stimulus_and_cochlear_amplifier_frequency_spectrum$amplitude
   ) %>% filter_spectrum_in_range()
 
-  low_beats_wavelength_spectrum = all_beats_wavelength_spectrum %>%
-    dplyr::filter(wavelength >= max_stimulus_wavelength)
-
-  high_beats_wavelength_spectrum = all_beats_wavelength_spectrum %>%
-    dplyr::filter(wavelength < max_stimulus_wavelength)
-
-  if (beat_pass_filter == BEAT_PASS_FILTER$LOW) {
-    filtered_beats_wavelength_spectrum = low_beats_wavelength_spectrum
-  } else if (beat_pass_filter == BEAT_PASS_FILTER$HIGH) {
-    filtered_beats_wavelength_spectrum = high_beats_wavelength_spectrum
-  } else if (beat_pass_filter == BEAT_PASS_FILTER$ALL) {
-    filtered_beats_wavelength_spectrum = all_beats_wavelength_spectrum
-  } else if (beat_pass_filter == BEAT_PASS_FILTER$NONE) {
-    filtered_beats_wavelength_spectrum = empty_wavelength_spectrum()
-  }
+  beats_wavelength_spectrum = tibble::tibble(
+    wavelength = C_SOUND / beats_frequency_spectrum$frequency,
+    amplitude  = beats_frequency_spectrum$amplitude
+  ) %>% filter_spectrum_in_range()
 
   # Store the values
   x %>% dplyr::mutate(
-    filtered_beats_wavelength_spectrum   = list(filtered_beats_wavelength_spectrum),
-    all_beats_wavelength_spectrum        = list(all_beats_wavelength_spectrum),
-    low_beats_wavelength_spectrum        = list(low_beats_wavelength_spectrum),
-    high_beats_wavelength_spectrum       = list(high_beats_wavelength_spectrum),
+    beats_frequency_spectrum  = list(beats_frequency_spectrum),
+    beats_wavelength_spectrum = list(beats_wavelength_spectrum),
     beat_pass_filter,
-    stimulus_and_cochlear_amplifier_wavelength_spectrum = list(stimulus_and_cochlear_amplifier_wavelength_spectrum),
-    max_stimulus_wavelength
+    stimulus_and_cochlear_amplifier_frequency_spectrum = list(stimulus_and_cochlear_amplifier_frequency_spectrum)
   )
 
 }
@@ -237,9 +223,10 @@ compute_fundamental_wavenumber <- function(
 ) {
 
   wavelength_spectrum = combine_spectra(
-    x$stimulus_wavelength_spectrum[[1]],
-    x$cochlear_amplifier_wavelength_spectrum[[1]],
-    x$filtered_beats_wavelength_spectrum[[1]]
+    x$stimulus_wavelength_spectrum[[1]]
+    # ,
+    # x$cochlear_amplifier_wavelength_spectrum[[1]],
+    # x$filtered_beats_wavelength_spectrum[[1]]
   )
 
   l = wavelength_spectrum$wavelength
@@ -380,25 +367,10 @@ compute_harmony_perception <- function(x) {
 #' @export
 compute_beats_perception <- function(x) {
 
-  low_beating  = beating(x$low_beats_wavelength_spectrum[[1]])
-  high_beating = beating(x$high_beats_wavelength_spectrum[[1]])
-  all_beating  = beating(x$all_beats_wavelength_spectrum[[1]])
-
-  if (x$beat_pass_filter == BEAT_PASS_FILTER$LOW) {
-    beating = low_beating
-  } else if (x$beat_pass_filter == BEAT_PASS_FILTER$HIGH) {
-    beating = high_beating
-  } else if (x$beat_pass_filter == BEAT_PASS_FILTER$ALL) {
-    beating = all_beating
-  } else  {
-    beating = 0
-  }
+  beating = beating(x$beats_wavelength_spectrum[[1]])
 
   x %>% dplyr::mutate(
-    beating,
-    low_beating,
-    high_beating,
-    all_beating
+    beating
   )
 
 }

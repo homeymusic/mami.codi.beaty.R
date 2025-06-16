@@ -73,14 +73,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // compute_beats
-DataFrame compute_beats(NumericVector wavelength, NumericVector amplitude);
-RcppExport SEXP _mami_codi_R_compute_beats(SEXP wavelengthSEXP, SEXP amplitudeSEXP) {
+DataFrame compute_beats(NumericVector frequency, NumericVector amplitude);
+RcppExport SEXP _mami_codi_R_compute_beats(SEXP frequencySEXP, SEXP amplitudeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type wavelength(wavelengthSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type frequency(frequencySEXP);
     Rcpp::traits::input_parameter< NumericVector >::type amplitude(amplitudeSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_beats(wavelength, amplitude));
+    rcpp_result_gen = Rcpp::wrap(compute_beats(frequency, amplitude));
     return rcpp_result_gen;
 END_RCPP
 }
