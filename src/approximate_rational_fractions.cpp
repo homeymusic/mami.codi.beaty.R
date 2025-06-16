@@ -316,7 +316,8 @@ using namespace Rcpp;
 
  //’ Compute Combination Tones from Frequencies
  //’
- //’ Generate combination tones—first‐order difference (f₂–f₁) and cubic difference (2f₁–f₂)—
+ //’ Generate all four primary combination tones—quadratic difference (f₂–f₁),
+ //’ quadratic summation (f₁+f₂), cubic difference (2f₁–f₂), and cubic summation (2f₂–f₁)—
  //’ from two or more input frequencies and their amplitudes.  Only tones below the lowest
  //’ primary frequency are retained.
  //’
@@ -325,7 +326,6 @@ using namespace Rcpp;
  //’ @return A DataFrame with columns:
  //’   • frequency: the combination‐tone frequency (Hz)
  //’   • amplitude: sum of the two primary amplitudes
- //’   • type:       “difference” or “cubic_difference”
  //’ @export
  // [[Rcpp::export]]
  Rcpp::DataFrame compute_combination_tones(
@@ -340,12 +340,12 @@ using namespace Rcpp;
      );
    }
 
-   // Find lowest primary – only CTs below this will be kept
+   // lowest primary frequency
    double min_freq = Rcpp::min(frequency);
 
-   // Maximum entries: for each unordered pair, up to two CTs
+   // for each unordered pair, up to four CTs
    int max_pairs   = n * (n - 1) / 2;
-   int max_entries = max_pairs * 2;
+   int max_entries = max_pairs * 4;
 
    Rcpp::NumericVector ct_freq(max_entries);
    Rcpp::NumericVector ct_amp (max_entries);
@@ -356,28 +356,38 @@ using namespace Rcpp;
        double fi = frequency[i];
        double fj = frequency[j];
 
-       // Explicitly label lower (f₁) and higher (f₂)
+       // label lower (f₁) and higher (f₂)
        double low  = std::min(fi, fj);
        double high = std::max(fi, fj);
 
-       // First‐order difference tone: f₂ − f₁
-       double diff1 = high - low;
-       // Cubic difference tone: 2f₁ − f₂
-       double diff3 = 2 * low - high;
+       // compute the four combination tones
+       double quad_diff    = high - low;      // f₂ − f₁
+       double quad_sum     = low  + high;     // f₁ + f₂
+       double cubic_diff   = 2 * low  - high; // 2f₁ − f₂
+       double cubic_sum    = 2 * high - low;  // 2f₂ − f₁
 
-       // Tolerance to avoid near‐zero artifacts
-       double tol = std::numeric_limits<double>::epsilon() * std::max(std::abs(fi), std::abs(fj));
+       // tolerance to avoid near-zero artifacts
+       double tol = std::numeric_limits<double>::epsilon()
+         * std::max(std::abs(fi), std::abs(fj));
 
-       // Include first‐order difference if within range
-       if (diff1 > tol && diff1 < min_freq) {
-         ct_freq[count] = diff1;
+       // retain only those tones below the lowest primary
+       if (quad_diff  > tol && quad_diff  < min_freq) {
+         ct_freq[count] = quad_diff;
          ct_amp [count] = amplitude[i] + amplitude[j];
          ++count;
        }
-
-       // Include cubic difference if within range
-       if (diff3 > tol && diff3 < min_freq) {
-         ct_freq[count] = diff3;
+       if (quad_sum   > tol && quad_sum   < min_freq) {
+         ct_freq[count] = quad_sum;
+         ct_amp [count] = amplitude[i] + amplitude[j];
+         ++count;
+       }
+       if (cubic_diff > tol && cubic_diff < min_freq) {
+         ct_freq[count] = cubic_diff;
+         ct_amp [count] = amplitude[i] + amplitude[j];
+         ++count;
+       }
+       if (cubic_sum  > tol && cubic_sum  < min_freq) {
+         ct_freq[count] = cubic_sum;
          ct_amp [count] = amplitude[i] + amplitude[j];
          ++count;
        }
@@ -391,9 +401,9 @@ using namespace Rcpp;
      );
    }
 
-   // Trim to actual size and return
+   // trim to actual size and return
    return Rcpp::DataFrame::create(
      _["frequency"] = ct_freq[ Rcpp::Range(0, count - 1) ],
-     _["amplitude"] = ct_amp [ Rcpp::Range(0, count - 1) ]
+                             _["amplitude"] = ct_amp [ Rcpp::Range(0, count - 1) ]
    );
  }
