@@ -206,7 +206,10 @@ compute_fundamental_wavenumber <- function(
     integer_harmonics_tolerance
 ) {
 
-  wavelength_spectrum = x$stimulus_wavelength_spectrum[[1]]
+  wavelength_spectrum = combine_spectra(
+    x$stimulus_wavelength_spectrum[[1]],
+    x$beats_wavelength_spectrum[[1]]
+  )
 
   l = wavelength_spectrum$wavelength
 
@@ -297,7 +300,10 @@ compute_fundamental_frequency <- function(
     integer_harmonics_tolerance
 ) {
 
-  frequency_spectrum = x$stimulus_frequency_spectrum[[1]]
+  frequency_spectrum = combine_spectra(
+    x$stimulus_frequency_spectrum[[1]],
+    x$beats_frequency_spectrum[[1]]
+  )
 
   f = frequency_spectrum$frequency
 
@@ -427,11 +433,9 @@ compute_harmony_perception <- function(x) {
     ) log2(.data$space_beats_cycle_length) else 0,
 
     dissonance =
-      .data$space_dissonance + .data$time_dissonance +
-      .data$space_beats_dissonance + .data$time_beats_dissonance,
+      .data$space_dissonance + .data$time_dissonance,
     majorness =
-      .data$space_dissonance - .data$time_dissonance +
-      .data$space_beats_dissonance - .data$time_beats_dissonance
+      .data$space_dissonance - .data$time_dissonance
   )
 
 }
