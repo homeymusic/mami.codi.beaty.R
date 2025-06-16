@@ -251,65 +251,85 @@ using namespace Rcpp;
    );
  }
 
- //’ Calculate Beats from Frequencies
+ //’ Calculate Beats and AM Sidebands (fi only)
  //’
- //’ Generate beats from two sets of frequencies and return their frequencies and amplitudes.
+ //’ Generate the linear beat rate |f₂–f₁| and the two AM sidebands
+ //’ at fi ± |f₂–f₁| for each unordered pair of input frequencies.
+ //’ Amplitudes are summed from the two primaries.
  //’
  //’ @param frequency NumericVector of frequencies
  //’ @param amplitude NumericVector of amplitudes
- //’ @return A DataFrame containing beat frequencies and amplitudes.
+ //’ @return A DataFrame containing beat and sideband frequencies and amplitudes.
  //’ @export
  // [[Rcpp::export]]
- DataFrame compute_beats(
-     NumericVector frequency,
-     NumericVector amplitude
+ Rcpp::DataFrame compute_beats_and_sidebands(
+     Rcpp::NumericVector frequency,
+     Rcpp::NumericVector amplitude
  ) {
    int n = frequency.size();
    if (n < 2) {
-     return DataFrame::create(
-       _["frequency"] = NumericVector::create(),
-       _["amplitude"]  = NumericVector::create()
+     return Rcpp::DataFrame::create(
+       _["frequency"] = Rcpp::NumericVector::create(),
+       _["amplitude"] = Rcpp::NumericVector::create()
      );
    }
 
-   // Find the lowest input frequency
+   // lowest primary frequency (for gating the beat tone)
    double min_freq = Rcpp::min(frequency);
 
-   // Pre-allocate storage for all possible pairs
-   int max_pairs = n * (n - 1) / 2;
-   NumericVector beat_freq(max_pairs);
-   NumericVector beat_amp(max_pairs);
+   // for each unordered pair: 1 beat + 2 sidebands → up to 3 entries
+   int max_pairs   = n * (n - 1) / 2;
+   int max_entries = max_pairs * 3;
+   Rcpp::NumericVector out_freq(max_entries);
+   Rcpp::NumericVector out_amp (max_entries);
    int count = 0;
 
    for (int i = 0; i < n; ++i) {
+     double fi = frequency[i];
      for (int j = i + 1; j < n; ++j) {
-       double fi = frequency[i];
        double fj = frequency[j];
-       double diff = std::abs(fi - fj);
+       double diff   = std::abs(fi - fj);
+       double sum_amp = amplitude[i] + amplitude[j];
 
-       // compute a relative tolerance based on the larger magnitude
-       double tol = std::numeric_limits<double>::epsilon() * std::max(std::abs(fi), std::abs(fj));
+       // tiny tolerance to avoid numerical zero
+       double tol = std::numeric_limits<double>::epsilon()
+         * std::max(std::abs(fi), std::abs(fj));
 
-       // only keep beats below the lowest input frequency
-       if (diff > tol  &&  diff < min_freq) {
-         beat_freq[count] = diff;
-         beat_amp[count]  = amplitude[i] + amplitude[j];
+       // (1) Beat rate: |fi - fj|, only if below the lowest primary
+       if (diff > tol && diff < min_freq) {
+         out_freq[count] = diff;
+         out_amp [count] = sum_amp;
+         ++count;
+       }
+
+       // (2) Upper sideband at fi + diff
+       double sb_p = fi + diff;
+       if (sb_p > tol) {
+         out_freq[count] = sb_p;
+         out_amp [count] = sum_amp;
+         ++count;
+       }
+
+       // (3) Lower sideband at fi - diff, only if positive
+       if (fi > diff + tol) {
+         double sb_m = fi - diff;
+         out_freq[count] = sb_m;
+         out_amp [count] = sum_amp;
          ++count;
        }
      }
    }
 
-   // nothing to return?
    if (count == 0) {
-     return DataFrame::create(
-       _["frequency"] = NumericVector::create(),
-       _["amplitude"]  = NumericVector::create()
+     return Rcpp::DataFrame::create(
+       _["frequency"] = Rcpp::NumericVector::create(),
+       _["amplitude"] = Rcpp::NumericVector::create()
      );
    }
 
-   // trim to actual size
-   return DataFrame::create(
-     _["frequency"] = beat_freq[ Range(0, count - 1) ],
-                               _["amplitude"] = beat_amp[   Range(0, count - 1) ]
+   // trim to actual size and return
+   return Rcpp::DataFrame::create(
+     _["frequency"] = out_freq[ Rcpp::Range(0, count - 1) ],
+                              _["amplitude"] = out_amp [ Rcpp::Range(0, count - 1) ]
    );
  }
