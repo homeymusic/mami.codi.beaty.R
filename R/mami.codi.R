@@ -208,6 +208,7 @@ compute_fundamental_wavenumber <- function(
 
   wavelength_spectrum = combine_spectra(
     x$stimulus_wavelength_spectrum[[1]],
+    x$cochlear_amplifier_wavelength_spectrum[[1]],
     x$beats_wavelength_spectrum[[1]]
   )
 
@@ -300,8 +301,10 @@ compute_fundamental_frequency <- function(
     integer_harmonics_tolerance
 ) {
 
-  frequency_spectrum = x$stimulus_frequency_spectrum[[1]]
-
+  frequency_spectrum = combine_spectra(
+    x$stimulus_frequency_spectrum[[1]],
+    x$cochlear_amplifier_frequency_spectrum[[1]]
+  )
   f = frequency_spectrum$frequency
 
   P = 1 / f
