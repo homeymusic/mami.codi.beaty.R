@@ -181,6 +181,12 @@ p = params %>% purrr::map(\(p) {
     pseudo_octave     = p_o
   )))
   
+  print(plot_semitone_beating(chords, paste('Beating'),
+                              sigma=sigma,include_points=T,include_line=F,
+                              black_vlines=black_vlines,gray_vlines=gray_vlines))
+  cat("  \n")
+
+  
   print(plot_semitone_codi(chords, paste('Consonance-Dissonance'),
                            goal=experiment,sigma=sigma,include_points=T,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
@@ -192,26 +198,9 @@ p = params %>% purrr::map(\(p) {
                                  black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
 
-  print(plot_semitone_beating(chords, paste('Beating'),
-                              sigma=sigma,include_points=T,include_line=F,
-                              black_vlines=black_vlines,gray_vlines=gray_vlines))
-  cat("  \n")
-
-  
   print(plot_semitone_mami(chords, paste('Major-Minor'),
                            goal=NULL,sigma=sigma,include_points=T,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
-  cat("  \n")
-  
-  
-  time_error = (chords %>% tidyr::unnest(time_fractions))$error
-  time_error = remove_floating_point_mistakes(time_error, t_v)
-  print(plot_error_hist(time_error, bins=21, 'major', t_v, 'time Variance'))
-  cat("  \n")
-  
-  space_error = (chords %>% tidyr::unnest(space_fractions))$error
-  space_error = remove_floating_point_mistakes(space_error, s_v)
-  print(plot_error_hist(space_error,  bins=21, 'minor', s_v, 'space Variance'))
   cat("  \n")
   
 })
