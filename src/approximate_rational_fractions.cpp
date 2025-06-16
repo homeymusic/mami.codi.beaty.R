@@ -350,7 +350,6 @@ using namespace Rcpp;
 
    Rcpp::NumericVector ct_freq(max_entries);
    Rcpp::NumericVector ct_amp (max_entries);
-   Rcpp::CharacterVector ct_type(max_entries);
    int count = 0;
 
    for (int i = 0; i < n; ++i) {
@@ -374,7 +373,6 @@ using namespace Rcpp;
        if (diff1 > tol && diff1 < min_freq) {
          ct_freq[count] = diff1;
          ct_amp [count] = amplitude[i] + amplitude[j];
-         ct_type[count] = "difference";
          ++count;
        }
 
@@ -382,7 +380,6 @@ using namespace Rcpp;
        if (diff3 > tol && diff3 < min_freq) {
          ct_freq[count] = diff3;
          ct_amp [count] = amplitude[i] + amplitude[j];
-         ct_type[count] = "cubic_difference";
          ++count;
        }
      }
@@ -391,15 +388,13 @@ using namespace Rcpp;
    if (count == 0) {
      return Rcpp::DataFrame::create(
        _["frequency"] = Rcpp::NumericVector::create(),
-       _["amplitude"] = Rcpp::NumericVector::create(),
-       _["type"]      = Rcpp::CharacterVector::create()
+       _["amplitude"] = Rcpp::NumericVector::create()
      );
    }
 
    // Trim to actual size and return
    return Rcpp::DataFrame::create(
      _["frequency"] = ct_freq[ Rcpp::Range(0, count - 1) ],
-                             _["amplitude"] = ct_amp [ Rcpp::Range(0, count - 1) ],
-                                                     _["type"]      = ct_type[ Rcpp::Range(0, count - 1) ]
+     _["amplitude"] = ct_amp [ Rcpp::Range(0, count - 1) ]
    );
  }
