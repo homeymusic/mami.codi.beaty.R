@@ -60,8 +60,8 @@ mami.codi <- function(
       integer_harmonics_tolerance
     ) %>%
     # Psychophysical Domain
-    compute_harmony_perception() %>%
     compute_beats_perception()   %>%
+    compute_harmony_perception() %>%
     # App Domain
     format_output(metadata, verbose)
 
@@ -268,7 +268,7 @@ compute_fundamental_beats_wavenumber <- function(
         integer_harmonics_tolerance
       ),
 
-      fundamental_wavenumber = min(k) / .data$space_cycle_length,
+      fundamental_beats_wavenumber = min(k) / .data$space_beats_cycle_length,
 
       # Store the values
       beats_wavelengths            = list(l),
@@ -359,7 +359,7 @@ compute_fundamental_beats_frequency <- function(
         integer_harmonics_tolerance
       ),
 
-      beats_fundamental_frequency  = min(f) / .data$time_cycle_length,
+      fundamental_beats_frequency  = min(f) / .data$time_beats_cycle_length,
 
       # Store the values
       beats_frequencies            = list(f),
