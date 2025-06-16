@@ -133,10 +133,16 @@ p = params %>% purrr::map(\(p) {
 
   chords$consonance_z = z_scores(-chords$dissonance)
   chords$major_z = z_scores(chords$majorness)
+  
   chords$space_consonance = -chords$space_dissonance
   chords$time_consonance = -chords$time_dissonance
   chords$space_consonance_z = z_scores(-chords$space_dissonance)
   chords$time_consonance_z = z_scores(-chords$time_dissonance)
+  
+  chords$space_beats_consonance = -chords$space_beats_dissonance
+  chords$time_beats_consonance = -chords$time_beats_dissonance
+  chords$space_beats_consonance_z = z_scores(-chords$space_beats_dissonance)
+  chords$time_beats_consonance_z = z_scores(-chords$time_beats_dissonance)
   
   experiment.rds = paste0('./man/data/input/',
                           p$t,
@@ -180,16 +186,23 @@ p = params %>% purrr::map(\(p) {
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_beating(chords, paste('Beating'),
-                              sigma=sigma,include_points=T,include_line=F,
-                              black_vlines=black_vlines,gray_vlines=gray_vlines))
-  cat("  \n")
-
   print(plot_semitone_space_time(chords, paste('space and time Consonance'),
                                  dashed_minor = p$dashed_minor,
                                  goal=NULL,sigma=sigma,include_points=T,
                                  black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
+
+  print(plot_semitone_space_time_beats(chords, paste('space and time beats Consonance'),
+                                 dashed_minor = p$dashed_minor,
+                                 goal=NULL,sigma=sigma,include_points=T,
+                                 black_vlines=black_vlines,gray_vlines=gray_vlines))
+  cat("  \n")
+
+  print(plot_semitone_beating(chords, paste('Beating'),
+                              sigma=sigma,include_points=T,include_line=F,
+                              black_vlines=black_vlines,gray_vlines=gray_vlines))
+  cat("  \n")
+
   
   print(plot_semitone_mami(chords, paste('Major-Minor'),
                            goal=NULL,sigma=sigma,include_points=T,

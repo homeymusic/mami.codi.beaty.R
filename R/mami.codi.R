@@ -263,7 +263,7 @@ compute_fundamental_beats_wavenumber <- function(
 
       compute_fundamental_cycle(
         l/min(l),
-        DIMENSION$BEATS_SPACE,
+        DIMENSION$SPACE_BEATS,
         space_uncertainty,
         integer_harmonics_tolerance
       ),
@@ -420,6 +420,13 @@ compute_harmony_perception <- function(x) {
 
     time_dissonance  = log2(.data$time_cycle_length),
     space_dissonance = log2(.data$space_cycle_length),
+
+    time_beats_dissonance = if (
+      "time_beats_cycle_length" %in% names(dplyr::cur_data_all())
+    ) log2(.data$time_beats_cycle_length) else 0,
+    space_beats_dissonance = if (
+      "space_beats_cycle_length" %in% names(dplyr::cur_data_all())
+    ) log2(.data$space_beats_cycle_length) else 0,
 
     dissonance       = .data$space_dissonance + .data$time_dissonance,
     majorness        = .data$space_dissonance - .data$time_dissonance
