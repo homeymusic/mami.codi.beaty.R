@@ -295,27 +295,24 @@ using namespace Rcpp;
        double tol = std::numeric_limits<double>::epsilon()
          * std::max(std::abs(fi), std::abs(fj));
 
-       // (1) Beat rate: |fi - fj|, only if below the lowest primary
        if (diff > tol && diff < min_freq) {
          out_freq[count] = diff;
          out_amp [count] = sum_amp;
          ++count;
-       }
 
-       // (2) Upper sideband at fi + diff
-       double sb_p = fi + diff;
-       if (sb_p > tol) {
-         out_freq[count] = sb_p;
-         out_amp [count] = sum_amp;
-         ++count;
-       }
+         double sb_p = fi + diff;
+         if (sb_p > tol) {
+           out_freq[count] = sb_p;
+           out_amp [count] = sum_amp;
+           ++count;
+         }
 
-       // (3) Lower sideband at fi - diff, only if positive
-       if (fi > diff + tol) {
-         double sb_m = fi - diff;
-         out_freq[count] = sb_m;
-         out_amp [count] = sum_amp;
-         ++count;
+         if (fi > diff + tol) {
+           double sb_m = fi - diff;
+           out_freq[count] = sb_m;
+           out_amp [count] = sum_amp;
+           ++count;
+         }
        }
      }
    }
@@ -330,6 +327,6 @@ using namespace Rcpp;
    // trim to actual size and return
    return Rcpp::DataFrame::create(
      _["frequency"] = out_freq[ Rcpp::Range(0, count - 1) ],
-                              _["amplitude"] = out_amp [ Rcpp::Range(0, count - 1) ]
+     _["amplitude"] = out_amp [ Rcpp::Range(0, count - 1) ]
    );
  }
