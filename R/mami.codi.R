@@ -41,7 +41,7 @@ mami.codi <- function(
     generate_cochlea_amplifications(
       cochlear_amplifier_num_harmonics
     ) %>%
-    generate_beats() %>%
+    generate_combination_tones() %>%
     # Frequency Domain
     compute_fundamental_wavenumber(
       space_uncertainty,
@@ -157,9 +157,9 @@ generate_cochlea_amplifications <- function(
 #'
 #' @return The wavelength spectrum of the selected beat tones.
 #'
-#' @rdname generate_beats
+#' @rdname generate_combination_tones
 #' @export
-generate_beats <- function(
+generate_combination_tones <- function(
     x
 ) {
 
