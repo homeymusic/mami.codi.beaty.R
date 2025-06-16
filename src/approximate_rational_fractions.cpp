@@ -206,8 +206,21 @@ using namespace Rcpp;
                                           const double deviation) {
 
    x = unique(x);
-
    const int     n = x.size();
+
+   if (n == 0) {
+     return DataFrame::create(
+       _["rational_number"]        = NumericVector::create(),
+       _["pseudo_rational_number"] = NumericVector::create(),
+       _["pseudo_octave"]          = NumericVector::create(),
+       _["num"]                    = NumericVector::create(),
+       _["den"]                    = NumericVector::create(),
+       _["approximation"]          = NumericVector::create(),
+       _["error"]                  = NumericVector::create(),
+       _["uncertainty"]            = NumericVector::create()
+     );
+   }
+
    NumericVector nums(n);
    NumericVector dens(n);
    NumericVector pseudo_x(n);
