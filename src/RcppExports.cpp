@@ -72,15 +72,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// compute_beats_and_sidebands
-Rcpp::DataFrame compute_beats_and_sidebands(Rcpp::NumericVector frequency, Rcpp::NumericVector amplitude);
-RcppExport SEXP _mami_codi_R_compute_beats_and_sidebands(SEXP frequencySEXP, SEXP amplitudeSEXP) {
+// compute_sidebands
+Rcpp::DataFrame compute_sidebands(Rcpp::NumericVector frequency, Rcpp::NumericVector amplitude);
+RcppExport SEXP _mami_codi_R_compute_sidebands(SEXP frequencySEXP, SEXP amplitudeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type frequency(frequencySEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type amplitude(amplitudeSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_beats_and_sidebands(frequency, amplitude));
+    rcpp_result_gen = Rcpp::wrap(compute_sidebands(frequency, amplitude));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -91,7 +91,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mami_codi_R_approximate_harmonics", (DL_FUNC) &_mami_codi_R_approximate_harmonics, 2},
     {"_mami_codi_R_pseudo_octave", (DL_FUNC) &_mami_codi_R_pseudo_octave, 1},
     {"_mami_codi_R_approximate_rational_fractions", (DL_FUNC) &_mami_codi_R_approximate_rational_fractions, 3},
-    {"_mami_codi_R_compute_beats_and_sidebands", (DL_FUNC) &_mami_codi_R_compute_beats_and_sidebands, 2},
+    {"_mami_codi_R_compute_sidebands", (DL_FUNC) &_mami_codi_R_compute_sidebands, 2},
     {NULL, NULL, 0}
 };
 

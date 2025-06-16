@@ -168,7 +168,7 @@ generate_beats <- function(
     x$cochlear_amplifier_frequency_spectrum[[1]]
   )
 
-  beats_frequency_spectrum = compute_beats_and_sidebands(
+  beats_frequency_spectrum = compute_sidebands(
     frequency = stimulus_and_cochlear_amplifier_frequency_spectrum$frequency,
     amplitude  = stimulus_and_cochlear_amplifier_frequency_spectrum$amplitude
   ) %>% filter_spectrum_in_range()

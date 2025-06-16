@@ -262,7 +262,7 @@ using namespace Rcpp;
  //’ @return A DataFrame containing beat and sideband frequencies and amplitudes.
  //’ @export
  // [[Rcpp::export]]
- Rcpp::DataFrame compute_beats_and_sidebands(
+ Rcpp::DataFrame compute_sidebands(
      Rcpp::NumericVector frequency,
      Rcpp::NumericVector amplitude
  ) {
@@ -296,9 +296,9 @@ using namespace Rcpp;
          * std::max(std::abs(fi), std::abs(fj));
 
        if (diff > tol && diff < min_freq) {
-         out_freq[count] = diff;
-         out_amp [count] = sum_amp;
-         ++count;
+         // out_freq[count] = diff;
+         // out_amp [count] = sum_amp;
+         // ++count;
 
          double sb_p = fi + diff;
          if (sb_p > tol) {
