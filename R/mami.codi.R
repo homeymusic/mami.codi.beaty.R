@@ -428,9 +428,12 @@ compute_harmony_perception <- function(x) {
       "space_beats_cycle_length" %in% names(dplyr::cur_data_all())
     ) log2(.data$space_beats_cycle_length) else 0,
 
-    dissonance       = .data$space_dissonance + .data$time_dissonance,
-    majorness        = .data$space_dissonance - .data$time_dissonance
-
+    dissonance =
+      .data$space_dissonance + .data$time_dissonance +
+      .data$space_beats_dissonance + .data$time_beats_dissonance,
+    majorness =
+      .data$space_dissonance - .data$time_dissonance +
+      .data$space_beats_dissonance - .data$time_beats_dissonance
   )
 
 }

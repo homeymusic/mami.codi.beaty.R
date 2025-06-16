@@ -448,6 +448,13 @@ plot_semitone_space_time_beats <- function(chords, title='', include_line=T, sig
     gray_vlines = whole_semitones
   }
 
+  chords$smoothed.time_consonance  = smoothed(chords$semitone,
+                                              chords$time_consonance,
+                                              sigma)
+  chords$smoothed.space_consonance = smoothed(chords$semitone,
+                                              chords$space_consonance,
+                                              sigma)
+
   chords$smoothed.time_beats_consonance  = smoothed(chords$semitone,
                                               chords$time_beats_consonance,
                                               sigma)
@@ -455,7 +462,9 @@ plot_semitone_space_time_beats <- function(chords, title='', include_line=T, sig
                                               chords$space_beats_consonance,
                                               sigma)
 
-  mean_theoretical = mean(c(chords$smoothed.time_beats_consonance,
+  mean_theoretical = mean(c(chords$smoothed.time_consonance,
+                            chords$smoothed.space_consonance,
+                            chords$smoothed.time_beats_consonance,
                             chords$smoothed.space_beats_consonance))
 
   linetype_for_minor = if (dashed_minor) {'dashed'} else {'solid'}
@@ -463,6 +472,16 @@ plot_semitone_space_time_beats <- function(chords, title='', include_line=T, sig
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone)) +
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
+    { if (include_points)
+      ggplot2::geom_point(ggplot2::aes(y = .data$time_consonance),
+                          shape=21, stroke=NA, size=1,
+                          fill=colors_homey$major)
+    } +
+    { if (include_points)
+      ggplot2::geom_point(ggplot2::aes(y = .data$space_consonance),
+                          shape=21, stroke=NA, size=1,
+                          fill=colors_homey$minor)
+    } +
     { if (include_points)
       ggplot2::geom_point(ggplot2::aes(y = .data$time_beats_consonance),
                           shape=21, stroke=NA, size=1,
@@ -474,14 +493,25 @@ plot_semitone_space_time_beats <- function(chords, title='', include_line=T, sig
                           fill=colors_homey$minor)
     } +
     ggplot2::geom_line(ggplot2::aes(
+      y = .data$smoothed.time_consonance,
+      color = 'time'),
+      linewidth = 1,
+      linetype = 'solid') +
+    ggplot2::geom_line(ggplot2::aes(
+      y = .data$smoothed.space_consonance,
+      color = 'space'),
+      linewidth = 1,
+      linetype = 'solid') +
+    ggplot2::geom_line(ggplot2::aes(
       y = .data$smoothed.time_beats_consonance,
       color = 'time'),
-      linewidth = 1) +
+      linewidth = 1,
+      linetype = 'dashed') +
     ggplot2::geom_line(ggplot2::aes(
       y = .data$smoothed.space_beats_consonance,
       color = 'space'),
       linewidth = 1,
-      linetype = linetype_for_minor) +
+      linetype = 'dashed') +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
                          ggplot2::aes(x = semitone,
