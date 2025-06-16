@@ -157,9 +157,6 @@ frequency_spectrum_from_sparse_fr_spectrum <- function(x) {
   ) %>% filter_spectrum_in_range()
 }
 
-
-# Function to filter a tibble within the specified range based on the dimension
-# Function to filter a tibble within the specified range based on column names
 filter_spectrum_in_range <- function(spectrum) {
 
   if ("frequency" %in% colnames(spectrum)) {

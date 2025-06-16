@@ -2,9 +2,16 @@
 % Please edit documentation in R/mami.codi.R
 \name{compute_fundamental_wavenumber}
 \alias{compute_fundamental_wavenumber}
+\alias{compute_fundamental_beats_wavenumber}
 \title{Compute the fundamental wavenumber of the complex waveform.}
 \usage{
 compute_fundamental_wavenumber(
+  x,
+  space_uncertainty,
+  integer_harmonics_tolerance
+)
+
+compute_fundamental_beats_wavenumber(
   x,
   space_uncertainty,
   integer_harmonics_tolerance
@@ -19,8 +26,13 @@ compute_fundamental_wavenumber(
 }
 \value{
 Fundamental wavenumber of a complex waveform.
+
+Fundamental wavenumber of a complex waveform.
 }
 \description{
+Computes the fundamental wavenumber from a wavelength spectrum that
+includes stimulus, beat, and cochlear emission tones.
+
 Computes the fundamental wavenumber from a wavelength spectrum that
 includes stimulus, beat, and cochlear emission tones.
 }
