@@ -2,9 +2,7 @@
 % Please edit documentation in R/mami.codi.R
 \name{generate_beats}
 \alias{generate_beats}
-\title{Generate beat tones as a wavelength spectrum (only, not frequency spectrum)
-and apply a pass filter (low, high, all, or none) relative to the lowest tone
-in the stimulus.}
+\title{Generate beat tones.}
 \usage{
 generate_beats(x)
 }
@@ -12,10 +10,8 @@ generate_beats(x)
 \item{x}{Wavelength and frequency spectra representing the stimulus tones.}
 }
 \value{
-The wavelength spectrum of the selected beat tones.
+The wavelength and frequency spectrum of the selected beat tones.
 }
 \description{
-Generate beat tones as a wavelength spectrum (only, not frequency spectrum)
-and apply a pass filter (low, high, all, or none) relative to the lowest tone
-in the stimulus.
+Generate beat tones.
 }

@@ -42,7 +42,7 @@ approximate_rational_fractions <- function(x, uncertainty, deviation) {
     .Call(`_mami_codi_R_approximate_rational_fractions`, x, uncertainty, deviation)
 }
 
-compute_beats <- function(wavelength, amplitude) {
-    .Call(`_mami_codi_R_compute_beats`, wavelength, amplitude)
+compute_beats <- function(frequency, amplitude) {
+    .Call(`_mami_codi_R_compute_beats`, frequency, amplitude)
 }
 

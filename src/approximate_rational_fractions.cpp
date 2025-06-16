@@ -1,5 +1,7 @@
 #include <Rcpp.h>
 #include <tuple>
+#include <limits>
+#include <cmath>
 
 using namespace Rcpp;
 
@@ -206,8 +208,21 @@ DataFrame approximate_harmonics(const NumericVector x,
                                           const double deviation) {
 
    x = unique(x);
-
    const int     n = x.size();
+
+   if (n == 0) {
+     return DataFrame::create(
+       _["rational_number"]        = NumericVector::create(),
+       _["pseudo_rational_number"] = NumericVector::create(),
+       _["pseudo_octave"]          = NumericVector::create(),
+       _["num"]                    = NumericVector::create(),
+       _["den"]                    = NumericVector::create(),
+       _["approximation"]          = NumericVector::create(),
+       _["error"]                  = NumericVector::create(),
+       _["uncertainty"]            = NumericVector::create()
+     );
+   }
+
    NumericVector nums(n);
    NumericVector dens(n);
    NumericVector pseudo_x(n);
@@ -238,60 +253,71 @@ DataFrame approximate_harmonics(const NumericVector x,
    );
  }
 
-#include <Rcpp.h>
-using namespace Rcpp;
+//’ Calculate Beats from Frequencies
+//’
+//’ Generate beats from two sets of frequencies and return their frequencies and amplitudes.
+//’
+//’ @param frequency NumericVector of frequencies
+//’ @param amplitude NumericVector of amplitudes
+//’ @return A DataFrame containing beat frequencies and amplitudes.
+//’ @export
+// [[Rcpp::export]]
+DataFrame compute_beats(
+    NumericVector frequency,
+    NumericVector amplitude
+) {
+  int n = frequency.size();
+  if (n < 2) {
+    return DataFrame::create(
+      _["frequency"] = NumericVector::create(),
+      _["amplitude"]  = NumericVector::create()
+    );
+  }
 
- //' Calculate Beats from Frequencies
- //'
- //' Generate beats from two sets of frequencies and return their wavelength and amplitude.
- //'
- //' @param wavelength NumericVector of wavelengths
- //' @param amplitude NumericVector of amplitudes
- //'
- //' @return A DataFrame containing the spectrum, wavelengths, and amplitudes of the beats.
- //' @export
- // [[Rcpp::export]]
-DataFrame compute_beats(NumericVector wavelength, NumericVector amplitude) {
+  // Find the lowest input frequency
+  double min_freq = Rcpp::min(frequency);
 
-   const int n = wavelength.size();
+  // Pre-allocate storage for all possible pairs
+  int max_pairs = n * (n - 1) / 2;
+  NumericVector beat_freq(max_pairs);
+  NumericVector beat_amp(max_pairs);
+  int count = 0;
 
-   if (n < 2) {
-     return DataFrame::create(
-       _("wavelength") = NumericVector::create(),
-       _("amplitude")  = NumericVector::create()
-     );
-   }
+  for (int i = 0; i < n; ++i) {
+    for (int j = i + 1; j < n; ++j) {
+      double fi = frequency[i];
+      double fj = frequency[j];
 
-   // Vectors to hold the results
-   NumericVector beat_wavelength(n * (n - 1) / 2); // Max number of pairs
-   NumericVector beat_amplitude(n * (n - 1) / 2);
+      // compute a relative tolerance based on the larger magnitude
+      double tol = std::numeric_limits<double>::epsilon() * std::max(std::abs(fi), std::abs(fj));
 
-   int count = 0;
+      // skip “equal” frequencies within tolerance
+      if (std::abs(fi - fj) <= tol)
+        continue;
 
-   // Calculate the beats
-   for (int i = 0; i < n; i++) {
-     for (int j = i + 1; j < n; j++) {
-       if (wavelength[i] != wavelength[j]) {
-         // Compute the raw beat wavelength
-         double computed_wavelength = (wavelength[i] * wavelength[j]) / std::abs(wavelength[i] - wavelength[j]);
-         beat_wavelength[count] = computed_wavelength;
-         // Compute the beat amplitude
-         beat_amplitude[count] = amplitude[i] + amplitude[j];
-         count++;
-       }
-     }
-   }
+      // compute beat frequency
+      double bf = std::abs(fi - fj);
 
-   if (count < 1) {
-     return DataFrame::create(
-       _("wavelength") = NumericVector::create(),
-       _("amplitude")  = NumericVector::create()
-     );
-   } else {
-     // Create the resulting DataFrame
-     return DataFrame::create(
-       _("wavelength") = beat_wavelength[Rcpp::Range(0, count - 1)],
-                                        _("amplitude")  = beat_amplitude[Rcpp::Range(0, count - 1)]
-     );
-   }
- }
+      // only keep beats below the lowest input frequency
+      if (bf < min_freq) {
+        beat_freq[count] = bf;
+        beat_amp[count]  = amplitude[i] + amplitude[j];
+        ++count;
+      }
+    }
+  }
+
+  // nothing to return?
+  if (count == 0) {
+    return DataFrame::create(
+      _["frequency"] = NumericVector::create(),
+      _["amplitude"]  = NumericVector::create()
+    );
+  }
+
+  // trim to actual size
+  return DataFrame::create(
+    _["frequency"] = beat_freq[ Range(0, count - 1) ],
+                              _["amplitude"] = beat_amp[   Range(0, count - 1) ]
+  );
+}

@@ -18,7 +18,7 @@ major-minor versus the behavioral results are included in a plot below.
 
 | cochlear_amplifier_num_harmonics | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |---:|:---|:---|---:|---:|
-| 2 | 0.07958 | 0.07958 | 0.2 | 2 |
+| -Inf | 0.07958 | 0.07958 | 0.2 | 2 |
 
 ![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-2.png)<!-- -->  
@@ -33,7 +33,7 @@ For 10 harmonics, behavioral results and theoretical predictions agree.
 
 | cochlear_amplifier_num_harmonics | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |---:|:---|:---|---:|---:|
-| 2 | 0.07958 | 0.07958 | 0.2 | 2 |
+| -Inf | 0.07958 | 0.07958 | 0.2 | 2 |
 
 ![](man/figures/README-unnamed-chunk-4-7.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-8.png)<!-- -->  
@@ -51,7 +51,7 @@ peak.
 
 | cochlear_amplifier_num_harmonics | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |---:|:---|:---|---:|---:|
-| 2 | 0.07958 | 0.07958 | 0.2 | 2 |
+| -Inf | 0.07958 | 0.07958 | 0.2 | 2 |
 
 ![](man/figures/README-unnamed-chunk-4-13.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-14.png)<!-- -->  
@@ -69,7 +69,7 @@ while the M3 peak is slightly higher without the 3rd partial.
 
 | cochlear_amplifier_num_harmonics | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |---:|:---|:---|---:|---:|
-| 2 | 0.07958 | 0.07958 | 0.2 | 2 |
+| -Inf | 0.07958 | 0.07958 | 0.2 | 2 |
 
 ![](man/figures/README-unnamed-chunk-4-19.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-20.png)<!-- -->  
@@ -88,7 +88,7 @@ be relatively higher than the behavioral results.
 
 | cochlear_amplifier_num_harmonics | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |---:|:---|:---|---:|---:|
-| 2 | 0.07958 | 0.07958 | 0.2 | 2 |
+| -Inf | 0.07958 | 0.07958 | 0.2 | 2 |
 
 ![](man/figures/README-unnamed-chunk-4-25.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-26.png)<!-- -->  
@@ -105,7 +105,7 @@ and m7 that do not exist in the behavioral results.
 
 | cochlear_amplifier_num_harmonics | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |---:|:---|:---|---:|---:|
-| 2 | 0.07958 | 0.07958 | 0.2 | 2 |
+| -Inf | 0.07958 | 0.07958 | 0.2 | 2 |
 
 ![](man/figures/README-unnamed-chunk-4-31.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-32.png)<!-- -->  
@@ -121,7 +121,7 @@ with the theoretical peaks.
 
 | cochlear_amplifier_num_harmonics | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |---:|:---|:---|---:|---:|
-| 2 | 0.07958 | 0.07958 | 0.2 | 2 |
+| -Inf | 0.07958 | 0.07958 | 0.2 | 2 |
 
 ![](man/figures/README-unnamed-chunk-4-37.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-38.png)<!-- -->  
@@ -138,7 +138,7 @@ Description is below.
 
 | cochlear_amplifier_num_harmonics | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |---:|:---|:---|---:|---:|
-| 2 | 0.07958 | 0.07958 | 0.035 | 2 |
+| -Inf | 0.07958 | 0.07958 | 0.035 | 2 |
 
 ![](man/figures/README-unnamed-chunk-4-43.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-44.png)<!-- -->  
@@ -153,7 +153,7 @@ Description is below.
 
 | cochlear_amplifier_num_harmonics | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |---:|:---|:---|---:|---:|
-| 2 | 0.07958 | 0.07958 | 0.035 | 2 |
+| -Inf | 0.07958 | 0.07958 | 0.035 | 2 |
 
 ![](man/figures/README-unnamed-chunk-4-49.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-50.png)<!-- -->  
@@ -168,7 +168,7 @@ Description is below.
 
 | cochlear_amplifier_num_harmonics | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |---:|:---|:---|---:|---:|
-| 2 | 0.07958 | 0.07958 | 0.035 | 2 |
+| -Inf | 0.07958 | 0.07958 | 0.035 | 2 |
 
 ![](man/figures/README-unnamed-chunk-4-55.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-56.png)<!-- -->  

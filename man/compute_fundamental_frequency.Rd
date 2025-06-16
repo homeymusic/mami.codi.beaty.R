@@ -4,14 +4,10 @@
 \alias{compute_fundamental_frequency}
 \title{Compute the fundamental temporal frequency of a complex waveform.}
 \usage{
-compute_fundamental_frequency(x, time_uncertainty, integer_harmonics_tolerance)
+compute_fundamental_frequency(x)
 }
 \arguments{
 \item{x}{Wavelength spectrum that include stimulus, beat, and cochlear emission tones.}
-
-\item{time_uncertainty}{Uncertainty factor applied when creating rational approximations for temporal frequency.}
-
-\item{integer_harmonics_tolerance}{Allowable deviation for harmonics that are not perfect integers.}
 }
 \value{
 Fundamental temporal frequency of a complex waveform.

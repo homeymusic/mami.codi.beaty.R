@@ -435,6 +435,99 @@ plot_semitone_space_time <- function(chords, title='', include_line=T, sigma=0.2
     theme_homey()
 }
 
+
+plot_semitone_space_time_with_beating <- function(chords, title='', include_line=T, sigma=0.2,
+                                     dashed_minor = F,include_points=T,
+                                     include_linear_regression = F, goal=NULL,
+                                     black_vlines=c(),gray_vlines=c(),
+                                     xlab='Semitone',
+                                     ylab='Consonance') {
+
+  whole_semitones = integer_semitones(chords$semitone)
+  if (length(gray_vlines) == 0) {
+    gray_vlines = whole_semitones
+  }
+
+  chords$smoothed.time_consonance  = smoothed(chords$semitone,
+                                              chords$time_consonance,
+                                              sigma)
+  chords$smoothed.space_consonance = smoothed(chords$semitone,
+                                              chords$space_consonance,
+                                              sigma)
+
+  chords$smoothed.time_beats_consonance  = smoothed(chords$semitone,
+                                              chords$time_beats_consonance,
+                                              sigma)
+  chords$smoothed.space_beats_consonance = smoothed(chords$semitone,
+                                              chords$space_beats_consonance,
+                                              sigma)
+
+  mean_theoretical = mean(c(chords$smoothed.time_consonance,
+                            chords$smoothed.space_consonance))
+
+  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone)) +
+    ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
+    ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
+    { if (include_points)
+      ggplot2::geom_point(ggplot2::aes(y = .data$time_consonance),
+                          shape=21, stroke=NA, size=1,
+                          fill=colors_homey$major)
+    } +
+    { if (include_points)
+      ggplot2::geom_point(ggplot2::aes(y = .data$space_consonance),
+                          shape=21, stroke=NA, size=1,
+                          fill=colors_homey$minor)
+    } +
+    { if (include_points)
+      ggplot2::geom_point(ggplot2::aes(y = .data$time_beats_consonance),
+                          shape=21, stroke=NA, size=1,
+                          fill=colors_homey$major)
+    } +
+    { if (include_points)
+      ggplot2::geom_point(ggplot2::aes(y = .data$space_beats_consonance),
+                          shape=21, stroke=NA, size=1,
+                          fill=colors_homey$minor)
+    } +
+    ggplot2::geom_line(ggplot2::aes(
+      y = .data$smoothed.time_consonance,
+      color = 'time'),
+      linewidth = 1,
+      linetype = 'solid') +
+    ggplot2::geom_line(ggplot2::aes(
+      y = .data$smoothed.space_consonance,
+      color = 'space'),
+      linewidth = 1,
+      linetype = 'solid') +
+    ggplot2::geom_line(ggplot2::aes(
+      y = .data$smoothed.time_beats_consonance,
+      color = 'time'),
+      linewidth = 1,
+      linetype = 'dashed') +
+    ggplot2::geom_line(ggplot2::aes(
+      y = .data$smoothed.space_beats_consonance,
+      color = 'space'),
+      linewidth = 1,
+      linetype = 'dashed') +
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance + mean_theoretical,
+                                      color = 'behavioral',
+                                      group=1), linewidth = 0.5)} +
+    ggplot2::ggtitle(title) +
+    ggplot2::scale_x_continuous(breaks = whole_semitones,
+                                minor_breaks = c()) +
+    ggplot2::guides(col = ggplot2::guide_legend()) +
+    ggplot2::ylab(ylab) +
+    ggplot2::xlab(xlab) +
+    ggplot2::scale_color_manual(
+      values=space_time_colors(),
+      breaks=c('space', 'time', 'behavioral')) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+}
+
+
 plot_semitone_space <- function(chords, title='', include_line=T, sigma=0.2,
                                 dashed_minor = F,include_points=T,
                                 include_linear_regression = F, goal=NULL,
