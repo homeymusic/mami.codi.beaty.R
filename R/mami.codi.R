@@ -151,9 +151,7 @@ generate_cochlea_amplifications <- function(
 
 }
 
-#' Generate beat tones as a wavelength spectrum (only, not frequency spectrum)
-#' and apply a pass filter (low, high, all, or none) relative to the lowest tone
-#' in the stimulus.
+#' Generate beat tones
 #'
 #' @param x Wavelength and frequency spectra representing the stimulus tones.
 #'
