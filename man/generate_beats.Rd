@@ -6,20 +6,10 @@
 and apply a pass filter (low, high, all, or none) relative to the lowest tone
 in the stimulus.}
 \usage{
-generate_beats(x, beat_pass_filter)
+generate_beats(x)
 }
 \arguments{
 \item{x}{Wavelength and frequency spectra representing the stimulus tones.}
-
-\item{beat_pass_filter}{Specifies which bands of beat tones to include. Options are:
-\describe{
-@eval paste0(
-"\n  \\item{\\code{", BEAT_PASS_FILTER$LOW, "}}{Passes beat tones lower than the lowest stimulus tone.}",
-"\n  \\item{\\code{", BEAT_PASS_FILTER$HIGH, "}}{Passes beat tones higher than the lowest stimulus tone.}",
-"\n  \\item{\\code{", BEAT_PASS_FILTER$ALL, "}}{Passes all beat tones.}",
-"\n  \\item{\\code{", BEAT_PASS_FILTER$NONE, "}}{Passes none of the beat tones.}"
-)
-}}
 }
 \value{
 The wavelength spectrum of the selected beat tones.

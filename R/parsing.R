@@ -157,19 +157,16 @@ frequency_spectrum_from_sparse_fr_spectrum <- function(x) {
   ) %>% filter_spectrum_in_range()
 }
 
-
-# Function to filter a tibble within the specified range based on the dimension
-# Function to filter a tibble within the specified range based on column names
 filter_spectrum_in_range <- function(spectrum) {
 
   if ("frequency" %in% colnames(spectrum)) {
     # Filter for frequencies within the audible range
     spectrum <- spectrum %>%
-      dplyr::filter(frequency >= MIN_FREQUENCY & frequency <= MAX_FREQUENCY)
+      dplyr::filter(amplitude > 1e-15 & frequency >= MIN_FREQUENCY & frequency <= MAX_FREQUENCY)
   } else if ("wavelength" %in% colnames(spectrum)) {
     # Filter for wavelengths within the audible range
     spectrum <- spectrum %>%
-      dplyr::filter(wavelength >= MIN_WAVELENGTH & wavelength <= MAX_WAVELENGTH)
+      dplyr::filter(amplitude > 1e-15 & wavelength >= MIN_WAVELENGTH & wavelength <= MAX_WAVELENGTH)
   } else {
     stop("The tibble must contain either 'frequency' or 'wavelength' column.")
   }

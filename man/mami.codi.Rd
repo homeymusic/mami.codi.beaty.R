@@ -6,7 +6,6 @@
 \usage{
 mami.codi(
   x,
-  beat_pass_filter = DEFAULT_BEAT_PASS_FILTER,
   cochlear_amplifier_num_harmonics = COCHLEAR_AMPLIFIER_NUM_HARMONICS,
   space_uncertainty = UNCERTAINTY_LIMIT,
   time_uncertainty = UNCERTAINTY_LIMIT,
@@ -20,16 +19,6 @@ mami.codi(
 \item{x}{Chord to analyze, which is parsed using
 \code{hrep::sparse_fr_spectrum}. For more details, see
 \href{https://github.com/pmcharrison/hrep/blob/master/R/sparse-fr-spectrum.R}{hrep::sparse_fr_spectrum documentation}.}
-
-\item{beat_pass_filter}{Specifies which bands of beats to include: low, high, all, or none.
-\describe{
-@eval paste0(
-"\item{\\code{", BEAT_PASS_FILTER$LOW, "}}{Passes beat tones lower than the lowest stimulus tone.}\n",
-"\item{\\code{", BEAT_PASS_FILTER$HIGH, "}}{Passes beat tones higher than the lowest stimulus tone.}\n",
-"\item{\\code{", BEAT_PASS_FILTER$ALL, "}}{Passes all beat tones.}\n",
-"\item{\\code{", BEAT_PASS_FILTER$NONE, "}}{Passes none of the beat tones.}\n"
-)
-}}
 
 \item{cochlear_amplifier_num_harmonics}{Number of harmonics to include for the stimulus-frequency otoacoustic emission.}
 

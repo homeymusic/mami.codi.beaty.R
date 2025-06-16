@@ -5,15 +5,6 @@
 #' @param x Chord to analyze, which is parsed using
 #'   \code{hrep::sparse_fr_spectrum}. For more details, see
 #'   \href{https://github.com/pmcharrison/hrep/blob/master/R/sparse-fr-spectrum.R}{hrep::sparse_fr_spectrum documentation}.
-#' @param beat_pass_filter Specifies which bands of beats to include: low, high, all, or none.
-#'   \describe{
-#'     @eval paste0(
-#'       "\item{\\code{", BEAT_PASS_FILTER$LOW, "}}{Passes beat tones lower than the lowest stimulus tone.}\n",
-#'       "\item{\\code{", BEAT_PASS_FILTER$HIGH, "}}{Passes beat tones higher than the lowest stimulus tone.}\n",
-#'       "\item{\\code{", BEAT_PASS_FILTER$ALL, "}}{Passes all beat tones.}\n",
-#'       "\item{\\code{", BEAT_PASS_FILTER$NONE, "}}{Passes none of the beat tones.}\n"
-#'     )
-#'   }
 #' @param cochlear_amplifier_num_harmonics Number of harmonics to include for the stimulus-frequency otoacoustic emission.
 #' @param space_uncertainty Optional space uncertainty value for finding rational fractions.
 #' @param time_uncertainty Optional time uncertainty value for finding rational fractions.
@@ -33,7 +24,6 @@
 #' @export
 mami.codi <- function(
     x,
-    beat_pass_filter                 = DEFAULT_BEAT_PASS_FILTER,
     cochlear_amplifier_num_harmonics = COCHLEAR_AMPLIFIER_NUM_HARMONICS,
     space_uncertainty                = UNCERTAINTY_LIMIT,
     time_uncertainty                 = UNCERTAINTY_LIMIT,
@@ -51,9 +41,7 @@ mami.codi <- function(
     generate_cochlea_amplifications(
       cochlear_amplifier_num_harmonics
     ) %>%
-    generate_beats(
-      beat_pass_filter
-    ) %>%
+    generate_beats() %>%
     # Frequency Domain
     compute_fundamental_wavenumber(
       space_uncertainty,
@@ -160,22 +148,13 @@ generate_cochlea_amplifications <- function(
 #' in the stimulus.
 #'
 #' @param x Wavelength and frequency spectra representing the stimulus tones.
-#' @param beat_pass_filter Specifies which bands of beat tones to include. Options are:
-#'   \describe{
-#'     @eval paste0(
-#'       "\n  \\item{\\code{", BEAT_PASS_FILTER$LOW, "}}{Passes beat tones lower than the lowest stimulus tone.}",
-#'       "\n  \\item{\\code{", BEAT_PASS_FILTER$HIGH, "}}{Passes beat tones higher than the lowest stimulus tone.}",
-#'       "\n  \\item{\\code{", BEAT_PASS_FILTER$ALL, "}}{Passes all beat tones.}",
-#'       "\n  \\item{\\code{", BEAT_PASS_FILTER$NONE, "}}{Passes none of the beat tones.}"
-#'     )
-#'   }
 #'
 #' @return The wavelength spectrum of the selected beat tones.
 #'
 #' @rdname generate_beats
 #' @export
 generate_beats <- function(
-    x, beat_pass_filter
+    x
 ) {
 
   stimulus_and_cochlear_amplifier_frequency_spectrum = combine_spectra(
@@ -197,7 +176,6 @@ generate_beats <- function(
   x %>% dplyr::mutate(
     beats_frequency_spectrum  = list(beats_frequency_spectrum),
     beats_wavelength_spectrum = list(beats_wavelength_spectrum),
-    beat_pass_filter,
     stimulus_and_cochlear_amplifier_frequency_spectrum = list(stimulus_and_cochlear_amplifier_frequency_spectrum)
   )
 
@@ -429,22 +407,6 @@ C_SOUND = 343 # m/s arbitrary, disappears in the ratios
 #' @export
 default_cochlear_amplifier_num_harmonics <- function() { COCHLEAR_AMPLIFIER_NUM_HARMONICS }
 COCHLEAR_AMPLIFIER_NUM_HARMONICS = 2
-
-#' Default beat pass filter
-#'
-#' Default beat pass filter for determining which beat tones pass into the model
-#'
-#''
-#' @rdname default_beat_pass_filter
-#' @export
-default_beat_pass_filter <- function() { DEFAULT_BEAT_PASS_FILTER }
-BEAT_PASS_FILTER <- list(
-  ALL  = 'all',
-  HIGH = 'high',
-  LOW  = 'low',
-  NONE = 'none'
-)
-DEFAULT_BEAT_PASS_FILTER = BEAT_PASS_FILTER$LOW
 
 DIMENSION <- list(
   SPACE = 'space',
