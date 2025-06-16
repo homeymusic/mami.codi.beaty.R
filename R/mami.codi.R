@@ -30,10 +30,10 @@ mami.codi <- function(
     parse_input(...) %>%
     # Physical Domain
     generate_stimulus() %>%
-    generate_cochlea_amplifications() %>%
     # Frequency Domain
     compute_fundamental_wavenumber() %>%
     compute_fundamental_frequency() %>%
+    generate_cochlea_amplifications() %>%
     generate_beats() %>%
     compute_fundamental_beats_wavenumber() %>%
     compute_fundamental_beats_frequency() %>%
@@ -141,8 +141,9 @@ compute_fundamental_wavenumber <- function(
 ) {
 
   wavelength_spectrum = combine_spectra(
-    x$stimulus_wavelength_spectrum[[1]],
-    x$cochlear_amplifier_wavelength_spectrum[[1]]
+    x$stimulus_wavelength_spectrum[[1]]
+    # ,
+    # x$cochlear_amplifier_wavelength_spectrum[[1]]
   )
 
   l = wavelength_spectrum$wavelength
@@ -183,6 +184,8 @@ compute_fundamental_frequency <- function(
 
   frequency_spectrum = combine_spectra(
     x$stimulus_frequency_spectrum[[1]]
+    # ,
+    # x$cochlear_amplifier_frequency_spectrum[[1]]
   )
 
   f = frequency_spectrum$frequency
@@ -379,9 +382,9 @@ compute_harmony_perception <- function(x) {
     ) log2(.data$space_beats_cycle_length) else 0,
 
        dissonance = .data$space_dissonance + .data$time_dissonance + .data$space_beats_dissonance + .data$time_beats_dissonance,
-    #    majorness  = .data$space_dissonance - .data$time_dissonance + .data$space_beats_dissonance - .data$time_beats_dissonance
+       majorness  = .data$space_dissonance - .data$time_dissonance + .data$space_beats_dissonance - .data$time_beats_dissonance
     # dissonance = .data$space_dissonance + .data$time_dissonance + .data$space_beats_dissonance,
-    majorness  = .data$space_dissonance - .data$time_dissonance
+    # majorness  = .data$space_dissonance - .data$time_dissonance
 
   )
 
@@ -400,12 +403,8 @@ compute_harmony_perception <- function(x) {
 #' @export
 compute_beats_perception <- function(x) {
 
-  low_beating  = beating(x$beats_wavelength_spectrum[[1]])
-  beating = low_beating
-
   x %>% dplyr::mutate(
-    beating,
-    low_beating
+    beating = beating(x$beats_wavelength_spectrum[[1]])
   )
 
 }

@@ -176,3 +176,23 @@ test_that("combine_spectra respects tolerance for frequency spectra", {
     2.0
   )
 })
+
+test_that("zero amplitude components of the spectrum are not included", {
+  bass_f0 <- hrep::midi_to_freq(60)
+  bass <- tibble::tibble(
+    frequency = bass_f0 * 1:5,
+    amplitude = c(1, 1, 0, 1, 1)
+  ) %>% as.list() %>%  hrep::sparse_fr_spectrum()
+
+  upper_f0 <- hrep::midi_to_freq(67)
+  upper <- tibble::tibble(
+    frequency = upper_f0 * 1:5,
+    amplitude = c(1, 1, 0, 1, 1)
+  ) %>% as.list() %>%  hrep::sparse_fr_spectrum()
+
+  study_chord = do.call(hrep::combine_sparse_spectra, list(bass,upper))
+  expect_equal(length(study_chord$x), 10)
+  f_spectrum = frequency_spectrum_from_sparse_fr_spectrum(study_chord)
+  expect_equal(length(f_spectrum$frequency), 8)
+
+})
