@@ -300,10 +300,7 @@ compute_fundamental_frequency <- function(
     integer_harmonics_tolerance
 ) {
 
-  frequency_spectrum = combine_spectra(
-    x$stimulus_frequency_spectrum[[1]],
-    x$beats_frequency_spectrum[[1]]
-  )
+  frequency_spectrum = x$stimulus_frequency_spectrum[[1]]
 
   f = frequency_spectrum$frequency
 
