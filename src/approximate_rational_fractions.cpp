@@ -313,3 +313,93 @@ using namespace Rcpp;
                                _["amplitude"] = beat_amp[   Range(0, count - 1) ]
    );
  }
+
+ //’ Compute Combination Tones from Frequencies
+ //’
+ //’ Generate combination tones—first‐order difference (f₂–f₁) and cubic difference (2f₁–f₂)—
+ //’ from two or more input frequencies and their amplitudes.  Only tones below the lowest
+ //’ primary frequency are retained.
+ //’
+ //’ @param frequency NumericVector of input frequencies
+ //’ @param amplitude NumericVector of corresponding amplitudes
+ //’ @return A DataFrame with columns:
+ //’   • frequency: the combination‐tone frequency (Hz)
+ //’   • amplitude: sum of the two primary amplitudes
+ //’   • type:       “difference” or “cubic_difference”
+ //’ @export
+ // [[Rcpp::export]]
+ Rcpp::DataFrame compute_combination_tones(
+     Rcpp::NumericVector frequency,
+     Rcpp::NumericVector amplitude
+ ) {
+   int n = frequency.size();
+   if (n < 2) {
+     return Rcpp::DataFrame::create(
+       _["frequency"] = Rcpp::NumericVector::create(),
+       _["amplitude"] = Rcpp::NumericVector::create(),
+       _["type"]      = Rcpp::CharacterVector::create()
+     );
+   }
+
+   // Find lowest primary – only CTs below this will be kept
+   double min_freq = Rcpp::min(frequency);
+
+   // Maximum entries: for each unordered pair, up to two CTs
+   int max_pairs   = n * (n - 1) / 2;
+   int max_entries = max_pairs * 2;
+
+   Rcpp::NumericVector ct_freq(max_entries);
+   Rcpp::NumericVector ct_amp (max_entries);
+   Rcpp::CharacterVector ct_type(max_entries);
+   int count = 0;
+
+   for (int i = 0; i < n; ++i) {
+     for (int j = i + 1; j < n; ++j) {
+       double fi = frequency[i];
+       double fj = frequency[j];
+
+       // Explicitly label lower (f₁) and higher (f₂)
+       double low  = std::min(fi, fj);
+       double high = std::max(fi, fj);
+
+       // First‐order difference tone: f₂ − f₁
+       double diff1 = high - low;
+       // Cubic difference tone: 2f₁ − f₂
+       double diff3 = 2 * low - high;
+
+       // Tolerance to avoid near‐zero artifacts
+       double tol = std::numeric_limits<double>::epsilon() * std::max(std::abs(fi), std::abs(fj));
+
+       // Include first‐order difference if within range
+       if (diff1 > tol && diff1 < min_freq) {
+         ct_freq[count] = diff1;
+         ct_amp [count] = amplitude[i] + amplitude[j];
+         ct_type[count] = "difference";
+         ++count;
+       }
+
+       // Include cubic difference if within range
+       if (diff3 > tol && diff3 < min_freq) {
+         ct_freq[count] = diff3;
+         ct_amp [count] = amplitude[i] + amplitude[j];
+         ct_type[count] = "cubic_difference";
+         ++count;
+       }
+     }
+   }
+
+   if (count == 0) {
+     return Rcpp::DataFrame::create(
+       _["frequency"] = Rcpp::NumericVector::create(),
+       _["amplitude"] = Rcpp::NumericVector::create(),
+       _["type"]      = Rcpp::CharacterVector::create()
+     );
+   }
+
+   // Trim to actual size and return
+   return Rcpp::DataFrame::create(
+     _["frequency"] = ct_freq[ Rcpp::Range(0, count - 1) ],
+                             _["amplitude"] = ct_amp [ Rcpp::Range(0, count - 1) ],
+                                                     _["type"]      = ct_type[ Rcpp::Range(0, count - 1) ]
+   );
+ }

@@ -25,3 +25,7 @@ compute_beats <- function(frequency, amplitude) {
     .Call(`_mami_codi_R_compute_beats`, frequency, amplitude)
 }
 
+compute_combination_tones <- function(frequency, amplitude) {
+    .Call(`_mami_codi_R_compute_combination_tones`, frequency, amplitude)
+}
+

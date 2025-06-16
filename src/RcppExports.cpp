@@ -84,6 +84,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_combination_tones
+Rcpp::DataFrame compute_combination_tones(Rcpp::NumericVector frequency, Rcpp::NumericVector amplitude);
+RcppExport SEXP _mami_codi_R_compute_combination_tones(SEXP frequencySEXP, SEXP amplitudeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type frequency(frequencySEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type amplitude(amplitudeSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_combination_tones(frequency, amplitude));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mami_codi_R_stern_brocot", (DL_FUNC) &_mami_codi_R_stern_brocot, 3},
@@ -92,6 +104,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mami_codi_R_pseudo_octave", (DL_FUNC) &_mami_codi_R_pseudo_octave, 1},
     {"_mami_codi_R_approximate_rational_fractions", (DL_FUNC) &_mami_codi_R_approximate_rational_fractions, 3},
     {"_mami_codi_R_compute_beats", (DL_FUNC) &_mami_codi_R_compute_beats, 2},
+    {"_mami_codi_R_compute_combination_tones", (DL_FUNC) &_mami_codi_R_compute_combination_tones, 2},
     {NULL, NULL, 0}
 };
 
