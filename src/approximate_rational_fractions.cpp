@@ -336,8 +336,7 @@ using namespace Rcpp;
    if (n < 2) {
      return Rcpp::DataFrame::create(
        _["frequency"] = Rcpp::NumericVector::create(),
-       _["amplitude"] = Rcpp::NumericVector::create(),
-       _["type"]      = Rcpp::CharacterVector::create()
+       _["amplitude"] = Rcpp::NumericVector::create()
      );
    }
 
