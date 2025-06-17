@@ -323,6 +323,157 @@ plot_semitone_codi <- function(chords, title='', include_line=T, sigma=0.2,
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
+
+
+plot_semitone_thomaes_function <- function(chords, title='', include_line=T, sigma=0.2,
+                                             include_points=T,
+                                             goal=NULL,
+                                             black_vlines=c(),gray_vlines=c(),
+                                             xlab='Semitone',
+                                             ylab='Consonance (Z-Score)') {
+
+  whole_semitones = integer_semitones(chords$semitone)
+  if (length(gray_vlines) == 0) {
+    gray_vlines = whole_semitones
+  }
+  color_factor_homey <- function(x,column_name) {
+    cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
+  }
+
+  chords$smoothed_thomaes_function_z = smoothed(chords$semitone,
+                                                  chords$thomaes_function_z,
+                                                  sigma)
+
+  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
+                                       y = .data$thomaes_function_z)) +
+    ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
+    ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
+    { if (include_points)
+      ggplot2::geom_point(shape=21, stroke=NA, size=1,
+                          ggplot2::aes(fill=color_factor_homey(chords,'majorness')))
+    } +
+    { if (include_line)
+      ggplot2::geom_line(data=chords,
+                         ggplot2::aes(x = semitone,
+                                      y = smoothed_thomaes_function_z,
+                                      color=color_factor_homey(chords,'majorness'),
+                                      group=1), linewidth = 1)} +
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance,
+                                      color = 'behavioral'
+                         ), linewidth = 0.5)} +
+    ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
+    ggplot2::scale_color_manual(values=color_values_homey()) +
+    ggplot2::ggtitle(title) +
+    ggplot2::scale_x_continuous(breaks = whole_semitones,
+                                minor_breaks = c()) + # Removed `breaks` argument to auto-generate tick labels
+    ggplot2::ylab(ylab) +
+    ggplot2::xlab(xlab) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+}
+
+plot_semitone_stern_brocot_depth <- function(chords, title='', include_line=T, sigma=0.2,
+                                                 include_points=T,
+                                                 goal=NULL,
+                                                 black_vlines=c(),gray_vlines=c(),
+                                                 xlab='Semitone',
+                                                 ylab='Consonance (Z-Score)') {
+
+  whole_semitones = integer_semitones(chords$semitone)
+  if (length(gray_vlines) == 0) {
+    gray_vlines = whole_semitones
+  }
+  color_factor_homey <- function(x,column_name) {
+    cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
+  }
+
+  chords$smoothed_stern_brocot_depth_z = smoothed(chords$semitone,
+                                                      chords$stern_brocot_depth_z,
+                                                      sigma)
+
+  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
+                                       y = .data$stern_brocot_depth_z)) +
+    ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
+    ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
+    { if (include_points)
+      ggplot2::geom_point(shape = 21, stroke = NA, size = 1, fill = colors_homey$green)
+    } +
+    { if (include_line)
+      ggplot2::geom_line(data=chords,
+                         ggplot2::aes(x = semitone,
+                                      y = smoothed_stern_brocot_depth_z,
+                                      color=color_factor_homey(chords,'majorness'),
+                                      group=1), linewidth = 1)} +
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance,
+                                      color = 'behavioral'
+                         ), linewidth = 0.5)} +
+    ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
+    ggplot2::scale_color_manual(values=color_values_homey()) +
+    ggplot2::ggtitle(title) +
+    ggplot2::scale_x_continuous(breaks = whole_semitones,
+                                minor_breaks = c()) + # Removed `breaks` argument to auto-generate tick labels
+    ggplot2::ylab(ylab) +
+    ggplot2::xlab(xlab) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+}
+
+plot_semitone_euclids_orchard_height <- function(chords, title='', include_line=T, sigma=0.2,
+                               include_points=T,
+                               goal=NULL,
+                               black_vlines=c(),gray_vlines=c(),
+                               xlab='Semitone',
+                               ylab='Consonance (Z-Score)') {
+
+  whole_semitones = integer_semitones(chords$semitone)
+  if (length(gray_vlines) == 0) {
+    gray_vlines = whole_semitones
+  }
+  color_factor_homey <- function(x,column_name) {
+    cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
+  }
+
+  chords$smoothed_euclids_orchard_height_z = smoothed(chords$semitone,
+                                          chords$euclids_orchard_height_z,
+                                          sigma)
+
+  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
+                                       y = .data$euclids_orchard_height_z)) +
+    ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
+    ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
+    { if (include_points)
+      ggplot2::geom_point(shape=21, stroke=NA, size=1,
+                          ggplot2::aes(fill=color_factor_homey(chords,'majorness')))
+    } +
+    { if (include_line)
+      ggplot2::geom_line(data=chords,
+                         ggplot2::aes(x = semitone,
+                                      y = smoothed_euclids_orchard_height_z,
+                                      color=color_factor_homey(chords,'majorness'),
+                                      group=1), linewidth = 1)} +
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance,
+                                      color = 'behavioral'
+                         ), linewidth = 0.5)} +
+    ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
+    ggplot2::scale_color_manual(values=color_values_homey()) +
+    ggplot2::ggtitle(title) +
+    ggplot2::scale_x_continuous(breaks = whole_semitones,
+                                minor_breaks = c()) + # Removed `breaks` argument to auto-generate tick labels
+    ggplot2::ylab(ylab) +
+    ggplot2::xlab(xlab) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+}
+
 plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
                                include_points=T,
                                include_linear_regression = F, goal=NULL,

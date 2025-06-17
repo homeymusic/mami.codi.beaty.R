@@ -285,6 +285,9 @@ compute_fundamental_cycle <- function(x, dimension, uncertainty, integer_harmoni
 
   t = tibble::tibble_row(
     cycle_length = lcm_integers(fractions$den),
+    euclids_orchard_height = sum(fractions$euclids_orchard_height),
+    thomae = sum(fractions$thomae),
+    depth = sum(fractions$depth),
     fractions = list(fractions)
   ) %>% dplyr::rename_with(~ paste0(dimension, '_' , .))
   t

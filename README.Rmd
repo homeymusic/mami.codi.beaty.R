@@ -136,8 +136,18 @@ p = params %>% purrr::map(\(p) {
   
   chords$space_consonance = -chords$space_dissonance
   chords$time_consonance = -chords$time_dissonance
+  
   chords$space_consonance_z = z_scores(-chords$space_dissonance)
   chords$time_consonance_z = z_scores(-chords$time_dissonance)
+
+  chords$euclids_orchard_height = chords$space_euclids_orchard_height + chords$time_euclids_orchard_height
+  chords$euclids_orchard_height_z = z_scores(chords$euclids_orchard_height)
+  
+  chords$stern_brocot_depth = chords$space_depth + chords$time_depth
+  chords$stern_brocot_depth_z = z_scores(chords$stern_brocot_depth)
+  
+  chords$thomaes_function = chords$space_thomae + chords$time_thomae
+  chords$thomaes_function_z = z_scores(chords$thomaes_function)
   
   chords$beating_z = z_scores(chords$beating)
   
@@ -183,21 +193,36 @@ p = params %>% purrr::map(\(p) {
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_beating(chords, paste('Beating'),
-                              goal=experiment, sigma=sigma,include_points=T,include_line=F,
-                              black_vlines=black_vlines,gray_vlines=gray_vlines))
+  print(plot_semitone_euclids_orchard_height(chords,title = "Euclid’s Orchard Height",
+                                             goal=experiment,black_vlines = black_vlines,gray_vlines  = gray_vlines))
   cat("  \n")
-
+  
+  print(plot_semitone_thomaes_function(chords,title = "Thomae's Function",
+                                       goal=experiment,black_vlines = black_vlines,gray_vlines  = gray_vlines))
+  cat("  \n")
+  
   print(plot_semitone_space_time(chords, paste('space and time beats Consonance'),
                                  dashed_minor = p$dashed_minor,
                                  goal=NULL,sigma=sigma,include_points=T,
                                  black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
-
+  
   print(plot_semitone_mami(chords, paste('Major-Minor'),
                            goal=NULL,sigma=sigma,include_points=T,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
+  
+  print(plot_semitone_beating(chords, paste('Beating'),
+                              goal=experiment, sigma=sigma,include_points=T,include_line=F,
+                              black_vlines=black_vlines,gray_vlines=gray_vlines))
+  cat("  \n")
+
+  print(plot_semitone_stern_brocot_depth(chords,title = "Stern-Brocot Depth",
+                                         goal=experiment,include_line=F,
+                                         black_vlines = black_vlines,gray_vlines  = gray_vlines)
+  )
+  cat("  \n")
+  
   
 })
 ```
