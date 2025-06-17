@@ -2,16 +2,9 @@
 % Please edit documentation in R/mami.codi.R
 \name{compute_fundamental_frequency}
 \alias{compute_fundamental_frequency}
-\alias{compute_fundamental_beats_frequency}
 \title{Compute the fundamental temporal frequency of a complex waveform.}
 \usage{
 compute_fundamental_frequency(x, time_uncertainty, integer_harmonics_tolerance)
-
-compute_fundamental_beats_frequency(
-  x,
-  time_uncertainty,
-  integer_harmonics_tolerance
-)
 }
 \arguments{
 \item{x}{Wavelength spectrum that include stimulus, beat, and cochlear emission tones.}
@@ -22,13 +15,8 @@ compute_fundamental_beats_frequency(
 }
 \value{
 Fundamental temporal frequency of a complex waveform.
-
-Fundamental temporal frequency of a complex waveform.
 }
 \description{
-Computes the fundamental temporal frequency from a frequency spectrum that
-includes stimulus, beat, and cochlear emission tones.
-
 Computes the fundamental temporal frequency from a frequency spectrum that
 includes stimulus, beat, and cochlear emission tones.
 }

@@ -47,15 +47,7 @@ mami.codi <- function(
       space_uncertainty,
       integer_harmonics_tolerance
     ) %>%
-    compute_fundamental_beats_wavenumber(
-      space_uncertainty,
-      integer_harmonics_tolerance
-    ) %>%
     compute_fundamental_frequency(
-      time_uncertainty,
-      integer_harmonics_tolerance
-    ) %>%
-    compute_fundamental_beats_frequency(
       time_uncertainty,
       integer_harmonics_tolerance
     ) %>%
@@ -92,15 +84,6 @@ generate_stimulus <- function(
   )
 
 }
-
-
-
-# TODO: does cochlear amplification respond to wavelengths stimulus? or frequencies stimulus?
-# Right now I am assuming frequency. but if the cochlear amplification starts with OHC which has
-# spatial extent then it should probably be wavelength sensitive, which means beats
-# which means the missing fundamental would create an emission response.
-
-# TODO: How to handle octave stretching and compressing?
 
 #' Generate tones emitted from the cochlea in response to frequency stimulation
 #'
@@ -237,51 +220,6 @@ compute_fundamental_wavenumber <- function(
 
 }
 
-#' Compute the fundamental wavenumber of the complex waveform.
-#'
-#' Computes the fundamental wavenumber from a wavelength spectrum that
-#' includes stimulus, beat, and cochlear emission tones.
-#'
-#' @param x Wavelength spectrum that include stimulus, beat, and cochlear emission tones.
-#' @param space_uncertainty Uncertainty factor applied when creating rational approximations for spatial wavelength.
-#' @param integer_harmonics_tolerance Allowable deviation for harmonics that are not perfect integers.
-#'
-#' @return Fundamental wavenumber of a complex waveform.
-#'
-#' @rdname compute_fundamental_wavenumber
-#' @export
-compute_fundamental_beats_wavenumber <- function(
-    x,
-    space_uncertainty,
-    integer_harmonics_tolerance
-) {
-
-  l = x$beats_wavelength_spectrum[[1]]$wavelength
-
-  if (length(l) > 0) {
-    k = 1 / l
-
-    x %>% dplyr::mutate(
-
-      compute_fundamental_cycle(
-        l/min(l),
-        DIMENSION$SPACE_BEATS,
-        space_uncertainty,
-        integer_harmonics_tolerance
-      ),
-
-      fundamental_beats_wavenumber = min(k) / .data$space_beats_cycle_length,
-
-      # Store the values
-      beats_wavelengths            = list(l),
-      beats_wavenumbers            = list(k)
-    )
-  } else {
-    x
-  }
-
-}
-
 #' Compute the fundamental temporal frequency of a complex waveform.
 #'
 #' Computes the fundamental temporal frequency from a frequency spectrum that
@@ -302,7 +240,8 @@ compute_fundamental_frequency <- function(
 ) {
 
   frequency_spectrum = combine_spectra(
-    x$stimulus_frequency_spectrum[[1]]
+    x$stimulus_frequency_spectrum[[1]] # ,
+    # x$cochlear_amplifier_frequency_spectrum[[1]]
   )
   f = frequency_spectrum$frequency
 
@@ -329,50 +268,6 @@ compute_fundamental_frequency <- function(
 
 }
 
-#' Compute the fundamental temporal frequency of a complex waveform.
-#'
-#' Computes the fundamental temporal frequency from a frequency spectrum that
-#' includes stimulus, beat, and cochlear emission tones.
-#'
-#' @param x Wavelength spectrum that include stimulus, beat, and cochlear emission tones.
-#' @param time_uncertainty Uncertainty factor applied when creating rational approximations for temporal frequency.
-#' @param integer_harmonics_tolerance Allowable deviation for harmonics that are not perfect integers.
-#'
-#' @return Fundamental temporal frequency of a complex waveform.
-#'
-#' @rdname compute_fundamental_frequency
-#' @export
-compute_fundamental_beats_frequency <- function(
-    x,
-    time_uncertainty,
-    integer_harmonics_tolerance
-) {
-  f = x$beats_frequency_spectrum[[1]]$frequency
-
-  if (length(f) > 0) {
-
-    P = 1 / f
-
-    x %>% dplyr::mutate(
-
-      compute_fundamental_cycle(
-        f/min(f),
-        DIMENSION$TIME_BEATS,
-        time_uncertainty,
-        integer_harmonics_tolerance
-      ),
-
-      fundamental_beats_frequency  = min(f) / .data$time_beats_cycle_length,
-
-      # Store the values
-      beats_frequencies            = list(f),
-      beats_periods                = list(P)
-    )
-  } else {
-    x
-  }
-
-}
 #' Compute the cycle length of a complex wave
 #'
 #' @param x Spectrum representing a complex waveform
@@ -423,13 +318,6 @@ compute_harmony_perception <- function(x) {
 
     time_dissonance  = log2(.data$time_cycle_length),
     space_dissonance = log2(.data$space_cycle_length),
-
-    time_beats_dissonance = if (
-      "time_beats_cycle_length" %in% names(dplyr::cur_data_all())
-    ) log2(.data$time_beats_cycle_length) else 0,
-    space_beats_dissonance = if (
-      "space_beats_cycle_length" %in% names(dplyr::cur_data_all())
-    ) log2(.data$space_beats_cycle_length) else 0,
 
     dissonance =
       .data$space_dissonance + .data$time_dissonance,

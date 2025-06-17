@@ -139,11 +139,6 @@ p = params %>% purrr::map(\(p) {
   chords$space_consonance_z = z_scores(-chords$space_dissonance)
   chords$time_consonance_z = z_scores(-chords$time_dissonance)
   
-  chords$space_beats_consonance = -chords$space_beats_dissonance
-  chords$time_beats_consonance = -chords$time_beats_dissonance
-  chords$space_beats_consonance_z = z_scores(-chords$space_beats_dissonance)
-  chords$time_beats_consonance_z = z_scores(-chords$time_beats_dissonance)
-  
   chords$beating_z = z_scores(chords$beating)
   
   experiment.rds = paste0('./man/data/input/',
