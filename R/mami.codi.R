@@ -319,6 +319,8 @@ compute_harmony_perception <- function(x) {
 
   x %>% dplyr::mutate(
 
+    stern_brocot_depth = log2(chords$space_depth + chords$time_depth),
+
     time_dissonance  = log2(.data$time_cycle_length),
     space_dissonance = log2(.data$space_cycle_length),
 

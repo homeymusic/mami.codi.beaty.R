@@ -143,7 +143,6 @@ p = params %>% purrr::map(\(p) {
   chords$euclids_orchard_height = chords$space_euclids_orchard_height + chords$time_euclids_orchard_height
   chords$euclids_orchard_height_z = z_scores(chords$euclids_orchard_height)
   
-  chords$stern_brocot_depth = chords$space_depth + chords$time_depth
   chords$stern_brocot_depth_z = z_scores(chords$stern_brocot_depth)
   
   chords$thomaes_function = chords$space_thomae + chords$time_thomae
