@@ -275,7 +275,7 @@ using namespace Rcpp;
    }
 
    // lowest primary frequency (for gating the beat tone)
-   double min_freq = Rcpp::min(frequency);
+   // double min_freq = Rcpp::min(frequency);
 
    // for each unordered pair: 1 beat + 2 sidebands → up to 3 entries
    int max_pairs   = n * (n - 1) / 2;
@@ -295,24 +295,25 @@ using namespace Rcpp;
        double tol = std::numeric_limits<double>::epsilon()
          * std::max(std::abs(fi), std::abs(fj));
 
-       if (diff > tol && diff < min_freq) {
+       // if (diff > tol && diff < min_freq) {
+       if (diff > tol) {
          out_freq[count] = diff;
          out_amp [count] = sum_amp;
          ++count;
 
-         double sb_p = fi + diff;
-         if (sb_p > tol) {
-           out_freq[count] = sb_p;
-           out_amp [count] = sum_amp;
-           ++count;
-         }
-
-         if (fi > diff + tol) {
-           double sb_m = fi - diff;
-           out_freq[count] = sb_m;
-           out_amp [count] = sum_amp;
-           ++count;
-         }
+         //   double sb_p = fi + diff;
+       //   if (sb_p > tol) {
+       //     out_freq[count] = sb_p;
+       //     out_amp [count] = sum_amp;
+       //     ++count;
+       //   }
+       //
+       //   if (fi > diff + tol) {
+       //     double sb_m = fi - diff;
+       //     out_freq[count] = sb_m;
+       //     out_amp [count] = sum_amp;
+       //     ++count;
+       //   }
        }
      }
    }
