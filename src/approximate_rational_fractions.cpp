@@ -300,23 +300,24 @@ using namespace Rcpp;
          out_freq[count] = diff;
          out_amp [count] = sum_amp;
          ++count;
+       }
 
-         //   double sb_p = fi + diff;
-       //   if (sb_p > tol) {
-       //     out_freq[count] = sb_p;
-       //     out_amp [count] = sum_amp;
-       //     ++count;
-       //   }
-       //
-       //   if (fi > diff + tol) {
-       //     double sb_m = fi - diff;
-       //     out_freq[count] = sb_m;
-       //     out_amp [count] = sum_amp;
-       //     ++count;
-       //   }
+       double sb_p = fi + diff;
+       if (sb_p > tol) {
+         out_freq[count] = sb_p;
+         out_amp [count] = sum_amp;
+         ++count;
+       }
+
+       if (fi > diff + tol) {
+         double sb_m = fi - diff;
+         out_freq[count] = sb_m;
+         out_amp [count] = sum_amp;
+         ++count;
        }
      }
    }
+
 
    if (count == 0) {
      return Rcpp::DataFrame::create(
