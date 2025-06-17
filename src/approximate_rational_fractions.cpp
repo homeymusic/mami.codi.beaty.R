@@ -285,32 +285,32 @@ using namespace Rcpp;
    int count = 0;
 
    for (int i = 0; i < n; ++i) {
-     double fi = frequency[i];
+     double freq_i = frequency[i];
      for (int j = i + 1; j < n; ++j) {
-       double fj = frequency[j];
-       double diff   = std::abs(fi - fj);
-       double sum_amp = amplitude[i] + amplitude[j];
+       double freq_j = frequency[j];
+       double beat_freq   = std::abs(freq_i - freq_j);
+       double composite_amplitude = amplitude[i] + amplitude[j];
 
        // tiny tolerance to avoid numerical zero
-       double tol = std::numeric_limits<double>::epsilon()
-         * std::max(std::abs(fi), std::abs(fj));
+       double tolerance = std::numeric_limits<double>::epsilon()
+         * std::max(std::abs(freq_i), std::abs(freq_j));
 
-       if (diff > tol && diff < min_freq) {
-         out_freq[count] = diff;
-         out_amp [count] = sum_amp;
+       if (beat_freq > tolerance && beat_freq < min_freq) {
+         out_freq[count] = beat_freq;
+         out_amp [count] = composite_amplitude;
          ++count;
 
-         double sb_p = fi + diff;
-         if (sb_p > tol) {
-           out_freq[count] = sb_p;
-           out_amp [count] = sum_amp;
+         double sideband_above = freq_i + beat_freq;
+         if (sideband_above > tolerance) {
+           out_freq[count] = sideband_above;
+           out_amp [count] = composite_amplitude;
            ++count;
          }
 
-         if (fi > diff + tol) {
-           double sb_m = fi - diff;
-           out_freq[count] = sb_m;
-           out_amp [count] = sum_amp;
+         if (freq_i > beat_freq + tolerance) {
+           double sideband_below = freq_i - beat_freq;
+           out_freq[count] = sideband_below;
+           out_amp [count] = composite_amplitude;
            ++count;
          }
        }
