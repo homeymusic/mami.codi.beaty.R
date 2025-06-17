@@ -2,9 +2,6 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
-typedef SEXP (*first_coprime_t)(SEXP,SEXP,SEXP);
-static first_coprime_t cpp_first_coprime = nullptr;
-
  //' compute_pseudo_octave
  //'
  //' Find the highest fundamental freq
@@ -111,6 +108,9 @@ static first_coprime_t cpp_first_coprime = nullptr;
    return std::stod(std::string(names_of_count[0]));
  }
 
+ typedef SEXP (*first_coprime_t)(SEXP,SEXP,SEXP);
+ static first_coprime_t cpp_first_coprime = nullptr;
+
  //' approximate_rational_fractions
  //'
  //' Approximates floating-point numbers to arbitrary uncertainty.
@@ -126,62 +126,40 @@ static first_coprime_t cpp_first_coprime = nullptr;
  DataFrame approximate_rational_fractions(NumericVector x,
                                           const double uncertainty,
                                           const double deviation) {
-
+   // 1) dedupe and early-return
    x = unique(x);
-   const int     n = x.size();
-
+   int n = x.size();
    if (n == 0) {
-     return DataFrame::create(
-       _["rational_number"]        = NumericVector::create(),
-       _["pseudo_rational_number"] = NumericVector::create(),
-       _["pseudo_octave"]          = NumericVector::create(),
-       _["num"]                    = NumericVector::create(),
-       _["den"]                    = NumericVector::create(),
-       _["approximation"]          = NumericVector::create(),
-       _["error"]                  = NumericVector::create(),
-       _["uncertainty"]            = NumericVector::create()
-     );
+     return DataFrame::create();
    }
 
-   NumericVector nums(n);
-   NumericVector dens(n);
-   NumericVector pseudo_x(n);
-   NumericVector approximations(n);
-   NumericVector errors(n);
+   // 2) compute the psycho-acoustic transform
+   DataFrame harm = approximate_harmonics(x, deviation);
+   double pseudo_octave_double = pseudo_octave(harm["pseudo_octave"]);
 
-   const DataFrame approximate_harmonics_df = approximate_harmonics(x, deviation);
-   const double pseudo_octave_double = pseudo_octave(approximate_harmonics_df["pseudo_octave"]);
-
+   // 3) build the vectors we'll pass to coprimer
+   NumericVector pseudo_x(n), uvec(n, uncertainty);
    for (int i = 0; i < n; ++i) {
-     pseudo_x[i]                  = pow(2.0, log(x[i]) / log(pseudo_octave_double));
-     if (!cpp_first_coprime) {
-         cpp_first_coprime = (first_coprime_t)
-           R_GetCCallable("coprimer", "first_coprime");
-       }
-       // wrap our scalar into 1-element vectors
-       NumericVector vx = NumericVector::create(pseudo_x[i]);
-       NumericVector vu = NumericVector::create(uncertainty);
-       // call it:
-       SEXP df_sexp = cpp_first_coprime(wrap(vx), wrap(vu), wrap(vu));
-       DataFrame df  = as<DataFrame>(df_sexp);
-       IntegerVector nv = df["num"];
-       IntegerVector dv = df["den"];
-       nums[i]           = nv[0];
-       dens[i]           = dv[0];
-       approximations[i] = double(nums[i]) / dens[i];
-       errors[i]         = approximations[i] - pseudo_x[i];
+     pseudo_x[i] = std::pow(2.0,
+                            std::log(x[i]) / std::log(pseudo_octave_double));
    }
 
-   return DataFrame::create(
-     _("rational_number")        = x,
-     _("pseudo_rational_number") = pseudo_x,
-     _("pseudo_octave")          = pseudo_octave_double,
-     _("num")                    = nums,
-     _("den")                    = dens,
-     _("approximation")          = approximations,
-     _("error")                  = errors,
-     _("uncertainty")               = uncertainty
-   );
+   // 4) grab the coprimer callable once
+   if (!cpp_first_coprime) {
+     cpp_first_coprime = (first_coprime_t)
+     R_GetCCallable("coprimer", "first_coprime");
+   }
+
+   // 5) single, vectorized call into coprimer
+   DataFrame df = cpp_first_coprime(wrap(pseudo_x),
+                                    wrap(uvec),
+                                    wrap(uvec));
+
+   // 6) augment only with pseudo outputs
+   df["pseudo_x"]      = pseudo_x;
+   df["pseudo_octave"] = NumericVector(n, pseudo_octave_double);
+
+   return df;
  }
 
  //’ Calculate Beats and AM Sidebands (fi only)
