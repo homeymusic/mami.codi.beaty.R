@@ -289,7 +289,7 @@ using namespace Rcpp;
      for (int j = i + 1; j < n; ++j) {
        double fj = frequency[j];
        double diff   = std::abs(fi - fj);
-       double sum_amp = amplitude[i] + amplitude[j];
+       double combined_amplitude = amplitude[i] + amplitude[j];
 
        // tiny tolerance to avoid numerical zero
        double tol = std::numeric_limits<double>::epsilon()
@@ -297,21 +297,21 @@ using namespace Rcpp;
 
        if (diff > tol && diff < min_freq) {
          out_freq[count] = diff;
-         out_amp [count] = sum_amp;
+         out_amp [count] = combined_amplitude;
          ++count;
        }
 
-       double sb_p = fi + diff;
-       if (sb_p > tol) {
-         out_freq[count] = sb_p;
-         out_amp [count] = sum_amp;
+       double sideband_above = fi + diff;
+       if (sideband_above > tol) {
+         out_freq[count] = sideband_above;
+         out_amp [count] = combined_amplitude;
          ++count;
        }
 
        if (fi > diff + tol) {
-         double sb_m = fi - diff;
-         out_freq[count] = sb_m;
-         out_amp [count] = sum_amp;
+         double sideband_below = fi - diff;
+         out_freq[count] = sideband_below;
+         out_amp [count] = combined_amplitude;
          ++count;
        }
      }

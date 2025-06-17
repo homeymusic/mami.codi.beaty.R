@@ -109,7 +109,7 @@ with the theoretical peaks.
 
 | cochlear_amplifier_num_harmonics | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |---:|:---|:---|---:|---:|
-| 2 | 0.07958 | 0.07958 | 0.2 | 1.9 |
+| 2 | 0.07958 | 0.07958 | 0.2 | 2 |
 
 ![](man/figures/README-unnamed-chunk-4-25.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-26.png)<!-- -->  
