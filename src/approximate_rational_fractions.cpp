@@ -1,6 +1,10 @@
 #include <Rcpp.h>
-
+#include <R_ext/Rdynload.h>
 using namespace Rcpp;
+
+
+typedef SEXP (*nearby_coprime_t)(SEXP,SEXP,SEXP);
+static nearby_coprime_t cpp_nearby_coprime = nullptr;
 
  //' stern_brocot
  //'
@@ -223,11 +227,22 @@ using namespace Rcpp;
 
    for (int i = 0; i < n; ++i) {
      pseudo_x[i]                  = pow(2.0, log(x[i]) / log(pseudo_octave_double));
-     const NumericVector fraction = stern_brocot(pseudo_x[i], uncertainty);
-     nums[i]                      = fraction[0];
-     dens[i]                      = fraction[1];
-     approximations[i]            = nums[i] / dens[i];
-     errors[i]                    = approximations[i] - pseudo_x[i];
+     if (!cpp_nearby_coprime) {
+         cpp_nearby_coprime = (nearby_coprime_t)
+           R_GetCCallable("coprimer", "nearby_coprime");
+       }
+       // wrap our scalar into 1-element vectors
+       NumericVector vx = NumericVector::create(pseudo_x[i]);
+       NumericVector vu = NumericVector::create(uncertainty);
+       // call it:
+       SEXP df_sexp = cpp_nearby_coprime(wrap(vx), wrap(vu), wrap(vu));
+       DataFrame df  = as<DataFrame>(df_sexp);
+       IntegerVector nv = df["num"];
+       IntegerVector dv = df["den"];
+       nums[i]           = nv[0];
+       dens[i]           = dv[0];
+       approximations[i] = double(nums[i]) / dens[i];
+       errors[i]         = approximations[i] - pseudo_x[i];
    }
 
    return DataFrame::create(
