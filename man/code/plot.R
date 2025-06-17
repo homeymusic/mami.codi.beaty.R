@@ -316,8 +316,7 @@ plot_semitone_codi <- function(chords, title='', include_line=T, sigma=0.2,
     ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
     ggplot2::scale_color_manual(values=color_values_homey()) +
     ggplot2::ggtitle(title) +
-    ggplot2::scale_x_continuous(breaks = whole_semitones,
-                                minor_breaks = c()) + # Removed `breaks` argument to auto-generate tick labels
+    ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::ylab(ylab) +
     ggplot2::xlab(xlab) +
     ggplot2::labs(color = NULL) +
@@ -416,8 +415,7 @@ plot_semitone_stern_brocot_depth <- function(chords, title='', include_line=T, s
     ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
     ggplot2::scale_color_manual(values=color_values_homey()) +
     ggplot2::ggtitle(title) +
-    ggplot2::scale_x_continuous(breaks = whole_semitones,
-                                minor_breaks = c()) + # Removed `breaks` argument to auto-generate tick labels
+    ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::ylab(ylab) +
     ggplot2::xlab(xlab) +
     ggplot2::labs(color = NULL) +
@@ -514,8 +512,7 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
     ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
     ggplot2::scale_color_manual(values=color_values_homey()) +
     ggplot2::ggtitle(title) +
-    ggplot2::scale_x_continuous(breaks = whole_semitones,
-                                minor_breaks = c()) +
+    ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::ylab(ylab) +
     ggplot2::xlab(xlab) +
     ggplot2::labs(color = NULL) +
@@ -575,8 +572,7 @@ plot_semitone_space_time <- function(chords, title='', include_line=T, sigma=0.2
                                       color = 'behavioral',
                                       group=1), linewidth = 0.5)} +
     ggplot2::ggtitle(title) +
-    ggplot2::scale_x_continuous(breaks = whole_semitones,
-                                minor_breaks = c()) +
+    ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::guides(col = ggplot2::guide_legend()) +
     ggplot2::ylab(ylab) +
     ggplot2::xlab(xlab) +
