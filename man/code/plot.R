@@ -1147,15 +1147,15 @@ plot_semitone_time_wrap_amp <- function(theory,
     theme_homey()
 }
 
-plot_semitone_beating <- function(chords, title = '', include_line = F, sigma = 0.2,
+plot_semitone_beating <- function(chords, title = '', goal=NULL, include_line = F, sigma = 0.2,
                                   include_points = TRUE,
                                   black_vlines = c(), gray_vlines = c()) {
 
   # Smooth the beating metric
-  chords$smoothed.beating <- smoothed(chords$semitone, chords$beating, sigma)
+  chords$smoothed.beating_z <- smoothed(chords$semitone, chords$beating_z, sigma)
 
   # Plotting
-  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone, y = .data$beating)) +
+  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone, y = .data$beating_z)) +
     ggplot2::geom_vline(xintercept = black_vlines, color = colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines, color = colors_homey$highlight, linetype = 'dotted') +
     { if (include_points)
@@ -1164,9 +1164,15 @@ plot_semitone_beating <- function(chords, title = '', include_line = F, sigma = 
     { if (include_line)
       ggplot2::geom_line(data = chords,
                          ggplot2::aes(x = semitone,
-                                      y = smoothed.beating,
+                                      y = smoothed.beating_z,
                                       group = 1), color = colors_homey$neutral, linewidth = 1)  # Set color directly
     } +
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance),
+                         color = colors_homey$neutral,
+                         linewidth = 0.5)} +
     ggplot2::scale_fill_manual(values = color_values_homey(), guide = "none") +
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
