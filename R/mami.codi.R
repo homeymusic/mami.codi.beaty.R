@@ -353,6 +353,7 @@ compute_beats_perception <- function(x) {
 
 }
 
+#' This beating definition that I made up is just the total energy per cycle
 beating <- function(
     x
 ) {
