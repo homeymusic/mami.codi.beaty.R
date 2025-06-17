@@ -2,80 +2,8 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
-typedef SEXP (*nearby_coprime_t)(SEXP,SEXP,SEXP);
-static nearby_coprime_t cpp_nearby_coprime = nullptr;
-
- //' stern_brocot
- //'
- //' Approximates a floating-point number to arbitrary uncertainty.
- //'
- //' @param x Number to convert to rational fraction
- //' @param uncertainty Binary search stops once the desired uncertainty is reached
- //'
- //' @return A ratio of num / den
- //'
- //' @export
- // [[Rcpp::export]]
- NumericVector stern_brocot(const double x, const double uncertainty,
-                            const std::string& metadata = "") {
-   // Ensure x is positive and uncertainty is non-negative
-   if (x <= 0) {
-     stop("STOP: x must be greater than 0");
-   }
-   if (uncertainty <= 0) {
-     stop("STOP: uncertainty must be greater than 0");
-   }
-
-   int cycles = 0;
-
-   if (x <= uncertainty) {
-     cycles = 1; // this would be considered a R move with 1 cycle.
-     return NumericVector::create(1, static_cast<int>(1 / uncertainty));
-   }
-
-   double approximation;
-
-   const double valid_min = x - uncertainty;
-   const double valid_max = x + uncertainty;
-
-   int left_num    = floor(x);
-   int left_den    = 1;
-   int mediant_num = round(x);
-   int mediant_den = 1;
-   int right_num   = floor(x) + 1;
-   int right_den   = 1;
-
-   approximation = (double) mediant_num / mediant_den;
-
-   const int insane = 1000;
-   while (((approximation < valid_min) || (valid_max < approximation)) && cycles < insane) {
-
-     if (approximation < valid_min) {
-       left_num  = mediant_num;
-       left_den  = mediant_den;
-     } else if (valid_max < approximation) {
-       right_num = mediant_num;
-       right_den = mediant_den;
-     }
-
-     mediant_num   = left_num + right_num;
-     mediant_den   = left_den + right_den;
-
-     approximation = (double) mediant_num / (double) mediant_den;
-     cycles++;
-   }
-
-   // Final checks
-   if (mediant_num <= 0) {
-     stop("STOP: this should not happen, mediant_num is less than or equal to zero");
-   }
-
-   if (mediant_den <= 0) {
-     stop("STOP: this should not happen, mediant_den is less than or equal to zero");
-   }
-
-   return NumericVector::create(mediant_num, mediant_den);
- }
+typedef SEXP (*first_coprime_t)(SEXP,SEXP,SEXP);
+static first_coprime_t cpp_first_coprime = nullptr;
 
  //' compute_pseudo_octave
  //'
@@ -156,10 +84,10 @@ static nearby_coprime_t cpp_nearby_coprime = nullptr;
    } else {
      return DataFrame::create(
        _("harmonic_number") = harmonic_number[Rcpp::Range(0, num_matches-1)],
-                                             _("evaluation_freq") = evaluation_freq[Rcpp::Range(0, num_matches-1)],
-                                                                                   _("reference_freq")  = reference_freq[Rcpp::Range(0, num_matches-1)],
-                                                                                                                        _("pseudo_octave")   = pseudo_octave[Rcpp::Range(0, num_matches-1)],
-                                                                                                                                                            _("highest_freq")    = highest_freq[Rcpp::Range(0, num_matches-1)]
+       _("evaluation_freq") = evaluation_freq[Rcpp::Range(0, num_matches-1)],
+       _("reference_freq")  = reference_freq[Rcpp::Range(0, num_matches-1)],
+       _("pseudo_octave")   = pseudo_octave[Rcpp::Range(0, num_matches-1)],
+       _("highest_freq")    = highest_freq[Rcpp::Range(0, num_matches-1)]
      );
    }
  }
@@ -226,15 +154,15 @@ static nearby_coprime_t cpp_nearby_coprime = nullptr;
 
    for (int i = 0; i < n; ++i) {
      pseudo_x[i]                  = pow(2.0, log(x[i]) / log(pseudo_octave_double));
-     if (!cpp_nearby_coprime) {
-         cpp_nearby_coprime = (nearby_coprime_t)
-           R_GetCCallable("coprimer", "nearby_coprime");
+     if (!cpp_first_coprime) {
+         cpp_first_coprime = (first_coprime_t)
+           R_GetCCallable("coprimer", "first_coprime");
        }
        // wrap our scalar into 1-element vectors
        NumericVector vx = NumericVector::create(pseudo_x[i]);
        NumericVector vu = NumericVector::create(uncertainty);
        // call it:
-       SEXP df_sexp = cpp_nearby_coprime(wrap(vx), wrap(vu), wrap(vu));
+       SEXP df_sexp = cpp_first_coprime(wrap(vx), wrap(vu), wrap(vu));
        DataFrame df  = as<DataFrame>(df_sexp);
        IntegerVector nv = df["num"];
        IntegerVector dv = df["den"];
