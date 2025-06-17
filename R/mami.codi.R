@@ -343,7 +343,7 @@ compute_harmony_perception <- function(x) {
 #' @export
 compute_beats_perception <- function(x) {
 
-  beating = beating(x$beats_wavelength_spectrum[[1]])
+  beating = beating(x$wavelength_spectrum[[1]])
 
   x %>% dplyr::mutate(
     beating
