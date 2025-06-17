@@ -1,5 +1,4 @@
 #include <Rcpp.h>
-#include <tuple>
 
 using namespace Rcpp;
 
@@ -47,21 +46,13 @@ using namespace Rcpp;
 
    const int insane = 1000;
    while (((approximation < valid_min) || (valid_max < approximation)) && cycles < insane) {
-     double x0  = 2 * x - approximation;
 
      if (approximation < valid_min) {
        left_num  = mediant_num;
        left_den  = mediant_den;
-       int k     = floor((right_num - x0 * right_den) / (x0 * left_den - left_num));
-       right_num = right_num + k * left_num;
-       right_den = right_den + k * left_den;
-
      } else if (valid_max < approximation) {
        right_num = mediant_num;
        right_den = mediant_den;
-       int k     = floor((x0 * left_den - left_num) / (right_num - x0 * right_den));
-       left_num  = left_num + k * right_num;
-       left_den  = left_den + k * right_den;
      }
 
      mediant_num   = left_num + right_num;
@@ -327,6 +318,6 @@ using namespace Rcpp;
    // trim to actual size and return
    return Rcpp::DataFrame::create(
      _["frequency"] = out_freq[ Rcpp::Range(0, count - 1) ],
-     _["amplitude"] = out_amp [ Rcpp::Range(0, count - 1) ]
+                              _["amplitude"] = out_amp [ Rcpp::Range(0, count - 1) ]
    );
  }
