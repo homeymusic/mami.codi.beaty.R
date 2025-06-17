@@ -2,7 +2,6 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
-
 typedef SEXP (*nearby_coprime_t)(SEXP,SEXP,SEXP);
 static nearby_coprime_t cpp_nearby_coprime = nullptr;
 
