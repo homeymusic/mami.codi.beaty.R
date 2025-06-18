@@ -52,7 +52,7 @@ mami.codi <- function(
       integer_harmonics_tolerance
     ) %>%
     # Psychophysical Domain
-    compute_beats_perception()   %>%
+    compute_energy_per_cycle()   %>%
     compute_harmony_perception() %>%
     # App Domain
     format_output(metadata, verbose)
@@ -343,9 +343,9 @@ compute_harmony_perception <- function(x) {
 #'
 #' @return Psychophysical measure of beating perception.
 #'
-#' @rdname compute_beats_perception
+#' @rdname compute_energy_per_cycle
 #' @export
-compute_beats_perception <- function(x) {
+compute_energy_per_cycle <- function(x) {
 
   beating = beating(x$beats_wavelength_spectrum[[1]])
 
