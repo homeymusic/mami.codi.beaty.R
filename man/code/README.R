@@ -103,7 +103,7 @@ grid_P8 = tidyr::expand_grid(
 #                         grid_M3,grid_M6,grid_P8)
 #
 grid = dplyr::bind_rows(
-  # grid_1,
+  grid_1,
   # grid_Bonang,
   # grid_5,grid_5PartialsNo3,
   # grid_10,grid_10_stretched,grid_10_compressed,
@@ -118,7 +118,8 @@ output = grid %>% furrr::future_pmap_dfr(\(interval,
                                            octave_ratio,
                                            timbre) {
 
-  cat("timbre:",timbre)
+  cat("timbre:", timbre, "interval", interval, "\n")
+
   if (timbre == 'Bonang') {
     bass_f0 <- hrep::midi_to_freq(tonic_midi)
     bass <- tibble::tibble(

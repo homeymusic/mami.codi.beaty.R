@@ -200,9 +200,8 @@ using namespace Rcpp;
 
    Rcpp::NumericVector beat_freqs(max_pairs);
    Rcpp::NumericVector beat_amps (max_pairs);
-
-   Rcpp::NumericVector sb_freqs(max_entries); // could be 2 per pair
-   Rcpp::NumericVector sb_amps (max_entries);
+   Rcpp::NumericVector sb_freqs  (max_entries);
+   Rcpp::NumericVector sb_amps   (max_entries);
 
    int beat_count = 0;
    int sb_count   = 0;
@@ -218,12 +217,12 @@ using namespace Rcpp;
          std::max(std::abs(fi), std::abs(fj));
 
        if (diff > tol && diff < min_freq) {
-         // (1) Beat
+         // Beat
          beat_freqs[beat_count] = diff;
          beat_amps [beat_count] = sum_amp;
          ++beat_count;
 
-         // (2) Upper sideband: fi + diff
+         // Upper sideband
          double sb_p = fi + diff;
          if (sb_p > tol) {
            sb_freqs[sb_count] = sb_p;
@@ -231,7 +230,7 @@ using namespace Rcpp;
            ++sb_count;
          }
 
-         // (3) Lower sideband: fi - diff, if positive
+         // Lower sideband
          if (fi > diff + tol) {
            double sb_m = fi - diff;
            sb_freqs[sb_count] = sb_m;
@@ -242,14 +241,31 @@ using namespace Rcpp;
      }
    }
 
+   // Guard against Rcpp::Range(0, -1) for empty results
+   Rcpp::NumericVector beat_freq_out = (beat_count > 0) ?
+   beat_freqs[Rcpp::Range(0, beat_count - 1)] :
+     Rcpp::NumericVector();
+
+   Rcpp::NumericVector beat_amp_out = (beat_count > 0) ?
+   beat_amps[Rcpp::Range(0, beat_count - 1)] :
+     Rcpp::NumericVector();
+
+   Rcpp::NumericVector sb_freq_out = (sb_count > 0) ?
+   sb_freqs[Rcpp::Range(0, sb_count - 1)] :
+     Rcpp::NumericVector();
+
+   Rcpp::NumericVector sb_amp_out = (sb_count > 0) ?
+   sb_amps[Rcpp::Range(0, sb_count - 1)] :
+     Rcpp::NumericVector();
+
    return Rcpp::List::create(
      _["beats"] = Rcpp::DataFrame::create(
-       _["frequency"] = beat_freqs[ Rcpp::Range(0, beat_count - 1) ],
-       _["amplitude"] = beat_amps [ Rcpp::Range(0, beat_count - 1) ]
+       _["frequency"] = beat_freq_out,
+       _["amplitude"] = beat_amp_out
      ),
      _["sidebands"] = Rcpp::DataFrame::create(
-       _["frequency"] = sb_freqs[ Rcpp::Range(0, sb_count - 1) ],
-       _["amplitude"] = sb_amps [ Rcpp::Range(0, sb_count - 1) ]
+       _["frequency"] = sb_freq_out,
+       _["amplitude"] = sb_amp_out
      )
    );
  }
