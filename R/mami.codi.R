@@ -347,7 +347,7 @@ compute_harmony_perception <- function(x) {
 #' @export
 compute_energy_per_cycle <- function(x) {
 
-  energy_per_cycle = energy_per_cycle(x$beats_wavelength_spectrum[[1]])
+  energy_per_cycle = energy_per_cycle(x$wavelength_spectrum[[1]])
 
   x %>% dplyr::mutate(
     energy_per_cycle
