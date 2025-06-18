@@ -141,8 +141,8 @@ generate_cochlea_amplifications <- function(
 generate_beats <- function(x) {
 
   stimulus_and_cochlear_amplifier_frequency_spectrum = combine_spectra(
-    x$stimulus_frequency_spectrum[[1]] #,
-    # x$cochlear_amplifier_frequency_spectrum[[1]]
+    x$stimulus_frequency_spectrum[[1]],
+    x$cochlear_amplifier_frequency_spectrum[[1]]
   )
 
   components = compute_beats_and_sidebands(
