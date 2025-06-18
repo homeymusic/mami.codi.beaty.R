@@ -134,7 +134,7 @@ generate_cochlea_amplifications <- function(
 
 }
 
-#' Generate beat tones
+#' Generate beat tones and sidebands
 #'
 #' @param x Wavelength and frequency spectra representing the stimulus tones.
 #'
@@ -142,32 +142,39 @@ generate_cochlea_amplifications <- function(
 #'
 #' @rdname generate_beats
 #' @export
-generate_beats <- function(
-    x
-) {
+generate_beats <- function(x) {
 
   stimulus_and_cochlear_amplifier_frequency_spectrum = combine_spectra(
     x$stimulus_frequency_spectrum[[1]],
     x$cochlear_amplifier_frequency_spectrum[[1]]
   )
 
-  beats_frequency_spectrum = compute_beats_and_sidebands(
+  components = compute_beats_and_sidebands(
     frequency = stimulus_and_cochlear_amplifier_frequency_spectrum$frequency,
-    amplitude  = stimulus_and_cochlear_amplifier_frequency_spectrum$amplitude
-  ) %>% filter_spectrum_in_range()
+    amplitude = stimulus_and_cochlear_amplifier_frequency_spectrum$amplitude
+  )
+
+  beats_frequency_spectrum = components$beats %>% filter_spectrum_in_range()
+  sidebands_frequency_spectrum = components$sidebands %>% filter_spectrum_in_range()
 
   beats_wavelength_spectrum = tibble::tibble(
     wavelength = C_SOUND / beats_frequency_spectrum$frequency,
     amplitude  = beats_frequency_spectrum$amplitude
   ) %>% filter_spectrum_in_range()
 
+  sidebands_wavelength_spectrum = tibble::tibble(
+    wavelength = C_SOUND / sidebands_frequency_spectrum$frequency,
+    amplitude  = sidebands_frequency_spectrum$amplitude
+  ) %>% filter_spectrum_in_range()
+
   # Store the values
   x %>% dplyr::mutate(
-    beats_frequency_spectrum  = list(beats_frequency_spectrum),
-    beats_wavelength_spectrum = list(beats_wavelength_spectrum),
+    beats_frequency_spectrum             = list(beats_frequency_spectrum),
+    sidebands_frequency_spectrum         = list(sidebands_frequency_spectrum),
+    beats_wavelength_spectrum            = list(beats_wavelength_spectrum),
+    sidebands_wavelength_spectrum        = list(sidebands_wavelength_spectrum),
     stimulus_and_cochlear_amplifier_frequency_spectrum = list(stimulus_and_cochlear_amplifier_frequency_spectrum)
   )
-
 }
 
 #' Compute the fundamental wavenumber of the complex waveform.
@@ -192,7 +199,7 @@ compute_fundamental_wavenumber <- function(
   wavelength_spectrum = combine_spectra(
     x$stimulus_wavelength_spectrum[[1]],
     x$cochlear_amplifier_wavelength_spectrum[[1]],
-    x$beats_wavelength_spectrum[[1]]
+    x$sidebands_wavelength_spectrum[[1]]
   )
 
   l = wavelength_spectrum$wavelength
@@ -240,8 +247,7 @@ compute_fundamental_frequency <- function(
 ) {
 
   frequency_spectrum = combine_spectra(
-    x$stimulus_frequency_spectrum[[1]] # ,
-    # x$cochlear_amplifier_frequency_spectrum[[1]]
+    x$stimulus_frequency_spectrum[[1]]
   )
   f = frequency_spectrum$frequency
 

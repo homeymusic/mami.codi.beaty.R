@@ -60,7 +60,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // compute_beats_and_sidebands
-Rcpp::DataFrame compute_beats_and_sidebands(Rcpp::NumericVector frequency, Rcpp::NumericVector amplitude);
+Rcpp::List compute_beats_and_sidebands(Rcpp::NumericVector frequency, Rcpp::NumericVector amplitude);
 RcppExport SEXP _mami_codi_R_compute_beats_and_sidebands(SEXP frequencySEXP, SEXP amplitudeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

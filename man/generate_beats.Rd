@@ -2,7 +2,7 @@
 % Please edit documentation in R/mami.codi.R
 \name{generate_beats}
 \alias{generate_beats}
-\title{Generate beat tones}
+\title{Generate beat tones and sidebands}
 \usage{
 generate_beats(x)
 }
@@ -13,5 +13,5 @@ generate_beats(x)
 The wavelength spectrum of the selected beat tones.
 }
 \description{
-Generate beat tones
+Generate beat tones and sidebands
 }
