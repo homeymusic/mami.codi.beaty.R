@@ -143,11 +143,13 @@ p = params %>% purrr::map(\(p) {
   chords$euclids_orchard_height = chords$space_euclids_orchard_height + chords$time_euclids_orchard_height
   chords$euclids_orchard_height_z = z_scores(chords$euclids_orchard_height)
   
+  chords$stern_brocot_depth = -chords$stern_brocot_depth
   chords$stern_brocot_depth_z = z_scores(chords$stern_brocot_depth)
   
   chords$thomaes_function = chords$space_thomae + chords$time_thomae
   chords$thomaes_function_z = z_scores(chords$thomaes_function)
   
+  chords$energy_per_cycle = -chords$energy_per_cycle
   chords$energy_per_cycle_z = z_scores(chords$energy_per_cycle)
   
   experiment.rds = paste0('./man/data/input/',
@@ -175,12 +177,10 @@ p = params %>% purrr::map(\(p) {
   }
   cat("  \n#####", title, '\n')
   cat(description)
-  cochlear_amplifier_num_harmonics = chords$cochlear_amplifier_num_harmonics %>% max()
   t_v = chords$time_uncertainty %>% max()
   s_v = chords$space_uncertainty %>% max()
   p_o = chords$space_fractions[[1]]$pseudo_octave %>% max() 
   print(knitr::kable(tibble::tibble_row(
-    cochlear_amplifier_num_harmonics = cochlear_amplifier_num_harmonics,
     time_uncertainty  = paste(round(t_v, 5), collapse = ' '),
     space_uncertainty = paste(round(s_v, 5), collapse = ' '),
     smoothing_sigma   = sigma,
@@ -190,6 +190,12 @@ p = params %>% purrr::map(\(p) {
   print(plot_semitone_codi(chords, paste('Consonance-Dissonance'),
                            goal=experiment,sigma=sigma,include_points=T,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
+  cat("  \n")
+  
+  print(plot_semitone_stern_brocot_depth(chords,title = "Stern-Brocot Depth",
+                                         goal=experiment,include_points=T,include_line=T,
+                                         black_vlines = black_vlines,gray_vlines  = gray_vlines)
+  )
   cat("  \n")
   
   print(plot_semitone_space_time(chords, paste('space and time beats Consonance'),
@@ -208,11 +214,6 @@ p = params %>% purrr::map(\(p) {
                               black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
 
-  print(plot_semitone_stern_brocot_depth(chords,title = "Stern-Brocot Depth",
-                                         goal=experiment,include_points=T,include_line=F,
-                                         black_vlines = black_vlines,gray_vlines  = gray_vlines)
-  )
-  cat("  \n")
   
   
 })

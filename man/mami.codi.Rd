@@ -6,7 +6,6 @@
 \usage{
 mami.codi(
   x,
-  cochlear_amplifier_num_harmonics = COCHLEAR_AMPLIFIER_NUM_HARMONICS,
   space_uncertainty = UNCERTAINTY_LIMIT,
   time_uncertainty = UNCERTAINTY_LIMIT,
   integer_harmonics_tolerance = INTEGER_HARMONICS_TOLERANCE,
@@ -19,8 +18,6 @@ mami.codi(
 \item{x}{Chord to analyze, which is parsed using
 \code{hrep::sparse_fr_spectrum}. For more details, see
 \href{https://github.com/pmcharrison/hrep/blob/master/R/sparse-fr-spectrum.R}{hrep::sparse_fr_spectrum documentation}.}
-
-\item{cochlear_amplifier_num_harmonics}{Number of harmonics to include for the stimulus-frequency otoacoustic emission.}
 
 \item{space_uncertainty}{Optional space uncertainty value for finding rational fractions.}
 

@@ -11,7 +11,7 @@ compute_fundamental_wavenumber(
 )
 }
 \arguments{
-\item{x}{Wavelength spectrum that include stimulus, beat, and cochlear emission tones.}
+\item{x}{Wavelength spectrum that include stimulus, beat tones.}
 
 \item{space_uncertainty}{Uncertainty factor applied when creating rational approximations for spatial wavelength.}
 
@@ -22,5 +22,5 @@ Fundamental wavenumber of a complex waveform.
 }
 \description{
 Computes the fundamental wavenumber from a wavelength spectrum that
-includes stimulus, beat, and cochlear emission tones.
+includes stimulus, beat.
 }

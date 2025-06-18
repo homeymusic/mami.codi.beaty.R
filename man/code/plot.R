@@ -29,6 +29,7 @@ colors_homey <- list(
   'light_neutral'     = '#FFF6E2',
   'fundamental'       = '#FF5500',
   'green'             = '#74DE7E',
+  'green_lighter'     = '#9EE8A5',
   'gray'              = '#C0C0C0'
 )
 
@@ -54,7 +55,8 @@ color_values_homey <- function() {
   c("minor"=colors_homey$minor,
     "neutral"=colors_homey$fundamental,
     "major"=colors_homey$major,
-    'behavioral'=colors_homey$neutral)
+    'behavioral'=colors_homey$neutral,
+    'sb_depth'=colors_homey$green_lighter)
 }
 space_time_colors <- function() {
   c('space'=colors_homey$minor,
@@ -404,7 +406,7 @@ plot_semitone_stern_brocot_depth <- function(chords, title='', include_line=T, s
       ggplot2::geom_line(data=chords,
                          ggplot2::aes(x = semitone,
                                       y = smoothed_stern_brocot_depth_z,
-                                      color=color_factor_homey(chords,'majorness'),
+                                      color = 'sb_depth',
                                       group=1), linewidth = 1)} +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
