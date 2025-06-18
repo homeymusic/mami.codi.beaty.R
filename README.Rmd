@@ -203,7 +203,7 @@ p = params %>% purrr::map(\(p) {
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_energy_per_cycle(chords, paste('Energy Per Cycle sum(amplitude ^ 2 * wavelength)'),
+  print(plot_semitone_energy_per_cycle(chords, paste('Energy Per Cycle'),
                               goal=experiment, sigma=sigma,include_points=T,include_line=F,
                               black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
