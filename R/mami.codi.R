@@ -36,7 +36,7 @@ mami.codi <- function(
     parse_input(...) %>%
     # Physical Domain
     generate_stimulus() %>%
-    generate_beats() %>%
+    generate_sidebands() %>%
     # Frequency Domain
     compute_fundamental_wavenumber(
       space_uncertainty,
@@ -80,50 +80,47 @@ generate_stimulus <- function(
 
 }
 
-#' Generate beat tones and sidebands
+#' Generate sidebands
 #'
-#' @param x Wavelength and frequency spectra representing the stimulus tones.
+#' For a given stimulus spectrum, compute the spectral sidebands
+#' (fi ± |fj – fi|) for every unordered pair of input frequencies,
+#' then convert to wavelength and filter into range.
 #'
-#' @return The wavelength spectrum of the selected beat tones.
-#'
-#' @rdname generate_beats
+#' @param x A list or tibble containing `stimulus_frequency_spectrum`
+#'   (a data.frame/tibble with `frequency` and `amplitude` columns).
+#' @return The input `x` augmented with:
+#'   - `sidebands_frequency_spectrum`: filtered sideband frequencies & amplitudes
+#'   - `sidebands_wavelength_spectrum`: corresponding wavelengths & amplitudes
+#' @rdname generate_sidebands
 #' @export
-generate_beats <- function(x) {
+generate_sidebands <- function(x) {
+  stimulus_frequency_spectrum <- x$stimulus_frequency_spectrum[[1]]
 
-  stimulus_frequency_spectrum = x$stimulus_frequency_spectrum[[1]]
-  components = compute_beats_and_sidebands(
+  sidebands_frequency_spectrum <- compute_sidebands(
     frequency = stimulus_frequency_spectrum$frequency,
     amplitude = stimulus_frequency_spectrum$amplitude
-  )
+  ) %>%
+    filter_spectrum_in_range()
 
-  beats_frequency_spectrum = components$beats %>% filter_spectrum_in_range()
-  sidebands_frequency_spectrum = components$sidebands %>% filter_spectrum_in_range()
-
-  beats_wavelength_spectrum = tibble::tibble(
-    wavelength = C_SOUND / beats_frequency_spectrum$frequency,
-    amplitude  = beats_frequency_spectrum$amplitude
-  ) %>% filter_spectrum_in_range()
-
-  sidebands_wavelength_spectrum = tibble::tibble(
+  sidebands_wavelength_spectrum <- tibble::tibble(
     wavelength = C_SOUND / sidebands_frequency_spectrum$frequency,
     amplitude  = sidebands_frequency_spectrum$amplitude
-  ) %>% filter_spectrum_in_range()
+  ) %>%
+    filter_spectrum_in_range()
 
-  # Store the values
-  x %>% dplyr::mutate(
-    beats_frequency_spectrum             = list(beats_frequency_spectrum),
-    sidebands_frequency_spectrum         = list(sidebands_frequency_spectrum),
-    beats_wavelength_spectrum            = list(beats_wavelength_spectrum),
-    sidebands_wavelength_spectrum        = list(sidebands_wavelength_spectrum)
-  )
+  x %>%
+    dplyr::mutate(
+      sidebands_frequency_spectrum = list(sidebands_frequency_spectrum),
+      sidebands_wavelength_spectrum = list(sidebands_wavelength_spectrum)
+    )
 }
 
 #' Compute the fundamental wavenumber of the complex waveform.
 #'
 #' Computes the fundamental wavenumber from a wavelength spectrum that
-#' includes stimulus, beat.
+#' includes stimulus, side bands.
 #'
-#' @param x Wavelength spectrum that include stimulus, beat tones.
+#' @param x Wavelength spectrum that include stimulus, side bands.
 #' @param space_uncertainty Uncertainty factor applied when creating rational approximations for spatial wavelength.
 #' @param integer_harmonics_tolerance Allowable deviation for harmonics that are not perfect integers.
 #'
@@ -170,9 +167,9 @@ compute_fundamental_wavenumber <- function(
 #' Compute the fundamental temporal frequency of a complex waveform.
 #'
 #' Computes the fundamental temporal frequency from a frequency spectrum that
-#' includes stimulus, beat tones.
+#' includes stimulus and side bands.
 #'
-#' @param x Wavelength spectrum that include stimulus, beat tones.
+#' @param x Wavelength spectrum that include stimulus and side bands.
 #' @param time_uncertainty Uncertainty factor applied when creating rational approximations for temporal frequency.
 #' @param integer_harmonics_tolerance Allowable deviation for harmonics that are not perfect integers.
 #'
@@ -278,14 +275,13 @@ compute_harmony_perception <- function(x) {
 
 }
 
-#' Compute beating perception from beat spectrum
+#' Compute energy density per cycle
 #'
-#' Calculates a psychophysical measure of beating perception derived from the
-#' beat spectrum, interpreting beat frequencies and amplitudes in a perceptual context.
+#' Calculates energy density per cycle.
 #'
-#' @param x The beat spectrum, containing frequency and amplitude information for beats derived from the stimulus.
+#' @param x The spectrum of stimulus and side bands.
 #'
-#' @return Psychophysical measure of beating perception.
+#' @return Physics measure of energy per cycle.
 #'
 #' @rdname compute_energy_per_cycle
 #' @export
@@ -299,7 +295,6 @@ compute_energy_per_cycle <- function(x) {
 
 }
 
-#' This beating definition that I made up is just the total energy per cycle
 energy_per_cycle <- function(
     x
 ) {
@@ -347,9 +342,7 @@ C_SOUND = 343 # m/s arbitrary, disappears in the ratios
 
 DIMENSION <- list(
   SPACE = 'space',
-  SPACE_BEATS = 'space_beats',
-  TIME  = 'time',
-  TIME_BEATS  = 'time_beats'
+  TIME  = 'time'
 )
 
 MAX_FREQUENCY = hrep::midi_to_freq(127 + 24)

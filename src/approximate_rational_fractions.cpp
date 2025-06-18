@@ -162,66 +162,49 @@ using namespace Rcpp;
    return df;
  }
 
- //' Compute Beats and Sidebands Separately
+ //' Compute Sidebands
  //'
  //' For each unordered pair of input frequencies, compute:
- //'   1. The beat frequency (|f2 - f1|) if it's below the minimum frequency
- //'   2. Two sidebands: fi ± |f2 - f1|
+ //'   Two sidebands: fi ± |f2 - f1|
  //'
- //' Returns two separate data frames: one for beats and one for sidebands.
+ //' Returns a DataFrame of sideband frequencies and amplitudes.
  //'
  //' @param frequency NumericVector of input frequencies
  //' @param amplitude NumericVector of input amplitudes (same length)
- //' @return A List with two DataFrames: $beats and $sidebands
- //'
+ //' @return DataFrame with columns `frequency` and `amplitude`
  //' @export
  // [[Rcpp::export]]
- Rcpp::List compute_beats_and_sidebands(
-     Rcpp::NumericVector frequency,
-     Rcpp::NumericVector amplitude
+ DataFrame compute_sidebands(
+     NumericVector frequency,
+     NumericVector amplitude
  ) {
    int n = frequency.size();
    if (n < 2) {
-     return Rcpp::List::create(
-       _["beats"] = Rcpp::DataFrame::create(
-         _["frequency"] = Rcpp::NumericVector(),
-         _["amplitude"] = Rcpp::NumericVector()
-       ),
-       _["sidebands"] = Rcpp::DataFrame::create(
-         _["frequency"] = Rcpp::NumericVector(),
-         _["amplitude"] = Rcpp::NumericVector()
-       )
+     return DataFrame::create(
+       _["frequency"] = NumericVector(),
+       _["amplitude"] = NumericVector()
      );
    }
 
    double min_freq = Rcpp::min(frequency);
    int max_pairs   = n * (n - 1) / 2;
-   int max_entries = max_pairs * 3;
+   int max_entries = max_pairs * 2; // only sidebands
 
-   Rcpp::NumericVector beat_freqs(max_pairs);
-   Rcpp::NumericVector beat_amps (max_pairs);
-   Rcpp::NumericVector sb_freqs  (max_entries);
-   Rcpp::NumericVector sb_amps   (max_entries);
-
-   int beat_count = 0;
-   int sb_count   = 0;
+   NumericVector sb_freqs(max_entries);
+   NumericVector sb_amps (max_entries);
+   int sb_count = 0;
 
    for (int i = 0; i < n; ++i) {
      double fi = frequency[i];
      for (int j = i + 1; j < n; ++j) {
        double fj = frequency[j];
-       double diff = std::abs(fi - fj);
+       double diff    = std::abs(fi - fj);
        double sum_amp = amplitude[i] + amplitude[j];
 
        double tol = std::numeric_limits<double>::epsilon() *
          std::max(std::abs(fi), std::abs(fj));
 
        if (diff > tol && diff < min_freq) {
-         // Beat
-         beat_freqs[beat_count] = diff;
-         beat_amps [beat_count] = sum_amp;
-         ++beat_count;
-
          // Upper sideband
          double sb_p = fi + diff;
          if (sb_p > tol) {
@@ -229,7 +212,6 @@ using namespace Rcpp;
            sb_amps [sb_count] = sum_amp;
            ++sb_count;
          }
-
          // Lower sideband
          if (fi > diff + tol) {
            double sb_m = fi - diff;
@@ -241,31 +223,16 @@ using namespace Rcpp;
      }
    }
 
-   // Guard against Rcpp::Range(0, -1) for empty results
-   Rcpp::NumericVector beat_freq_out = (beat_count > 0) ?
-   beat_freqs[Rcpp::Range(0, beat_count - 1)] :
-     Rcpp::NumericVector();
+   NumericVector sb_freq_out = (sb_count > 0)
+     ? sb_freqs[Range(0, sb_count - 1)]
+   : NumericVector();
 
-   Rcpp::NumericVector beat_amp_out = (beat_count > 0) ?
-   beat_amps[Rcpp::Range(0, beat_count - 1)] :
-     Rcpp::NumericVector();
+   NumericVector sb_amp_out = (sb_count > 0)
+     ? sb_amps[Range(0, sb_count - 1)]
+   : NumericVector();
 
-   Rcpp::NumericVector sb_freq_out = (sb_count > 0) ?
-   sb_freqs[Rcpp::Range(0, sb_count - 1)] :
-     Rcpp::NumericVector();
-
-   Rcpp::NumericVector sb_amp_out = (sb_count > 0) ?
-   sb_amps[Rcpp::Range(0, sb_count - 1)] :
-     Rcpp::NumericVector();
-
-   return Rcpp::List::create(
-     _["beats"] = Rcpp::DataFrame::create(
-       _["frequency"] = beat_freq_out,
-       _["amplitude"] = beat_amp_out
-     ),
-     _["sidebands"] = Rcpp::DataFrame::create(
-       _["frequency"] = sb_freq_out,
-       _["amplitude"] = sb_amp_out
-     )
+   return DataFrame::create(
+     _["frequency"] = sb_freq_out,
+     _["amplitude"] = sb_amp_out
    );
  }
