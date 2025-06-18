@@ -141,8 +141,8 @@ generate_cochlea_amplifications <- function(
 generate_beats <- function(x) {
 
   stimulus_and_cochlear_amplifier_frequency_spectrum = combine_spectra(
-    x$stimulus_frequency_spectrum[[1]],
-    x$cochlear_amplifier_frequency_spectrum[[1]]
+    x$stimulus_frequency_spectrum[[1]] #,
+    # x$cochlear_amplifier_frequency_spectrum[[1]]
   )
 
   components = compute_beats_and_sidebands(
@@ -194,7 +194,7 @@ compute_fundamental_wavenumber <- function(
 
   wavelength_spectrum = combine_spectra(
     x$stimulus_wavelength_spectrum[[1]],
-    x$cochlear_amplifier_wavelength_spectrum[[1]],
+    # x$cochlear_amplifier_wavelength_spectrum[[1]],
     x$sidebands_wavelength_spectrum[[1]]
   )
 
@@ -347,16 +347,16 @@ compute_harmony_perception <- function(x) {
 #' @export
 compute_energy_per_cycle <- function(x) {
 
-  beating = beating(x$beats_wavelength_spectrum[[1]])
+  energy_per_cycle = energy_per_cycle(x$beats_wavelength_spectrum[[1]])
 
   x %>% dplyr::mutate(
-    beating
+    energy_per_cycle
   )
 
 }
 
 #' This beating definition that I made up is just the total energy per cycle
-beating <- function(
+energy_per_cycle <- function(
     x
 ) {
   if (nrow(x) > 0) {
