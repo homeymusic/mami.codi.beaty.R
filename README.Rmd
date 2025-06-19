@@ -141,6 +141,8 @@ p = params %>% purrr::map(\(p) {
   chords$stern_brocot_depth = -chords$stern_brocot_depth
   chords$stern_brocot_depth_z = z_scores(chords$stern_brocot_depth)
   
+  chords$stern_brocot_depth_diff_z = z_scores(chords$stern_brocot_depth_diff)
+  
   chords$thomaes_function = chords$space_thomae + chords$time_thomae
   chords$thomaes_function_z = z_scores(chords$thomaes_function)
   
@@ -191,6 +193,12 @@ p = params %>% purrr::map(\(p) {
   print(plot_semitone_stern_brocot_depth(chords,title = "Beating (Stern-Brocot Depth)",
                                          goal=experiment,sigma=sigma,include_points=T,include_line=T,
                                          black_vlines = black_vlines,gray_vlines  = gray_vlines)
+  )
+  cat("  \n")
+  
+  print(plot_semitone_stern_brocot_depth_diff(chords,title = "Beating Diff (Stern-Brocot Depth Diff)",
+                                              goal=experiment,sigma=sigma,include_points=T,include_line=T,
+                                              black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
   cat("  \n")
   

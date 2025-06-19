@@ -223,7 +223,7 @@ compute_harmony_perception <- function(x) {
     stern_brocot_space_depth = log2(.data$space_depth),
 
     stern_brocot_depth      = log2(.data$space_depth * .data$time_depth),
-    stern_brocot_depth_diff = log2(.data$space_depth / .data$time_depth)
+    stern_brocot_depth_diff = log2(.data$time_depth / .data$space_depth)
 
   )
 
