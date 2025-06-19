@@ -192,7 +192,7 @@ p = params %>% purrr::map(\(p) {
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_space_time(chords, paste('space and time beats Consonance'),
+  print(plot_semitone_space_time(chords, paste('Space and Time Consonance'),
                                  dashed_minor = p$dashed_minor,
                                  goal=NULL,sigma=sigma,include_points=T,
                                  black_vlines=black_vlines,gray_vlines=gray_vlines))
@@ -209,7 +209,7 @@ p = params %>% purrr::map(\(p) {
   )
   cat("  \n")
   
-  print(plot_semitone_stern_brocot_depth_space_time(chords,title = "Stern-Brocot Depth",
+  print(plot_semitone_stern_brocot_depth_space_time(chords,title = "Space and Time Stern-Brocot Depth",
                                          goal=experiment,include_points=T,include_line=T,
                                          black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
