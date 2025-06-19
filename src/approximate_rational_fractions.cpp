@@ -2,6 +2,9 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
+typedef SEXP (*coprimer_first_coprime_t)(SEXP,SEXP,SEXP);
+static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
+
  //' compute_pseudo_octave
  //'
  //' Find the highest fundamental freq
@@ -108,9 +111,6 @@ using namespace Rcpp;
    return std::stod(std::string(names_of_count[0]));
  }
 
- typedef SEXP (*first_coprime_t)(SEXP,SEXP,SEXP);
- static first_coprime_t cpp_first_coprime = nullptr;
-
  //' approximate_rational_fractions
  //'
  //' Approximates floating-point numbers to arbitrary uncertainty.
@@ -145,13 +145,13 @@ using namespace Rcpp;
    }
 
    // 4) grab the coprimer callable once
-   if (!cpp_first_coprime) {
-     cpp_first_coprime = (first_coprime_t)
+   if (!coprimer_first_coprime) {
+     coprimer_first_coprime = (coprimer_first_coprime_t)
      R_GetCCallable("coprimer", "first_coprime");
    }
 
    // 5) single, vectorized call into coprimer
-   DataFrame df = cpp_first_coprime(wrap(pseudo_x),
+   DataFrame df = coprimer_first_coprime(wrap(pseudo_x),
                                     wrap(uvec),
                                     wrap(uvec));
 

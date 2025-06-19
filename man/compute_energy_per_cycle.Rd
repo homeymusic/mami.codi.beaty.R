@@ -2,17 +2,16 @@
 % Please edit documentation in R/mami.codi.R
 \name{compute_energy_per_cycle}
 \alias{compute_energy_per_cycle}
-\title{Compute beating perception from beat spectrum}
+\title{Compute energy density per cycle}
 \usage{
 compute_energy_per_cycle(x)
 }
 \arguments{
-\item{x}{The beat spectrum, containing frequency and amplitude information for beats derived from the stimulus.}
+\item{x}{The spectrum of stimulus and side bands.}
 }
 \value{
-Psychophysical measure of beating perception.
+Physics measure of energy per cycle.
 }
 \description{
-Calculates a psychophysical measure of beating perception derived from the
-beat spectrum, interpreting beat frequencies and amplitudes in a perceptual context.
+Calculates energy density per cycle.
 }
