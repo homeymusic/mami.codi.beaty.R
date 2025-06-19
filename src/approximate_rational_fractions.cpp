@@ -1,3 +1,5 @@
+// This is c++ code used by mami.codi.beaty
+
 #include <Rcpp.h>
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;

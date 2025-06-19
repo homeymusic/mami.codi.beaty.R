@@ -1,4 +1,4 @@
-#' Major-Minor Consonance-Dissonance
+#' Major-Minor Consonance-Dissonance Beating
 #'
 #' A model of consonance perception based on the fundamental cycles of complex space and time signals.
 #'
@@ -16,9 +16,9 @@
 #' @return Major-Minor (majorness), Consonance-Dissonance (dissonance), and metadata, with additional
 #'   information if \code{verbose = TRUE}.
 #'
-#' @rdname mami.codi
+#' @rdname mami.codi.beaty
 #' @export
-mami.codi <- function(
+mami.codi.beaty <- function(
     x,
     metadata = NA,
     verbose  = FALSE,

@@ -12,7 +12,7 @@
 #' @importFrom hrep freq amp sparse_fr_spectrum
 #' @importFrom Rcpp evalCpp
 #' @importFrom furrr future_pmap_dfr
-#' @useDynLib  mami.codi.R, .registration = TRUE
+#' @useDynLib  mami.codi.beaty.R, .registration = TRUE
 
 ## usethis namespace: end
 NULL

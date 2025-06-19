@@ -7,6 +7,6 @@
 src/*.o
 src/*.so
 src/*.dll
-mami.codi.R.Rcheck/
-mami.codi.R*.tar.gz
-mami.codi.R*.tgz
+mami.codi.beaty.R*.check/
+mami.codi.beaty.R*.tar.gz
+mami.codi.beaty.R*.tgz

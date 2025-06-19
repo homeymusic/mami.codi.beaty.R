@@ -1,6 +1,6 @@
 devtools::load_all(".")
 
-library(mami.codi.R)
+library(mami.codi.beaty.R)
 library(furrr)
 library(purrr)
 library(parallelly)

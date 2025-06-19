@@ -12,7 +12,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // compute_pseudo_octave
 const double compute_pseudo_octave(const double ratio_n, const double ratio_0, const int n);
-RcppExport SEXP _mami_codi_R_compute_pseudo_octave(SEXP ratio_nSEXP, SEXP ratio_0SEXP, SEXP nSEXP) {
+RcppExport SEXP _mami_codi_beaty_R_compute_pseudo_octave(SEXP ratio_nSEXP, SEXP ratio_0SEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -25,7 +25,7 @@ END_RCPP
 }
 // approximate_harmonics
 DataFrame approximate_harmonics(const NumericVector input_ratios, const double integer_harmonic_tolerance);
-RcppExport SEXP _mami_codi_R_approximate_harmonics(SEXP input_ratiosSEXP, SEXP integer_harmonic_toleranceSEXP) {
+RcppExport SEXP _mami_codi_beaty_R_approximate_harmonics(SEXP input_ratiosSEXP, SEXP integer_harmonic_toleranceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -37,7 +37,7 @@ END_RCPP
 }
 // pseudo_octave
 const double pseudo_octave(NumericVector approximate_harmonics);
-RcppExport SEXP _mami_codi_R_pseudo_octave(SEXP approximate_harmonicsSEXP) {
+RcppExport SEXP _mami_codi_beaty_R_pseudo_octave(SEXP approximate_harmonicsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -48,7 +48,7 @@ END_RCPP
 }
 // approximate_rational_fractions
 DataFrame approximate_rational_fractions(NumericVector x, const double uncertainty, const double deviation);
-RcppExport SEXP _mami_codi_R_approximate_rational_fractions(SEXP xSEXP, SEXP uncertaintySEXP, SEXP deviationSEXP) {
+RcppExport SEXP _mami_codi_beaty_R_approximate_rational_fractions(SEXP xSEXP, SEXP uncertaintySEXP, SEXP deviationSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -61,7 +61,7 @@ END_RCPP
 }
 // compute_sidebands_wavelength
 DataFrame compute_sidebands_wavelength(NumericVector wavelength, NumericVector amplitude);
-RcppExport SEXP _mami_codi_R_compute_sidebands_wavelength(SEXP wavelengthSEXP, SEXP amplitudeSEXP) {
+RcppExport SEXP _mami_codi_beaty_R_compute_sidebands_wavelength(SEXP wavelengthSEXP, SEXP amplitudeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -73,15 +73,15 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mami_codi_R_compute_pseudo_octave", (DL_FUNC) &_mami_codi_R_compute_pseudo_octave, 3},
-    {"_mami_codi_R_approximate_harmonics", (DL_FUNC) &_mami_codi_R_approximate_harmonics, 2},
-    {"_mami_codi_R_pseudo_octave", (DL_FUNC) &_mami_codi_R_pseudo_octave, 1},
-    {"_mami_codi_R_approximate_rational_fractions", (DL_FUNC) &_mami_codi_R_approximate_rational_fractions, 3},
-    {"_mami_codi_R_compute_sidebands_wavelength", (DL_FUNC) &_mami_codi_R_compute_sidebands_wavelength, 2},
+    {"_mami_codi_beaty_R_compute_pseudo_octave", (DL_FUNC) &_mami_codi_beaty_R_compute_pseudo_octave, 3},
+    {"_mami_codi_beaty_R_approximate_harmonics", (DL_FUNC) &_mami_codi_beaty_R_approximate_harmonics, 2},
+    {"_mami_codi_beaty_R_pseudo_octave", (DL_FUNC) &_mami_codi_beaty_R_pseudo_octave, 1},
+    {"_mami_codi_beaty_R_approximate_rational_fractions", (DL_FUNC) &_mami_codi_beaty_R_approximate_rational_fractions, 3},
+    {"_mami_codi_beaty_R_compute_sidebands_wavelength", (DL_FUNC) &_mami_codi_beaty_R_compute_sidebands_wavelength, 2},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_mami_codi_R(DllInfo *dll) {
+RcppExport void R_init_mami_codi_beaty_R(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

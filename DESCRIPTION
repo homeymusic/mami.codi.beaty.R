@@ -1,6 +1,6 @@
-Package: mami.codi.R
+Package: mami.codi.beaty.R
 Type: Package
-Title: An Auditory Model of Major-Minor and Consonance-Dissonance Perception
+Title: An Auditory Model of Major-Minor, Consonance-Dissonance and Beating Perception
 Version: 0.1.0
 Authors@R: 
     person("Brian", "Mulloy", , "brian@homeymusic.com", role = c("aut", "cre"),

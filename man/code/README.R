@@ -1,6 +1,6 @@
 tonic_midi = 60
 
-local_result = devtools::install('/Users/homeymusic/Documents/git/homeymusic/mami.codi.R')
+local_result = devtools::install('/Users/homeymusic/Documents/git/homeymusic/mami.codi.beaty.R')
 
 if (is.na(local_result)) {
   stop("Fatal error: Unable to install the package. Please check the repository and branch name.")
@@ -10,7 +10,7 @@ if (is.na(local_result)) {
 
 source('./man/code/utils.R')
 
-library(mami.codi.R)
+library(mami.codi.beaty.R)
 devtools::load_all(".")
 
 output.rds = './man/data/output/readme.rds'
@@ -148,7 +148,7 @@ output = grid %>% furrr::future_pmap_dfr(\(interval,
     )
   }
 
-  mami.codi.R::mami.codi(study_chord,
+  mami.codi.beaty.R::mami.codi.beaty(study_chord,
                          num_harmonics       = num_harmonics,
                          pseudo_octave        = pseudo_octave,
                          metadata = list(

@@ -1,6 +1,6 @@
 ^README.Rmd
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^mami.codi.R\.Rcheck$
-^mami.codi.R.*\.tar\.gz$
-^mami.codi.R.*\.tgz$
+^mami.codi.beaty.R\.Rcheck$
+^mami.codi.beaty.R.*\.tar\.gz$
+^mami.codi.beaty.R.*\.tgz$

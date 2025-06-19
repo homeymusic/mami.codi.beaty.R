@@ -2,22 +2,22 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 compute_pseudo_octave <- function(ratio_n, ratio_0, n) {
-    .Call(`_mami_codi_R_compute_pseudo_octave`, ratio_n, ratio_0, n)
+    .Call(`_mami_codi_beaty_R_compute_pseudo_octave`, ratio_n, ratio_0, n)
 }
 
 approximate_harmonics <- function(input_ratios, integer_harmonic_tolerance) {
-    .Call(`_mami_codi_R_approximate_harmonics`, input_ratios, integer_harmonic_tolerance)
+    .Call(`_mami_codi_beaty_R_approximate_harmonics`, input_ratios, integer_harmonic_tolerance)
 }
 
 pseudo_octave <- function(approximate_harmonics) {
-    .Call(`_mami_codi_R_pseudo_octave`, approximate_harmonics)
+    .Call(`_mami_codi_beaty_R_pseudo_octave`, approximate_harmonics)
 }
 
 approximate_rational_fractions <- function(x, uncertainty, deviation) {
-    .Call(`_mami_codi_R_approximate_rational_fractions`, x, uncertainty, deviation)
+    .Call(`_mami_codi_beaty_R_approximate_rational_fractions`, x, uncertainty, deviation)
 }
 
 compute_sidebands_wavelength <- function(wavelength, amplitude) {
-    .Call(`_mami_codi_R_compute_sidebands_wavelength`, wavelength, amplitude)
+    .Call(`_mami_codi_beaty_R_compute_sidebands_wavelength`, wavelength, amplitude)
 }
 
