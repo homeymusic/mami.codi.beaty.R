@@ -20,7 +20,7 @@ p = RATIONAL_FRACTION_PRECISION
 ## Spatial -vs- Temporal
 
 ```{r, echo=F, message=F}
-P1 = 60 %>% mami.codi(verbose=T, num_harmonics=10, octave_ratio=1.9)
+P1 = 60 %>% mami.codi(verbose=T, num_harmonics=10, pseudo_octave=1.9)
 ```
 
 ```{r, echo=T, message=F}

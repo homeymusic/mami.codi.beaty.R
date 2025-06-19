@@ -12,7 +12,7 @@ timbre_paper = readRDS('./man/data/output/readme.rds')
 dyads <- timbre_paper %>% dplyr::rowwise() %>% dplyr::mutate(
   type          = metadata$type,
   num_harmonics = metadata$num_harmonics,
-  octave_ratio  = metadata$octave_ratio,
+  pseudo_octave  = metadata$pseudo_octave,
   semitone      = metadata$semitone,
   timbre        = metadata$timbre,
   label         = round(metadata$semitone),

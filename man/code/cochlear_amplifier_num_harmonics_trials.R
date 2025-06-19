@@ -5,13 +5,13 @@ run_trials <- function(search_label, cochlear_amplifier_num_harmonics) {
   library(mami.codi.R)
 
   num_harmonics = 10
-  octave_ratio  = 2.0
+  pseudo_octave  = 2.0
   roll_off      = 3
 
   if (search_label == 'Stretched') {
-    octave_ratio  = 2.1
+    pseudo_octave  = 2.1
   } else if (search_label == 'Compressed') {
-    octave_ratio  = 1.9
+    pseudo_octave  = 1.9
   } else if (search_label == 'Pure') {
     num_harmonics = 1
   } else if (search_label == '5Partials') {
@@ -20,7 +20,7 @@ run_trials <- function(search_label, cochlear_amplifier_num_harmonics) {
 
   print(search_label)
   print(paste('cochlear_amplifier_num_harmonics:',cochlear_amplifier_num_harmonics))
-  print(paste('octave_ratio:',octave_ratio))
+  print(paste('pseudo_octave:',pseudo_octave))
   print(paste('num_harmonics:',num_harmonics))
   print(paste('roll_off:',roll_off))
 
@@ -84,7 +84,7 @@ run_trials <- function(search_label, cochlear_amplifier_num_harmonics) {
       chord = hrep::sparse_fr_spectrum(c(0, interval),
                                        num_harmonics = num_harmonics,
                                        roll_off_dB   = roll_off,
-                                       octave_ratio  = octave_ratio
+                                       pseudo_octave  = pseudo_octave
       )
     }
 
@@ -93,7 +93,7 @@ run_trials <- function(search_label, cochlear_amplifier_num_harmonics) {
       chord,
       cochlear_amplifier_num_harmonics   = cochlear_amplifier_num_harmonics,
       metadata              = list(
-        octave_ratio        = octave_ratio,
+        pseudo_octave        = pseudo_octave,
         num_harmonics       = num_harmonics,
         roll_off_dB         = roll_off,
         semitone            = interval

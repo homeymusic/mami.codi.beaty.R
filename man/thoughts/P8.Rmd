@@ -25,25 +25,25 @@ grid_P8 = tidyr::expand_grid(
   temporal_uncertainty = temporal_uncertainty,
   interval = readRDS(experiment.rds)$profile$interval,
   num_harmonics=10,
-  octave_ratio=2.0,
+  pseudo_octave=2.0,
   timbre = 'P8'
 )
 P8 = grid_P8 %>% purrr::pmap_dfr(\(temporal_uncertainty,
                               interval,
                               num_harmonics,
-                              octave_ratio,
+                              pseudo_octave,
                               timbre) {
   
   study_chord = c(tonic_midi, interval + tonic_midi) %>% hrep::sparse_fr_spectrum(
     num_harmonics = num_harmonics,
-    octave_ratio  = octave_ratio,
+    pseudo_octave  = pseudo_octave,
     roll_off_dB   = 3.0
   )
   mami.codi.R::mami.codi(study_chord,
                          temporal_uncertainty=temporal_uncertainty,
                          metadata = list(
                            num_harmonics = num_harmonics,
-                           octave_ratio  = octave_ratio,
+                           pseudo_octave  = pseudo_octave,
                            semitone      = interval,
                            timbre        = timbre
                          ),
@@ -68,25 +68,25 @@ grid_M6 = tidyr::expand_grid(
   temporal_uncertainty = temporal_uncertainty,
   interval = readRDS(experiment.rds)$profile$interval,
   num_harmonics=10,
-  octave_ratio=2.0,
+  pseudo_octave=2.0,
   timbre = 'M6'
 )
 M6 = grid_M6 %>% purrr::pmap_dfr(\(temporal_uncertainty,
                               interval,
                               num_harmonics,
-                              octave_ratio,
+                              pseudo_octave,
                               timbre) {
   
   study_chord = c(tonic_midi, interval + tonic_midi) %>% hrep::sparse_fr_spectrum(
     num_harmonics = num_harmonics,
-    octave_ratio  = octave_ratio,
+    pseudo_octave  = pseudo_octave,
     roll_off_dB   = 3.0
   )
   mami.codi.R::mami.codi(study_chord,
                          temporal_uncertainty=temporal_uncertainty,
                          metadata = list(
                            num_harmonics = num_harmonics,
-                           octave_ratio  = octave_ratio,
+                           pseudo_octave  = pseudo_octave,
                            semitone      = interval,
                            timbre        = timbre
                          ),
@@ -113,25 +113,25 @@ grid_M3 = tidyr::expand_grid(
   temporal_uncertainty = temporal_uncertainty,
   interval = readRDS(experiment.rds)$profile$interval,
   num_harmonics=10,
-  octave_ratio=2.0,
+  pseudo_octave=2.0,
   timbre = 'M3'
 )
 M3 = grid_M3 %>% purrr::pmap_dfr(\(temporal_uncertainty,
                               interval,
                               num_harmonics,
-                              octave_ratio,
+                              pseudo_octave,
                               timbre) {
   
   study_chord = c(tonic_midi, interval + tonic_midi) %>% hrep::sparse_fr_spectrum(
     num_harmonics = num_harmonics,
-    octave_ratio  = octave_ratio,
+    pseudo_octave  = pseudo_octave,
     roll_off_dB   = 3.0
   )
   mami.codi.R::mami.codi(study_chord,
                          temporal_uncertainty=temporal_uncertainty,
                          metadata = list(
                            num_harmonics = num_harmonics,
-                           octave_ratio  = octave_ratio,
+                           pseudo_octave  = pseudo_octave,
                            semitone      = interval,
                            timbre        = timbre
                          ),

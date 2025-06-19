@@ -25,7 +25,7 @@ readme_data = readRDS('./man/data/readme.rds')
 chords <- readme_data %>% dplyr::rowwise() %>% dplyr::mutate(
   type          = metadata$type,
   num_harmonics = metadata$num_harmonics,
-  octave_ratio  = metadata$octave_ratio,
+  pseudo_octave  = metadata$pseudo_octave,
   semitone      = metadata$semitone,
   timbre        = metadata$timbre,
   label         = round(metadata$semitone),

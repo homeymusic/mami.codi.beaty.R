@@ -4,7 +4,7 @@
 ### Major Third
 
 ``` r
-M3 = hrep::sparse_fr_spectrum(c(60,64), num_harmonics=10, octave_ratio=2.1) %>%
+M3 = hrep::sparse_fr_spectrum(c(60,64), num_harmonics=10, pseudo_octave=2.1) %>%
   mami.codi(verbose=T)
 ```
 
@@ -97,7 +97,7 @@ tibble::tibble_row(
 ### Minor Third
 
 ``` r
-m3 = hrep::sparse_fr_spectrum(c(60,63), num_harmonics=10, octave_ratio=2.1) %>%
+m3 = hrep::sparse_fr_spectrum(c(60,63), num_harmonics=10, pseudo_octave=2.1) %>%
   mami.codi(verbose=T)
 ```
 
@@ -190,11 +190,11 @@ tibble::tibble_row(
 ## P1 Stretched, Harmonic and Compressed
 
 ``` r
-P1_stretched = hrep::sparse_fr_spectrum(60, num_harmonics=10, octave_ratio=2.1) %>%
+P1_stretched = hrep::sparse_fr_spectrum(60, num_harmonics=10, pseudo_octave=2.1) %>%
   mami.codi(verbose=T)
-P1_harmonic = hrep::sparse_fr_spectrum(60, num_harmonics=10, octave_ratio=2.0) %>%
+P1_harmonic = hrep::sparse_fr_spectrum(60, num_harmonics=10, pseudo_octave=2.0) %>%
   mami.codi(verbose=T)
-P1_compressed = hrep::sparse_fr_spectrum(60, num_harmonics=10, octave_ratio=1.9) %>%
+P1_compressed = hrep::sparse_fr_spectrum(60, num_harmonics=10, pseudo_octave=1.9) %>%
   mami.codi(verbose=T)
 ```
 

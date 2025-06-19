@@ -7,7 +7,7 @@ library(parallelly)
 
 mami.codi.map <- function(study, tolerances, tonic_midi) {
   num_harmonics = 10
-  octave_ratio = 2.0
+  pseudo_octave = 2.0
 
   behavior = readRDS(paste0('./man/data/',study,'.rds'))
   chords = tibble::tibble(
@@ -25,14 +25,14 @@ mami.codi.map <- function(study, tolerances, tonic_midi) {
 
     chord = hrep::sparse_fr_spectrum(chords$pitches[index][[1]][[1]],
                                      num_harmonics = num_harmonics,
-                                     octave_ratio  = octave_ratio)
+                                     pseudo_octave  = pseudo_octave)
 
     mami.codi.R::mami.codi(
       chord,
       temporal_standard_deviation=tolerance,
       spatial_standard_deviation=tolerance,
       metadata  = list(
-        octave_ratio=octave_ratio,
+        pseudo_octave=pseudo_octave,
         num_harmonics  = num_harmonics,
         semitone = chords$pitches[index][[1]][[1]][2] - tonic_midi
       ),

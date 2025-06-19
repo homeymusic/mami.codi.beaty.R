@@ -6,7 +6,7 @@ run_trials <- function(search_label, amplitudes) {
   library(mami.codi.R)
 
   num_harmonics = 10
-  octave_ratio  = 2.0
+  pseudo_octave  = 2.0
 
   if (search_label == 'Rolloff2') {
     roll_off = 2
@@ -17,7 +17,7 @@ run_trials <- function(search_label, amplitudes) {
   }
 
   print(search_label)
-  print(paste('octave_ratio:',octave_ratio))
+  print(paste('pseudo_octave:',pseudo_octave))
   print(paste('num_harmonics:',num_harmonics))
   print(paste('roll_off:',roll_off))
 
@@ -55,14 +55,14 @@ run_trials <- function(search_label, amplitudes) {
     chord = hrep::sparse_fr_spectrum(c(tonic_midi, interval),
                                      num_harmonics = num_harmonics,
                                      roll_off_dB   = roll_off,
-                                     octave_ratio  = octave_ratio
+                                     pseudo_octave  = pseudo_octave
     )
 
     mami.codi.R::mami.codi(
       chord,
       amplitude        = amplitude,
       metadata         = list(
-        octave_ratio   = octave_ratio,
+        pseudo_octave   = pseudo_octave,
         num_harmonics  = num_harmonics,
         roll_off_dB    = roll_off,
         semitone       = interval - tonic_midi

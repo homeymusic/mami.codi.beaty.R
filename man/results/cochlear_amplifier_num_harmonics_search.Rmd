@@ -79,7 +79,7 @@ theory <- theory %>%
   dplyr::rowwise() %>% 
   dplyr::mutate(
     num_harmonics  = metadata$num_harmonics,
-    octave_ratio   = metadata$octave_ratio,
+    pseudo_octave   = metadata$pseudo_octave,
     semitone       = metadata$semitone,
     .before=1
   ) %>% 

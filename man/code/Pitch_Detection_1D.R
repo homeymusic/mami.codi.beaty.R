@@ -2,17 +2,17 @@ source('./man/code/utils.R')
 
 standard_deviation       = mami.codi.R::default_standard_deviation()
 num_harmonics   = 10
-octave_ratio    = 2.0
+pseudo_octave    = 2.0
 amount_of_noise = 0
 num_tones       = 2*amount_of_noise + num_harmonics
 
 lo = hrep::sparse_fr_spectrum(60,
                               num_harmonics=num_harmonics,
-                              octave_ratio=octave_ratio)
+                              pseudo_octave=pseudo_octave)
 
 hi = hrep::sparse_fr_spectrum(63,
                               num_harmonics=num_harmonics,
-                              octave_ratio=octave_ratio)
+                              pseudo_octave=pseudo_octave)
 
 chord_spectrum = do.call(
   hrep::combine_sparse_spectra,

@@ -24,13 +24,13 @@ intervals = tonic_midi + read.csv(experiment.csv)$interval
 macro_index = seq_along(intervals)
 
 num_harmonics = 10
-octave_ratio  = 2.0
+pseudo_octave  = 2.0
 
 roll_off=c(2,7,12)
 grid_10 = tidyr::expand_grid(
   index=macro_index,
   num_harmonics,
-  octave_ratio,
+  pseudo_octave,
   roll_off
 )
 
@@ -38,7 +38,7 @@ grid = dplyr::bind_rows(grid_10)
 
 plan(multisession, workers=parallelly::availableCores())
 
-output = grid %>% furrr::future_pmap_dfr(\(index, num_harmonics, octave_ratio,
+output = grid %>% furrr::future_pmap_dfr(\(index, num_harmonics, pseudo_octave,
                                            roll_off) {
 
   if (roll_off == 2) {
@@ -52,11 +52,11 @@ output = grid %>% furrr::future_pmap_dfr(\(index, num_harmonics, octave_ratio,
   mami.codi.R::mami.codi(c(tonic_midi,intervals[index]),
                          amplitude = amplitude,
                          num_harmonics=num_harmonics,
-                         octave_ratio=octave_ratio,
+                         pseudo_octave=pseudo_octave,
                          roll_off_dB   = roll_off,
                          metadata = list(
                            num_harmonics = num_harmonics,
-                           octave_ratio  = octave_ratio,
+                           pseudo_octave  = pseudo_octave,
                            semitone      = intervals[index] - tonic_midi,
                            roll_off_dB   = roll_off
                          ),

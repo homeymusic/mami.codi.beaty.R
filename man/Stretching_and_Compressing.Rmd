@@ -11,14 +11,14 @@ knitr::opts_chunk$set(
 )
 midi  = c(0, 4, 7) + 60
 num_harmonics = 3
-octave_ratio = 2.1
+pseudo_octave = 2.1
 ```
 
 ```{r, echo=F, results='asis', message=F}
 chord = midi %>% mami.codi(
   verbose       = T,
   num_harmonics = num_harmonics,
-  octave_ratio  = octave_ratio
+  pseudo_octave  = pseudo_octave
 )
 c_sound = chord$speed_of_sound
 ```

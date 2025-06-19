@@ -22,25 +22,25 @@ span          = 7.1
 intervals     = seq(from=tonic_midi-span, to=tonic_midi+span, by=2*span/1000)
 index         = seq_along(intervals)
 num_harmonics = 10
-octave_ratio  = 2.0
+pseudo_octave  = 2.0
 roll_off      = 3
 grid = tidyr::expand_grid(
   index,
   num_harmonics,
-  octave_ratio,
+  pseudo_octave,
   roll_off
 )
-chords = grid %>% purrr::pmap_dfr(\(index, num_harmonics, octave_ratio, roll_off) {
+chords = grid %>% purrr::pmap_dfr(\(index, num_harmonics, pseudo_octave, roll_off) {
   spectrum = c(tonic_midi, intervals[index]) %>% hrep::sparse_fr_spectrum(
     num_harmonics = num_harmonics,
-    octave_ratio  = octave_ratio,
+    pseudo_octave  = pseudo_octave,
     roll_off_dB   = roll_off
   )
   spectrum %>% mami.codi.R::mami.codi(
     metadata = list(
       semitone      = intervals[index] - tonic_midi,
       num_harmonics = num_harmonics,
-      octave_ratio  = octave_ratio,
+      pseudo_octave  = pseudo_octave,
       roll_off      = roll_off
     ),
     verbose=TRUE
@@ -49,7 +49,7 @@ chords = grid %>% purrr::pmap_dfr(\(index, num_harmonics, octave_ratio, roll_off
 chords <- chords %>% dplyr::rowwise() %>% dplyr::mutate(
   semitone      = metadata$semitone,
   num_harmonics = metadata$num_harmonics,
-  octave_ratio  = metadata$octave_ratio,
+  pseudo_octave  = metadata$pseudo_octave,
   roll_off      = metadata$roll_off
 )
 cat("  \n###", title, '\n')

@@ -34,8 +34,8 @@ mami.codi <- function(
     # Frequency Domain
     compute_space_cycles() %>%
     compute_time_cycles() %>%
+    compute_energy_per_cycle() %>%
     # Psychophysical Domain
-    compute_energy_per_cycle()   %>% # TODO: move this to the phsical domain
     compute_harmony_perception() %>%
     # App Domain
     format_output(metadata, verbose)
@@ -86,8 +86,7 @@ generate_sidebands <- function(x) {
   sidebands_wavelength_spectrum <- compute_sidebands_wavelength(
     wavelength = wav_spec$wavelength,
     amplitude  = wav_spec$amplitude
-  ) %>%
-    filter_spectrum_in_range()
+  ) %>% filter_spectrum_in_range()
 
   x %>%
     dplyr::mutate(
@@ -249,7 +248,6 @@ compute_energy_per_cycle <- function(x) {
   )
 
 }
-
 
 #' this is a made up metric that felt right to me
 #' over one spatial cycle we are spatially

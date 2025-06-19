@@ -82,25 +82,25 @@ experiment.rds = '../data/input/Pure.rds'
 grid = tidyr::expand_grid(
   interval = readRDS(experiment.rds)$profile$interval,
   num_harmonics=1,
-  octave_ratio=2.0,
+  pseudo_octave=2.0,
   timbre = 'Pure'
 )
 
 output = grid %>% purrr::pmap_dfr(\(interval,
                                     num_harmonics,
-                                    octave_ratio,
+                                    pseudo_octave,
                                     timbre) {
   
   study_chord = (60 + c(0, interval)) %>% hrep::sparse_fr_spectrum(
     num_harmonics = num_harmonics,
-    octave_ratio  = octave_ratio,
+    pseudo_octave  = pseudo_octave,
     roll_off_dB   = 3.0
   )
   
   mami.codi.R::mami.codi(study_chord,
                          metadata = list(
                            num_harmonics       = num_harmonics,
-                           octave_ratio        = octave_ratio,
+                           pseudo_octave        = pseudo_octave,
                            semitone            = interval,
                            timbre              = timbre
                          ),
@@ -116,7 +116,7 @@ plot(output$beating)
 ```{r, echo=F}
 dyads <- output %>% dplyr::rowwise() %>% dplyr::mutate(
   num_harmonics = metadata$num_harmonics,
-  octave_ratio  = metadata$octave_ratio,
+  pseudo_octave  = metadata$pseudo_octave,
   semitone      = metadata$semitone,
   timbre        = metadata$timbre,
   label         = round(metadata$semitone),
