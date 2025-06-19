@@ -2,7 +2,7 @@
 % Please edit documentation in R/mami.codi.R
 \name{compute_energy_per_cycle}
 \alias{compute_energy_per_cycle}
-\title{Compute energy density per cycle}
+\title{Compute energy per cycle}
 \usage{
 compute_energy_per_cycle(x)
 }
@@ -13,5 +13,5 @@ compute_energy_per_cycle(x)
 Physics measure of energy per cycle.
 }
 \description{
-Calculates energy density per cycle.
+Calculates energy per cycle.
 }

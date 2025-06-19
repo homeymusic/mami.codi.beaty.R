@@ -42,7 +42,6 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
    int ratio_vector_size = input_ratios.size();
    double highest_input_ratio = max(input_ratios);
 
-   // Default output when there are too few ratios or no matches
    DataFrame default_output = DataFrame::create(
      _("harmonic_number")   = 1,
      _("evaluation_ratio")  = highest_input_ratio,
@@ -54,13 +53,11 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
      return default_output;
    }
 
-   // Precompute natural logs of each input ratio
    std::vector<double> log_input_ratios(ratio_vector_size);
    for (int idx = 0; idx < ratio_vector_size; ++idx) {
      log_input_ratios[idx] = std::log(input_ratios[idx]);
    }
 
-   // Prepare storage for all candidate matches
    std::vector<int>      harmonic_number_matches;
    std::vector<double>   evaluation_ratios;
    std::vector<double>   reference_ratios;
@@ -68,48 +65,43 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
    std::vector<double>   highest_ratio_flags;
 
    harmonic_number_matches.reserve(ratio_vector_size * ratio_vector_size / 2);
-   evaluation_ratios      .reserve(ratio_vector_size * ratio_vector_size / 2);
-   reference_ratios       .reserve(ratio_vector_size * ratio_vector_size / 2);
-   pseudo_octave_values   .reserve(ratio_vector_size * ratio_vector_size / 2);
-   highest_ratio_flags    .reserve(ratio_vector_size * ratio_vector_size / 2);
+   evaluation_ratios     .reserve(ratio_vector_size * ratio_vector_size / 2);
+   reference_ratios      .reserve(ratio_vector_size * ratio_vector_size / 2);
+   pseudo_octave_values  .reserve(ratio_vector_size * ratio_vector_size / 2);
+   highest_ratio_flags   .reserve(ratio_vector_size * ratio_vector_size / 2);
 
-   // Examine every unordered pair of ratios
    for (int i = 0; i < ratio_vector_size; ++i) {
      for (int j = i + 1; j < ratio_vector_size; ++j) {
-       // Test both directions: i/j and j/i
-       for (int direction = 0; direction < 2; ++direction) {
-         double evaluation_ratio_value = (direction == 0 ? input_ratios[i] : input_ratios[j]);
-         double reference_ratio_value  = (direction == 0 ? input_ratios[j] : input_ratios[i]);
-         double log_ratio_difference   = log_input_ratios[(direction == 0 ? i : j)]
-         - log_input_ratios[(direction == 0 ? j : i)];
-         double ratio_value            = std::exp(log_ratio_difference);
-         int    harmonic_candidate     = int(std::round(ratio_value));
+       bool i_is_larger = (input_ratios[i] >= input_ratios[j]);
+       int  idx_large   = i_is_larger ? i : j;
+       int  idx_small   = i_is_larger ? j : i;
+       double evaluation_ratio_value = input_ratios[idx_large];
+       double reference_ratio_value  = input_ratios[idx_small];
+       double log_ratio_difference   = log_input_ratios[idx_large]
+       - log_input_ratios[idx_small];
+       double ratio_value            = std::exp(log_ratio_difference);
+       int    harmonic_candidate     = int(std::round(ratio_value));
 
-         // Check if this ratio is close enough to an integer harmonic
-         if (harmonic_candidate >= 2 &&
-             std::abs(ratio_value - harmonic_candidate) / harmonic_candidate < integer_harmonic_tolerance) {
-           // Compute the pseudo-octave: 2^( ln(ratio) / ln(harmonic_candidate) )
-           double pseudo_octave_value = std::pow(
-             2.0,
-             log_ratio_difference / std::log((double)harmonic_candidate)
-           );
+       if (harmonic_candidate >= 2 &&
+           std::abs(ratio_value - harmonic_candidate) / harmonic_candidate < integer_harmonic_tolerance) {
+         double pseudo_octave_value = std::pow(
+           2.0,
+           log_ratio_difference / std::log((double)harmonic_candidate)
+         );
 
-           harmonic_number_matches.push_back(harmonic_candidate);
-           evaluation_ratios     .push_back(evaluation_ratio_value);
-           reference_ratios      .push_back(reference_ratio_value);
-           pseudo_octave_values  .push_back(pseudo_octave_value);
-           highest_ratio_flags   .push_back(highest_input_ratio);
-         }
+         harmonic_number_matches.push_back(harmonic_candidate);
+         evaluation_ratios     .push_back(evaluation_ratio_value);
+         reference_ratios      .push_back(reference_ratio_value);
+         pseudo_octave_values  .push_back(pseudo_octave_value);
+         highest_ratio_flags   .push_back(highest_input_ratio);
        }
      }
    }
 
-   // If we found no matches, return the default
    if (harmonic_number_matches.empty()) {
      return default_output;
    }
 
-   // Assemble and return the final DataFrame
    return DataFrame::create(
      _("harmonic_number")   = harmonic_number_matches,
      _("evaluation_ratio")  = evaluation_ratios,

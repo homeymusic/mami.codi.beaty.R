@@ -7,8 +7,10 @@
 speed_of_sound()
 }
 \description{
-Default minimum amplitude for deciding which tones are evaluated
+Approximate speed of sound at sea level m / s
 }
 \details{
+using E4 numerical value so we get some nice wavelength ratios but close to
+value at room temp at sea level.
 '
 }

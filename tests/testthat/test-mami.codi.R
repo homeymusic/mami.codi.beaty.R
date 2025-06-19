@@ -13,7 +13,7 @@ test_that('P1 with 3 harmonics fundamental frequency and fundamental wavenumber 
                              cochlear_amplifier_num_harmonics = 0,
                              beat_pass_filter = BEAT_PASS_FILTER$NONE)
   C4_frequency = hrep::midi_to_freq(60)
-  C4_wavenumber = hrep::midi_to_freq(60) / C_SOUND
+  C4_wavenumber = hrep::midi_to_freq(60) / SPEED_OF_SOUND
 
   expected_time_cycle_length = 1
   expect_equal(P1_3$time_cycle_length, expected_time_cycle_length)
@@ -556,7 +556,7 @@ test_that('freqs are greater than min', {
 test_that('wavelengths are less than max', {
   num_harmonics = 10
 
-  too_long_wavelength_freq = C_SOUND / (MAX_WAVELENGTH + 1)
+  too_long_wavelength_freq = SPEED_OF_SOUND / (MAX_WAVELENGTH + 1)
   result = mami.codi(c(60, hrep::freq_to_midi(too_long_wavelength_freq)),
                      verbose=T,
                      cochlear_amplifier_num_harmonics = 0,
@@ -567,7 +567,7 @@ test_that('wavelengths are less than max', {
 test_that('wavelengths are greater than min', {
   num_harmonics = 10
 
-  too_small_wavelength_freq = C_SOUND / (MIN_WAVELENGTH - 0.0001)
+  too_small_wavelength_freq = SPEED_OF_SOUND / (MIN_WAVELENGTH - 0.0001)
   result = mami.codi(c(60, hrep::freq_to_midi(too_small_wavelength_freq)),
                      verbose=T,
                      cochlear_amplifier_num_harmonics = 0,

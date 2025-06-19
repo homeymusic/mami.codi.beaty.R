@@ -260,9 +260,9 @@ compute_harmony_perception <- function(x) {
 
 }
 
-#' Compute energy density per cycle
+#' Compute energy per cycle
 #'
-#' Calculates energy density per cycle.
+#' Calculates energy per cycle.
 #'
 #' @param x The spectrum of stimulus and side bands.
 #'
@@ -272,19 +272,28 @@ compute_harmony_perception <- function(x) {
 #' @export
 compute_energy_per_cycle <- function(x) {
 
-  energy_per_cycle = energy_per_cycle(x$wavelength_spectrum[[1]])
 
   x %>% dplyr::mutate(
-    energy_per_cycle
+    energy_per_cycle = energy_per_cycle(x$wavelength_spectrum[[1]])
   )
 
 }
 
+
+#' this is a made up metric that felt right to me
+#' over one spatial cycle we are spatially
+#' displacing material by amplitude A.
+#'
+#' if we were to multiply it by bulk modulus
+#' we would have units of energy
+#'
+#' https://en.wikipedia.org/wiki/Bulk_modulus
+#'
 energy_per_cycle <- function(
     x
 ) {
   if (nrow(x) > 0) {
-    log2(1+sum(x$amplitude ^ 2 * x$wavelength, na.rm = TRUE))
+    sum( x$amplitude^2 * x$wavelength, na.rm = TRUE)
   } else {
     0
   }
@@ -317,13 +326,16 @@ INTEGER_HARMONICS_TOLERANCE = 0.11
 
 #' Speed of Sound
 #'
-#' Default minimum amplitude for deciding which tones are evaluated
+#' Approximate speed of sound at sea level m / s
 #'
+#' using E4 numerical value so we get some nice wavelength ratios but close to
+#' value at room temp at sea level.
 #''
 #' @rdname speed_of_sound
 #' @export
-speed_of_sound <- function() { C_SOUND }
-C_SOUND = 343 # m/s arbitrary, disappears in the ratios
+#'
+speed_of_sound <- function() { SPEED_OF_SOUND }
+SPEED_OF_SOUND = hrep::midi_to_freq(65)
 
 DIMENSION <- list(
   SPACE = 'space',
@@ -333,5 +345,5 @@ DIMENSION <- list(
 MAX_FREQUENCY = hrep::midi_to_freq(127 + 24)
 MIN_FREQUENCY = 1
 
-MAX_WAVELENGTH = C_SOUND / MIN_FREQUENCY
-MIN_WAVELENGTH = C_SOUND / MAX_FREQUENCY
+MAX_WAVELENGTH = SPEED_OF_SOUND / MIN_FREQUENCY
+MIN_WAVELENGTH = SPEED_OF_SOUND / MAX_FREQUENCY

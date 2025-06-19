@@ -27,7 +27,7 @@ P1_sparse = hrep::sparse_fr_spectrum(
 
 stimulus_wavelengths = P1_sparse %>% 
   dplyr::mutate(
-    wavelength = C_SOUND / x
+    wavelength = SPEED_OF_SOUND / x
   ) %>% 
   dplyr::select(c('wavelength', 'y')) %>%
   tibble::as_tibble()
@@ -57,7 +57,7 @@ P1_sparse_missing_fundamental = P1_sparse %>% dplyr::slice(-c(1))
 
 stimulus_wavelengths = P1_sparse_missing_fundamental %>% 
   dplyr::mutate(
-    wavelength = C_SOUND / x
+    wavelength = SPEED_OF_SOUND / x
   ) %>% 
   dplyr::select(c('wavelength', 'y')) %>%
   tibble::as_tibble()

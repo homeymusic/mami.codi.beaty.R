@@ -1,11 +1,11 @@
 tonic_midi = 60
 
-github_result = devtools::install('/Users/homeymusic/Documents/git/homeymusic/mami.codi.R')
+local_result = devtools::install('/Users/homeymusic/Documents/git/homeymusic/mami.codi.R')
 
-if (is.na(github_result)) {
-  stop("Fatal error: Unable to install the package from GitHub. Please check the repository and branch name.")
+if (is.na(local_result)) {
+  stop("Fatal error: Unable to install the package. Please check the repository and branch name.")
 } else {
-  message("Repo looks good: ", github_result)
+  message("Repo looks good: ", local_result)
 }
 
 source('./man/code/utils.R')

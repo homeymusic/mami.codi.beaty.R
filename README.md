@@ -88,7 +88,7 @@ be relatively higher than the behavioral results.
 
 | time_uncertainty | space_uncertainty | smoothing_sigma | pseudo_octave |
 |:-----------------|:------------------|----------------:|--------------:|
-| 0.07958          | 0.07958           |             0.2 |             2 |
+| 0.07958          | 0.07958           |             0.2 |      1.851852 |
 
 ![](man/figures/README-unnamed-chunk-4-25.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-26.png)<!-- -->  

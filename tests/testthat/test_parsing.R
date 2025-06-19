@@ -1,14 +1,14 @@
 test_that('combine wavelength spectra works', {
   C4_hrep = hrep::sparse_fr_spectrum(60, num_harmonics = 3)
   C4 = tibble::tibble(
-    wavelength = C_SOUND / C4_hrep$x,
+    wavelength = SPEED_OF_SOUND / C4_hrep$x,
     amplitude  = C4_hrep$y
   )
   expect_equal(C4$wavelength, c(1.3110340, 0.6555170, 0.4370113), tolerance = 0.1)
   expect_equal(C4$amplitude, c(1.0000000, 0.8912509, 0.8332050), tolerance = 0.1)
   C5_hrep = hrep::sparse_fr_spectrum(72, num_harmonics = 3)
   C5 = tibble::tibble(
-    wavelength = C_SOUND / C5_hrep$x,
+    wavelength = SPEED_OF_SOUND / C5_hrep$x,
     amplitude  = C5_hrep$y
   )
   expect_equal(C5$wavelength, c(0.6555170, 0.3277585, 0.2185057), tolerance = 0.1)
@@ -42,7 +42,7 @@ test_that('combine_spectra', {
 test_that('sparse_fr_spectrum_from_wavelength_spectrum', {
   C4_hrep = hrep::sparse_fr_spectrum(60, num_harmonics = 3)
   C4 = tibble::tibble(
-    wavelength = C_SOUND / C4_hrep$x,
+    wavelength = SPEED_OF_SOUND / C4_hrep$x,
     amplitude  = C4_hrep$y
   )
   expect_equal(C4$wavelength, c(1.3110340, 0.6555170, 0.4370113), tolerance = 0.1)
@@ -54,7 +54,7 @@ test_that('wavelength_spectrum_from_sparse_fr_spectrum', {
   C4_hrep = hrep::sparse_fr_spectrum(60, num_harmonics = 3)
   C4_roundtrip = wavelength_spectrum_from_sparse_fr_spectrum(C4_hrep)
   C4 = tibble::tibble(
-    wavelength = C_SOUND / C4_hrep$x,
+    wavelength = SPEED_OF_SOUND / C4_hrep$x,
     amplitude  = C4_hrep$y
   )
   expect_equal(C4_roundtrip, C4, tolerance=0.1)
