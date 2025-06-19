@@ -37,59 +37,86 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
  //'
  //' @export
  // [[Rcpp::export]]
- DataFrame approximate_harmonics(const NumericVector x,
-                                 const double deviation) {
-   const int x_size   = x.size();
-   const double ratio_max = max(x);
-   NumericVector harmonic_number(x_size * x_size * x_size);
-   NumericVector evaluation_ratio(x_size * x_size * x_size);
-   NumericVector reference_ratio(x_size * x_size * x_size);
-   NumericVector reference_amp(x_size * x_size * x_size);
-   NumericVector pseudo_octave(x_size * x_size * x_size);
-   NumericVector highest_ratio(x_size * x_size * x_size);
+ DataFrame approximate_harmonics(const NumericVector input_ratios,
+                                 const double integer_harmonic_tolerance) {
+   int ratio_vector_size = input_ratios.size();
+   double highest_input_ratio = max(input_ratios);
 
-
-   const DataFrame default_pseudo_octave = DataFrame::create(
-     _("harmonic_number") = 1,
-     _("evaluation_ratio") = ratio_max,
-     _("reference_ratio")  = ratio_max,
-     _("pseudo_octave")   = 2.0,
-     _("highest_ratio")    = ratio_max
+   // Default output when there are too few ratios or no matches
+   DataFrame default_output = DataFrame::create(
+     _("harmonic_number")   = 1,
+     _("evaluation_ratio")  = highest_input_ratio,
+     _("reference_ratio")   = highest_input_ratio,
+     _("pseudo_octave")     = 2.0,
+     _("highest_ratio")     = highest_input_ratio
    );
-
-   if (x_size <= 2) {
-     return default_pseudo_octave;
+   if (ratio_vector_size <= 2) {
+     return default_output;
    }
 
-   int num_matches=0;
+   // Precompute natural logs of each input ratio
+   std::vector<double> log_input_ratios(ratio_vector_size);
+   for (int idx = 0; idx < ratio_vector_size; ++idx) {
+     log_input_ratios[idx] = std::log(input_ratios[idx]);
+   }
 
-   for (int eval_ratio_index = 0; eval_ratio_index < x_size; ++eval_ratio_index) {
-     for (int ref_ratio_index = 0; ref_ratio_index < x_size; ++ref_ratio_index) {
-       for (int harmonic_num = 2; harmonic_num <= x_size; ++harmonic_num) {
-         const double p_octave = compute_pseudo_octave(x[eval_ratio_index], x[ref_ratio_index], harmonic_num);
-         if (2.0 - deviation < p_octave && p_octave < 2.0 + deviation) {
-           harmonic_number[num_matches] = harmonic_num;
-           evaluation_ratio[num_matches] = x[eval_ratio_index];
-           reference_ratio[num_matches]  = x[ref_ratio_index];
-           highest_ratio[num_matches]    = ratio_max;
-           pseudo_octave[num_matches]   = p_octave;
-           num_matches++;
+   // Prepare storage for all candidate matches
+   std::vector<int>      harmonic_number_matches;
+   std::vector<double>   evaluation_ratios;
+   std::vector<double>   reference_ratios;
+   std::vector<double>   pseudo_octave_values;
+   std::vector<double>   highest_ratio_flags;
+
+   harmonic_number_matches.reserve(ratio_vector_size * ratio_vector_size / 2);
+   evaluation_ratios      .reserve(ratio_vector_size * ratio_vector_size / 2);
+   reference_ratios       .reserve(ratio_vector_size * ratio_vector_size / 2);
+   pseudo_octave_values   .reserve(ratio_vector_size * ratio_vector_size / 2);
+   highest_ratio_flags    .reserve(ratio_vector_size * ratio_vector_size / 2);
+
+   // Examine every unordered pair of ratios
+   for (int i = 0; i < ratio_vector_size; ++i) {
+     for (int j = i + 1; j < ratio_vector_size; ++j) {
+       // Test both directions: i/j and j/i
+       for (int direction = 0; direction < 2; ++direction) {
+         double evaluation_ratio_value = (direction == 0 ? input_ratios[i] : input_ratios[j]);
+         double reference_ratio_value  = (direction == 0 ? input_ratios[j] : input_ratios[i]);
+         double log_ratio_difference   = log_input_ratios[(direction == 0 ? i : j)]
+         - log_input_ratios[(direction == 0 ? j : i)];
+         double ratio_value            = std::exp(log_ratio_difference);
+         int    harmonic_candidate     = int(std::round(ratio_value));
+
+         // Check if this ratio is close enough to an integer harmonic
+         if (harmonic_candidate >= 2 &&
+             std::abs(ratio_value - harmonic_candidate) / harmonic_candidate < integer_harmonic_tolerance) {
+           // Compute the pseudo-octave: 2^( ln(ratio) / ln(harmonic_candidate) )
+           double pseudo_octave_value = std::pow(
+             2.0,
+             log_ratio_difference / std::log((double)harmonic_candidate)
+           );
+
+           harmonic_number_matches.push_back(harmonic_candidate);
+           evaluation_ratios     .push_back(evaluation_ratio_value);
+           reference_ratios      .push_back(reference_ratio_value);
+           pseudo_octave_values  .push_back(pseudo_octave_value);
+           highest_ratio_flags   .push_back(highest_input_ratio);
          }
        }
      }
    }
 
-   if (num_matches == 0) {
-     return default_pseudo_octave;
-   } else {
-     return DataFrame::create(
-       _("harmonic_number") = harmonic_number[Rcpp::Range(0, num_matches-1)],
-                                             _("evaluation_ratio") = evaluation_ratio[Rcpp::Range(0, num_matches-1)],
-                                                                                   _("reference_ratio")  = reference_ratio[Rcpp::Range(0, num_matches-1)],
-                                                                                                                        _("pseudo_octave")   = pseudo_octave[Rcpp::Range(0, num_matches-1)],
-                                                                                                                                                            _("highest_ratio")    = highest_ratio[Rcpp::Range(0, num_matches-1)]
-     );
+   // If we found no matches, return the default
+   if (harmonic_number_matches.empty()) {
+     return default_output;
    }
+
+   // Assemble and return the final DataFrame
+   return DataFrame::create(
+     _("harmonic_number")   = harmonic_number_matches,
+     _("evaluation_ratio")  = evaluation_ratios,
+     _("reference_ratio")   = reference_ratios,
+     _("pseudo_octave")     = pseudo_octave_values,
+     _("highest_ratio")     = highest_ratio_flags
+   );
  }
 
  //' pseudo_octave

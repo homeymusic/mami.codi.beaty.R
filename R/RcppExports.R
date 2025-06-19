@@ -5,8 +5,8 @@ compute_pseudo_octave <- function(ratio_n, ratio_0, n) {
     .Call(`_mami_codi_R_compute_pseudo_octave`, ratio_n, ratio_0, n)
 }
 
-approximate_harmonics <- function(x, deviation) {
-    .Call(`_mami_codi_R_approximate_harmonics`, x, deviation)
+approximate_harmonics <- function(input_ratios, integer_harmonic_tolerance) {
+    .Call(`_mami_codi_R_approximate_harmonics`, input_ratios, integer_harmonic_tolerance)
 }
 
 pseudo_octave <- function(approximate_harmonics) {

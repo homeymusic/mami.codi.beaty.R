@@ -24,14 +24,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // approximate_harmonics
-DataFrame approximate_harmonics(const NumericVector x, const double deviation);
-RcppExport SEXP _mami_codi_R_approximate_harmonics(SEXP xSEXP, SEXP deviationSEXP) {
+DataFrame approximate_harmonics(const NumericVector input_ratios, const double integer_harmonic_tolerance);
+RcppExport SEXP _mami_codi_R_approximate_harmonics(SEXP input_ratiosSEXP, SEXP integer_harmonic_toleranceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const double >::type deviation(deviationSEXP);
-    rcpp_result_gen = Rcpp::wrap(approximate_harmonics(x, deviation));
+    Rcpp::traits::input_parameter< const NumericVector >::type input_ratios(input_ratiosSEXP);
+    Rcpp::traits::input_parameter< const double >::type integer_harmonic_tolerance(integer_harmonic_toleranceSEXP);
+    rcpp_result_gen = Rcpp::wrap(approximate_harmonics(input_ratios, integer_harmonic_tolerance));
     return rcpp_result_gen;
 END_RCPP
 }
