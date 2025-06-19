@@ -16,14 +16,9 @@ knitr::opts_chunk$set(
   message = FALSE,
   fig.crop= T
 )
-remove_floating_point_mistakes <- function(errors, uncertainty) {
-  errors = errors[errors>=-uncertainty]
-  errors[errors<=uncertainty]
-}
-c_sound = 343
 plot_fundamental_wavelength <- function(midi) {
   freq = hrep::midi_to_freq(midi)
-  wavelength = c_sound / freq
+  wavelength = SPEED_OF_SOUND / freq
   wavenumber = (2 * pi) / wavelength
   tibble::tibble(
     meters=seq(0, wavelength ,0.001),
@@ -177,12 +172,8 @@ p = params %>% purrr::map(\(p) {
   }
   cat("  \n#####", title, '\n')
   cat(description)
-  t_v = chords$time_uncertainty %>% max()
-  s_v = chords$space_uncertainty %>% max()
   p_o = chords$space_fractions[[1]]$pseudo_octave %>% max() 
   print(knitr::kable(tibble::tibble_row(
-    time_uncertainty  = paste(round(t_v, 5), collapse = ' '),
-    space_uncertainty = paste(round(s_v, 5), collapse = ' '),
     smoothing_sigma   = sigma,
     pseudo_octave     = p_o
   )))
@@ -194,7 +185,7 @@ p = params %>% purrr::map(\(p) {
   
   print(plot_semitone_space_time(chords, paste('Space and Time Consonance-Dissonance'),
                                  dashed_minor = p$dashed_minor,
-                                 goal=NULL,sigma=sigma,include_points=T,
+                                 goal=experiment,sigma=sigma,include_points=T,
                                  black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
@@ -204,19 +195,19 @@ p = params %>% purrr::map(\(p) {
   cat("  \n")
   
   print(plot_semitone_stern_brocot_depth(chords,title = "Stern-Brocot Depth",
-                                         goal=experiment,include_points=T,include_line=T,
+                                         goal=experiment,sigma=sigma,include_points=T,include_line=T,
                                          black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
   cat("  \n")
   
   print(plot_semitone_stern_brocot_depth_space_time(chords,title = "Space and Time Stern-Brocot Depth",
-                                         goal=experiment,include_points=T,include_line=T,
+                                         goal=experiment,sigma=sigma,include_points=T,include_line=T,
                                          black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
   cat("  \n")
   
   print(plot_semitone_energy_per_cycle(chords, paste('Energy Per Cycle'),
-                              goal=experiment, sigma=sigma,include_points=T,include_line=F,
+                              goal=experiment, sigma=sigma,include_points=T,include_line=T,
                               black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
 

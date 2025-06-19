@@ -381,7 +381,7 @@ plot_semitone_stern_brocot_depth_space_time <- function(chords, title='', includ
                                                         goal=NULL,
                                                         black_vlines=c(),gray_vlines=c(),
                                                         xlab='Semitone',
-                                                        ylab='Consonance (Z-Score)') {
+                                                        ylab='Negative Stern Brocot Depth  (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
   if (length(gray_vlines) == 0) {
@@ -446,7 +446,7 @@ plot_semitone_stern_brocot_depth <- function(chords, title='', include_line=T, s
                                                  goal=NULL,
                                                  black_vlines=c(),gray_vlines=c(),
                                                  xlab='Semitone',
-                                                 ylab='Consonance (Z-Score)') {
+                                                 ylab='Negative Stern Brocot Depth  (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
   if (length(gray_vlines) == 0) {
@@ -1376,10 +1376,12 @@ plot_semitone_energy_per_cycle <- function(chords, title = '', goal=NULL, includ
       ggplot2::geom_point(shape = 21, stroke = NA, size = 1, fill = colors_homey$green)  # Set fill directly
     } +
     { if (include_line)
-      ggplot2::geom_line(data = chords,
+
+    { if (include_line)
+      ggplot2::geom_line(data=chords,
                          ggplot2::aes(x = semitone,
                                       y = smoothed.energy_per_cycle_z,
-                                      group = 1), color = colors_homey$neutral, linewidth = 1)  # Set color directly
+                                      group=1), color = colors_homey$green_lighter, linewidth = 1)}
     } +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -1390,7 +1392,7 @@ plot_semitone_energy_per_cycle <- function(chords, title = '', goal=NULL, includ
     ggplot2::scale_fill_manual(values = color_values_homey(), guide = "none") +
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
-    ggplot2::ylab('Energy Per Cycle') +
+    ggplot2::ylab('Negative Energy Per Cycle (log2)') +
     ggplot2::xlab('Semitone') +
     ggplot2::labs(color = NULL) +
     theme_homey()

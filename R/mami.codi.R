@@ -81,11 +81,10 @@ generate_stimulus <- function(
 #'   - `sidebands_wavelength_spectrum`: filtered sideband wavelengths & amplitudes
 #' @export
 generate_sidebands <- function(x) {
-  wav_spec <- x$stimulus_wavelength_spectrum[[1]]
 
   sidebands_wavelength_spectrum <- compute_sidebands_wavelength(
-    wavelength = wav_spec$wavelength,
-    amplitude  = wav_spec$amplitude
+    wavelength = x$stimulus_wavelength_spectrum[[1]]$wavelength,
+    amplitude  = x$stimulus_wavelength_spectrum[[1]]$amplitude
   ) %>% filter_spectrum_in_range()
 
   x %>%
@@ -145,9 +144,8 @@ compute_time_cycles <- function(
     x
 ) {
 
-  frequency_spectrum = combine_spectra(
-    x$stimulus_frequency_spectrum[[1]]
-  )
+  frequency_spectrum = x$stimulus_frequency_spectrum[[1]]
+
   f = frequency_spectrum$frequency
 
   x %>% dplyr::mutate(
@@ -188,6 +186,7 @@ compute_cycle_length <- function(x, dimension) {
   t
 
 }
+
 lcm_integers <- function(x) {
   if (length(x) == 0) {
     return(1)
@@ -241,7 +240,6 @@ compute_harmony_perception <- function(x) {
 #' @rdname compute_energy_per_cycle
 #' @export
 compute_energy_per_cycle <- function(x) {
-
 
   x %>% dplyr::mutate(
     energy_per_cycle = energy_per_cycle(x$wavelength_spectrum[[1]])
@@ -311,8 +309,10 @@ DIMENSION <- list(
   TIME  = 'time'
 )
 
-MAX_FREQUENCY = hrep::midi_to_freq(127 + 24)
-MIN_FREQUENCY = 1
+# Phase-locking range
+MIN_FREQUENCY    <- 20
+MAX_FREQUENCY    <- 4000
 
-MAX_WAVELENGTH = SPEED_OF_SOUND / MIN_FREQUENCY
-MIN_WAVELENGTH = SPEED_OF_SOUND / MAX_FREQUENCY
+# Place-coding (BM) range
+MAX_WAVELENGTH   <- SPEED_OF_SOUND / 20
+MIN_WAVELENGTH   <- SPEED_OF_SOUND / 20000
