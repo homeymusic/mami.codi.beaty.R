@@ -11,15 +11,15 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // compute_pseudo_octave
-const double compute_pseudo_octave(const double fn, const double f0, const int n);
-RcppExport SEXP _mami_codi_R_compute_pseudo_octave(SEXP fnSEXP, SEXP f0SEXP, SEXP nSEXP) {
+const double compute_pseudo_octave(const double ratio_n, const double ratio_0, const int n);
+RcppExport SEXP _mami_codi_R_compute_pseudo_octave(SEXP ratio_nSEXP, SEXP ratio_0SEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double >::type fn(fnSEXP);
-    Rcpp::traits::input_parameter< const double >::type f0(f0SEXP);
+    Rcpp::traits::input_parameter< const double >::type ratio_n(ratio_nSEXP);
+    Rcpp::traits::input_parameter< const double >::type ratio_0(ratio_0SEXP);
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_pseudo_octave(fn, f0, n));
+    rcpp_result_gen = Rcpp::wrap(compute_pseudo_octave(ratio_n, ratio_0, n));
     return rcpp_result_gen;
 END_RCPP
 }

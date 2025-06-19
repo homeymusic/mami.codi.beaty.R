@@ -38,11 +38,11 @@ mami.codi <- function(
     generate_stimulus() %>%
     generate_sidebands() %>%
     # Frequency Domain
-    compute_fundamental_wavenumber(
+    compute_space_cycles(
       space_uncertainty,
       integer_harmonics_tolerance
     ) %>%
-    compute_fundamental_frequency(
+    compute_time_cycles(
       time_uncertainty,
       integer_harmonics_tolerance
     ) %>%
@@ -115,20 +115,20 @@ generate_sidebands <- function(x) {
     )
 }
 
-#' Compute the fundamental wavenumber of the complex waveform.
+#' Compute the spatial cycle length of the complex waveform.
 #'
-#' Computes the fundamental wavenumber from a wavelength spectrum that
+#' Computes the spatial cycle length from a wavelength spectrum that
 #' includes stimulus, side bands.
 #'
 #' @param x Wavelength spectrum that include stimulus, side bands.
 #' @param space_uncertainty Uncertainty factor applied when creating rational approximations for spatial wavelength.
 #' @param integer_harmonics_tolerance Allowable deviation for harmonics that are not perfect integers.
 #'
-#' @return Fundamental wavenumber of a complex waveform.
+#' @return spatial cycle length
 #'
-#' @rdname compute_fundamental_wavenumber
+#' @rdname compute_space_cycles
 #' @export
-compute_fundamental_wavenumber <- function(
+compute_space_cycles <- function(
     x,
     space_uncertainty,
     integer_harmonics_tolerance
@@ -141,43 +141,38 @@ compute_fundamental_wavenumber <- function(
 
   l = wavelength_spectrum$wavelength
 
-  k = 1 / l
-
   x %>% dplyr::mutate(
 
-    compute_fundamental_cycle(
+    compute_cycle_length(
       l/min(l),
       DIMENSION$SPACE,
       space_uncertainty,
       integer_harmonics_tolerance
     ),
 
-    fundamental_wavenumber = min(k) / .data$space_cycle_length,
-
     # Store the values
     wavelength_spectrum    = list(wavelength_spectrum),
     wavelengths            = list(l),
-    wavenumbers            = list(k),
     space_uncertainty,
     integer_harmonics_tolerance
   )
 
 }
 
-#' Compute the fundamental temporal frequency of a complex waveform.
+#' Compute the temporal cycle length of a complex waveform.
 #'
-#' Computes the fundamental temporal frequency from a frequency spectrum that
+#' Computes the temporal cycle length from a frequency spectrum that
 #' includes stimulus and side bands.
 #'
 #' @param x Wavelength spectrum that include stimulus and side bands.
 #' @param time_uncertainty Uncertainty factor applied when creating rational approximations for temporal frequency.
 #' @param integer_harmonics_tolerance Allowable deviation for harmonics that are not perfect integers.
 #'
-#' @return Fundamental temporal frequency of a complex waveform.
+#' @return temporal cycle length
 #'
-#' @rdname compute_fundamental_frequency
+#' @rdname compute_time_cycles
 #' @export
-compute_fundamental_frequency <- function(
+compute_time_cycles <- function(
     x,
     time_uncertainty,
     integer_harmonics_tolerance
@@ -188,23 +183,18 @@ compute_fundamental_frequency <- function(
   )
   f = frequency_spectrum$frequency
 
-  P = 1 / f
-
   x %>% dplyr::mutate(
 
-    compute_fundamental_cycle(
+    compute_cycle_length(
       f/min(f),
       DIMENSION$TIME,
       time_uncertainty,
       integer_harmonics_tolerance
     ),
 
-    fundamental_frequency  = min(f) / .data$time_cycle_length,
-
     # Store the values
     frequency_spectrum     = list(frequency_spectrum),
     frequencies            = list(f),
-    periods                = list(P),
     time_uncertainty
 
   )
@@ -220,9 +210,9 @@ compute_fundamental_frequency <- function(
 #'
 #' @return Estimated cycle length of the complex waveform.
 #'
-#' @rdname compute_fundamental_cycle
+#' @rdname compute_cycle_length
 #' @export
-compute_fundamental_cycle <- function(x, dimension, uncertainty, integer_harmonics_tolerance) {
+compute_cycle_length <- function(x, dimension, uncertainty, integer_harmonics_tolerance) {
 
   fractions = approximate_rational_fractions(x, uncertainty, integer_harmonics_tolerance)
 

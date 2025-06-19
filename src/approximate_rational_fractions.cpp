@@ -7,30 +7,30 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
 
  //' compute_pseudo_octave
  //'
- //' Find the highest fundamental freq
+ //' Find the pseudo octave
  //'
- //' @param fn freq to eval
- //' @param f0 fundamental freq
+ //' @param ratio_n ratio to eval
+ //' @param ratio_0 ratio
  //' @param n  harmonic number
  //'
  //' @return Calculated pseudo octave
  //'
  //' @export
  // [[Rcpp::export]]
- const double compute_pseudo_octave(const double fn, const double f0, const int n) {
+ const double compute_pseudo_octave(const double ratio_n, const double ratio_0, const int n) {
    if (n==1) {
      return 1.0;
    } else {
-     const int r = 1000000;
-     return std::round(r * pow(2, log(fn / f0) / log(n))) / r;
+     const int tol = 1000000;
+     return std::round(tol * pow(2, log(ratio_n / ratio_0) / log(n))) / tol;
    }
  }
 
  //' approximate_harmonics
  //'
- //' Determine pseudo octave of all frequencies relative to lowest frequency
+ //' Determine pseudo octave of all tones
  //'
- //' @param x Chord frequencies
+ //' @param x Chord tones
  //' @param deviation Deviation for estimating least common multiples
  //'
  //' @return A double of the best guess of the pseudo octave
@@ -40,21 +40,21 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
  DataFrame approximate_harmonics(const NumericVector x,
                                  const double deviation) {
    const int x_size   = x.size();
-   const double f_max = max(x);
+   const double ratio_max = max(x);
    NumericVector harmonic_number(x_size * x_size * x_size);
-   NumericVector evaluation_freq(x_size * x_size * x_size);
-   NumericVector reference_freq(x_size * x_size * x_size);
+   NumericVector evaluation_ratio(x_size * x_size * x_size);
+   NumericVector reference_ratio(x_size * x_size * x_size);
    NumericVector reference_amp(x_size * x_size * x_size);
    NumericVector pseudo_octave(x_size * x_size * x_size);
-   NumericVector highest_freq(x_size * x_size * x_size);
+   NumericVector highest_ratio(x_size * x_size * x_size);
 
 
    const DataFrame default_pseudo_octave = DataFrame::create(
      _("harmonic_number") = 1,
-     _("evaluation_freq") = f_max,
-     _("reference_freq")  = f_max,
+     _("evaluation_ratio") = ratio_max,
+     _("reference_ratio")  = ratio_max,
      _("pseudo_octave")   = 2.0,
-     _("highest_freq")    = f_max
+     _("highest_ratio")    = ratio_max
    );
 
    if (x_size <= 2) {
@@ -63,15 +63,15 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
 
    int num_matches=0;
 
-   for (int eval_freq_index = 0; eval_freq_index < x_size; ++eval_freq_index) {
-     for (int ref_freq_index = 0; ref_freq_index < x_size; ++ref_freq_index) {
+   for (int eval_ratio_index = 0; eval_ratio_index < x_size; ++eval_ratio_index) {
+     for (int ref_ratio_index = 0; ref_ratio_index < x_size; ++ref_ratio_index) {
        for (int harmonic_num = 2; harmonic_num <= x_size; ++harmonic_num) {
-         const double p_octave = compute_pseudo_octave(x[eval_freq_index], x[ref_freq_index], harmonic_num);
+         const double p_octave = compute_pseudo_octave(x[eval_ratio_index], x[ref_ratio_index], harmonic_num);
          if (2.0 - deviation < p_octave && p_octave < 2.0 + deviation) {
            harmonic_number[num_matches] = harmonic_num;
-           evaluation_freq[num_matches] = x[eval_freq_index];
-           reference_freq[num_matches]  = x[ref_freq_index];
-           highest_freq[num_matches]    = f_max;
+           evaluation_ratio[num_matches] = x[eval_ratio_index];
+           reference_ratio[num_matches]  = x[ref_ratio_index];
+           highest_ratio[num_matches]    = ratio_max;
            pseudo_octave[num_matches]   = p_octave;
            num_matches++;
          }
@@ -84,10 +84,10 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
    } else {
      return DataFrame::create(
        _("harmonic_number") = harmonic_number[Rcpp::Range(0, num_matches-1)],
-                                             _("evaluation_freq") = evaluation_freq[Rcpp::Range(0, num_matches-1)],
-                                                                                   _("reference_freq")  = reference_freq[Rcpp::Range(0, num_matches-1)],
+                                             _("evaluation_ratio") = evaluation_ratio[Rcpp::Range(0, num_matches-1)],
+                                                                                   _("reference_ratio")  = reference_ratio[Rcpp::Range(0, num_matches-1)],
                                                                                                                         _("pseudo_octave")   = pseudo_octave[Rcpp::Range(0, num_matches-1)],
-                                                                                                                                                            _("highest_freq")    = highest_freq[Rcpp::Range(0, num_matches-1)]
+                                                                                                                                                            _("highest_ratio")    = highest_ratio[Rcpp::Range(0, num_matches-1)]
      );
    }
  }
