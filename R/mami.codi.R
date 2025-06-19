@@ -262,13 +262,13 @@ compute_harmony_perception <- function(x) {
 
   x %>% dplyr::mutate(
 
-    stern_brocot_depth = log2(.data$space_depth + .data$time_depth),
+    stern_brocot_depth = log2(.data$space_depth ^ 2 + .data$time_depth ^ 2),
 
-    time_dissonance  = log2(.data$time_cycle_length),
-    space_dissonance = log2(.data$space_cycle_length),
+    time_dissonance  = log2(.data$time_cycle_length ^ 2),
+    space_dissonance = log2(.data$space_cycle_length ^ 2),
 
-    dissonance = log2(.data$time_cycle_length * .data$space_cycle_length),
-    majorness  = log2(.data$space_cycle_length / .data$time_cycle_length),
+    dissonance = log2(.data$time_cycle_length ^ 2 + .data$space_cycle_length ^ 2),
+    majorness  = log2(.data$space_cycle_length ^ 2 + .data$time_cycle_length ^ 2),
   )
 
 }
