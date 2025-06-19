@@ -53,7 +53,7 @@ prepare <- function(rds) {
 rad_to_deg <- function(rad) {
   rad * 180 / pi
 }
-GOLDEN_RATIO   = (1+sqrt(5)) / 2
+
 
 type = c(rep('Dual Dyads',12),rep('Dyads',13))
 mono_label = c('m2', 'M2','m3','M3','P4','tt','P5', 'm6', 'M6','m7','M7','P8')

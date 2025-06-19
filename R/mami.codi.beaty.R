@@ -211,6 +211,9 @@ lcm_integers <- function(x) {
 #' @export
 compute_harmony_perception <- function(x) {
 
+  cycle_dissonance = log2(x$time_cycle_length * x$space_cycle_length) / log2(GOLDEN_RATIO)
+  depth_dissonance = log2(x$space_depth * x$time_depth)
+
   x %>% dplyr::mutate(
 
     time_dissonance  = log2(.data$time_cycle_length),
@@ -222,7 +225,7 @@ compute_harmony_perception <- function(x) {
     stern_brocot_depth      = log2(.data$space_depth * .data$time_depth),
     stern_brocot_depth_diff = log2(.data$space_depth / .data$time_depth),
 
-    dissonance = log2(.data$time_cycle_length * .data$space_cycle_length * .data$space_depth * .data$time_depth),
+    dissonance = log2(1+ cycle_dissonance + depth_dissonance),
     majorness  = log2(.data$space_cycle_length / .data$time_cycle_length)
 
   )
@@ -316,3 +319,5 @@ MAX_FREQUENCY    <- 4000
 # Place-coding (BM) range
 MAX_WAVELENGTH   <- SPEED_OF_SOUND / 20
 MIN_WAVELENGTH   <- SPEED_OF_SOUND / 20000
+
+GOLDEN_RATIO   = (1+sqrt(5)) / 2
