@@ -17,16 +17,16 @@ smoothed <- function(x,val,sigma=0.2) {
   )
 }
 colors_homey <- list(
-  'background'        = '#664433',
-  'highlight'         = '#C18160',
-  'foreground'        = '#291B14',
+  'background'        = '#000000',
+  'highlight'         = '#BBBBBB',
+  'foreground'        = '#222222',
   'subtle_foreground' = '#7F745A',
   'minor'             = '#8AC5FF',
   'minor_dark'        = '#6894BF',
-  'neutral'           = '#F3DDAB',
+  'neutral'           = '#AAAAAA',
   'major'             = '#FFB000',
   'major_dark'        = '#BF8400',
-  'light_neutral'     = '#FFF6E2',
+  'light_neutral'     = '#DDDDDD',
   'fundamental'       = '#FF5500',
   'green'             = '#74DE7E',
   'green_lighter'     = '#9EE8A5',
@@ -591,7 +591,7 @@ plot_semitone_space_time <- function(chords, title='', include_line=T, sigma=0.2
                                      include_linear_regression = F, goal=NULL,
                                      black_vlines=c(),gray_vlines=c(),
                                      xlab='Semitone',
-                                     ylab='Consonance') {
+                                     ylab='Log2 Cycle Length') {
 
   whole_semitones = integer_semitones(chords$semitone)
   if (length(gray_vlines) == 0) {
