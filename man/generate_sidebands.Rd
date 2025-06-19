@@ -2,16 +2,23 @@
 % Please edit documentation in R/mami.codi.R
 \name{generate_sidebands}
 \alias{generate_sidebands}
-\title{Generate beat tones and sidebands}
+\title{Generate sidebands}
 \usage{
 generate_sidebands(x)
 }
 \arguments{
-\item{x}{Wavelength and frequency spectra representing the stimulus tones.}
+\item{x}{A list or tibble containing \code{stimulus_frequency_spectrum}
+(a data.frame/tibble with \code{frequency} and \code{amplitude} columns).}
 }
 \value{
-The wavelength spectrum of the selected beat tones.
+The input \code{x} augmented with:
+\itemize{
+\item \code{sidebands_frequency_spectrum}: filtered sideband frequencies & amplitudes
+\item \code{sidebands_wavelength_spectrum}: corresponding wavelengths & amplitudes
+}
 }
 \description{
-Generate beat tones and sidebands
+For a given stimulus spectrum, compute the spectral sidebands
+(fi ± |fj – fi|) for every unordered pair of input frequencies,
+then convert to wavelength and filter into range.
 }

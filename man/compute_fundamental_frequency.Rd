@@ -7,7 +7,7 @@
 compute_fundamental_frequency(x, time_uncertainty, integer_harmonics_tolerance)
 }
 \arguments{
-\item{x}{Wavelength spectrum that include stimulus, beat tones.}
+\item{x}{Wavelength spectrum that include stimulus and side bands.}
 
 \item{time_uncertainty}{Uncertainty factor applied when creating rational approximations for temporal frequency.}
 
@@ -18,5 +18,5 @@ Fundamental temporal frequency of a complex waveform.
 }
 \description{
 Computes the fundamental temporal frequency from a frequency spectrum that
-includes stimulus, beat tones.
+includes stimulus and side bands.
 }

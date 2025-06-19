@@ -2,7 +2,10 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
- //' compute_pseudo_octave
+typedef SEXP (*coprimer_first_coprime_t)(SEXP,SEXP,SEXP);
+static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
+
+//' compute_pseudo_octave
  //'
  //' Find the highest fundamental freq
  //'
@@ -81,10 +84,10 @@ using namespace Rcpp;
    } else {
      return DataFrame::create(
        _("harmonic_number") = harmonic_number[Rcpp::Range(0, num_matches-1)],
-       _("evaluation_freq") = evaluation_freq[Rcpp::Range(0, num_matches-1)],
-       _("reference_freq")  = reference_freq[Rcpp::Range(0, num_matches-1)],
-       _("pseudo_octave")   = pseudo_octave[Rcpp::Range(0, num_matches-1)],
-       _("highest_freq")    = highest_freq[Rcpp::Range(0, num_matches-1)]
+                                             _("evaluation_freq") = evaluation_freq[Rcpp::Range(0, num_matches-1)],
+                                                                                   _("reference_freq")  = reference_freq[Rcpp::Range(0, num_matches-1)],
+                                                                                                                        _("pseudo_octave")   = pseudo_octave[Rcpp::Range(0, num_matches-1)],
+                                                                                                                                                            _("highest_freq")    = highest_freq[Rcpp::Range(0, num_matches-1)]
      );
    }
  }
@@ -107,9 +110,6 @@ using namespace Rcpp;
    names_of_count = names_of_count[idx];
    return std::stod(std::string(names_of_count[0]));
  }
-
- typedef SEXP (*first_coprime_t)(SEXP,SEXP,SEXP);
- static first_coprime_t cpp_first_coprime = nullptr;
 
  //' approximate_rational_fractions
  //'
@@ -145,15 +145,15 @@ using namespace Rcpp;
    }
 
    // 4) grab the coprimer callable once
-   if (!cpp_first_coprime) {
-     cpp_first_coprime = (first_coprime_t)
+   if (!coprimer_first_coprime) {
+     coprimer_first_coprime = (coprimer_first_coprime_t)
      R_GetCCallable("coprimer", "first_coprime");
    }
 
    // 5) single, vectorized call into coprimer
-   DataFrame df = cpp_first_coprime(wrap(pseudo_x),
-                                    wrap(uvec),
-                                    wrap(uvec));
+   DataFrame df = coprimer_first_coprime(wrap(pseudo_x),
+                                         wrap(uvec),
+                                         wrap(uvec));
 
    // 6) augment only with pseudo outputs
    df["pseudo_x"]      = pseudo_x;
