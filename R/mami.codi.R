@@ -260,6 +260,9 @@ lcm_integers <- function(x) {
 #' @export
 compute_harmony_perception <- function(x) {
 
+  space_time_sum  = x$space_cycle_length + x$time_cycle_length
+  space_time_diff = x$space_cycle_length - x$time_cycle_length
+
   x %>% dplyr::mutate(
 
     stern_brocot_depth = log2(.data$space_depth + .data$time_depth),
@@ -267,10 +270,8 @@ compute_harmony_perception <- function(x) {
     time_dissonance  = log2(.data$time_cycle_length),
     space_dissonance = log2(.data$space_cycle_length),
 
-    dissonance =
-      .data$space_dissonance + .data$time_dissonance,
-    majorness =
-      .data$space_dissonance - .data$time_dissonance
+    dissonance = log2(space_time_sum),
+    majorness  = sign(space_time_diff) * log2(abs(1 + space_time_diff))
   )
 
 }
