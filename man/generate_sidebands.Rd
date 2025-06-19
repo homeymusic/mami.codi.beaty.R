@@ -2,23 +2,23 @@
 % Please edit documentation in R/mami.codi.R
 \name{generate_sidebands}
 \alias{generate_sidebands}
-\title{Generate sidebands}
+\title{Generate sidebands (pure‐wavelength)}
 \usage{
 generate_sidebands(x)
 }
 \arguments{
-\item{x}{A list or tibble containing \code{stimulus_frequency_spectrum}
-(a data.frame/tibble with \code{frequency} and \code{amplitude} columns).}
+\item{x}{A list/tibble containing \code{stimulus_wavelength_spectrum}
+(a tibble with \code{wavelength} and \code{amplitude}).}
 }
 \value{
 The input \code{x} augmented with:
 \itemize{
-\item \code{sidebands_frequency_spectrum}: filtered sideband frequencies & amplitudes
-\item \code{sidebands_wavelength_spectrum}: corresponding wavelengths & amplitudes
+\item \code{sidebands_wavelength_spectrum}: filtered sideband wavelengths & amplitudes
 }
 }
 \description{
-For a given stimulus spectrum, compute the spectral sidebands
-(fi ± |fj – fi|) for every unordered pair of input frequencies,
-then convert to wavelength and filter into range.
+For a given stimulus spectrum, compute the spatial beat‐wavelengths
+for every unordered pair of input wavelengths:
+λ_beat = λ_i * λ_j / |λ_j - λ_i|
+and filter them into range.
 }

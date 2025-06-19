@@ -162,77 +162,70 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
    return df;
  }
 
- //' Compute Sidebands
+ //' compute_sidebands_wavelength
  //'
- //' For each unordered pair of input frequencies, compute:
- //'   Two sidebands: fi ± |f2 - f1|
+ //' For each unordered pair of input wavelengths, compute the spatial beat‐
+ //' wavelength:
+ //'   λ_beat = λ_i * λ_j / |λ_j - λ_i|
  //'
- //' Returns a DataFrame of sideband frequencies and amplitudes.
- //'
- //' @param frequency NumericVector of input frequencies
- //' @param amplitude NumericVector of input amplitudes (same length)
- //' @return DataFrame with columns `frequency` and `amplitude`
+ //' @param wavelength NumericVector of input wavelengths
+ //' @param amplitude  NumericVector of input amplitudes (same length)
+ //' @return DataFrame with columns `wavelength` and `amplitude`
  //' @export
  // [[Rcpp::export]]
- DataFrame compute_sidebands(
-     NumericVector frequency,
+ DataFrame compute_sidebands_wavelength(
+     NumericVector wavelength,
      NumericVector amplitude
  ) {
-   int n = frequency.size();
+   int n = wavelength.size();
    if (n < 2) {
      return DataFrame::create(
-       _["frequency"] = NumericVector(),
-       _["amplitude"] = NumericVector()
+       _["wavelength"] = NumericVector(),
+       _["amplitude"]  = NumericVector()
      );
    }
 
-   double min_freq = Rcpp::min(frequency);
-   int max_pairs   = n * (n - 1) / 2;
-   int max_entries = max_pairs * 2; // only sidebands
+   // We'll only accept beat‐wavelengths longer than the longest stimulus wave
+   double max_wav = Rcpp::max(wavelength);
+   int max_pairs = n * (n - 1) / 2;
+   int max_entries = max_pairs;        // one beat per unordered pair
 
-   NumericVector sb_freqs(max_entries);
-   NumericVector sb_amps (max_entries);
+   NumericVector sb_wavs(max_entries);
+   NumericVector sb_amps(max_entries);
    int sb_count = 0;
 
    for (int i = 0; i < n; ++i) {
-     double fi = frequency[i];
+     double wi = wavelength[i];
      for (int j = i + 1; j < n; ++j) {
-       double fj = frequency[j];
-       double diff    = std::abs(fi - fj);
+       double wj      = wavelength[j];
+       double diff    = std::abs(wj - wi);
        double sum_amp = amplitude[i] + amplitude[j];
+       // avoid division by zero or floating‐point noise
+       double tol = std::numeric_limits<double>::epsilon() * std::max(std::abs(wi), std::abs(wj));
 
-       double tol = std::numeric_limits<double>::epsilon() *
-         std::max(std::abs(fi), std::abs(fj));
-
-       if (diff > tol && diff < min_freq) {
-         // Upper sideband
-         double sb_p = fi + diff;
-         if (sb_p > tol) {
-           sb_freqs[sb_count] = sb_p;
-           sb_amps [sb_count] = sum_amp;
-           ++sb_count;
-         }
-         // Lower sideband
-         if (fi > diff + tol) {
-           double sb_m = fi - diff;
-           sb_freqs[sb_count] = sb_m;
-           sb_amps [sb_count] = sum_amp;
+       if (diff > tol) {
+         // spatial‐beat wavelength:
+         double sb = (wi * wj) / diff;
+         // only keep beats *longer* than any stimulus wavelength
+         if (sb > max_wav + tol) {
+           sb_wavs[sb_count] = sb;
+           sb_amps[sb_count] = sum_amp;
            ++sb_count;
          }
        }
      }
    }
 
-   NumericVector sb_freq_out = (sb_count > 0)
-     ? sb_freqs[Range(0, sb_count - 1)]
+   // slice out only the entries we filled
+   NumericVector wav_out = (sb_count > 0)
+     ? sb_wavs[Range(0, sb_count - 1)]
    : NumericVector();
-
-   NumericVector sb_amp_out = (sb_count > 0)
+   NumericVector amp_out = (sb_count > 0)
      ? sb_amps[Range(0, sb_count - 1)]
    : NumericVector();
 
    return DataFrame::create(
-     _["frequency"] = sb_freq_out,
-     _["amplitude"] = sb_amp_out
+     _["wavelength"] = wav_out,
+     _["amplitude"]  = amp_out
    );
  }

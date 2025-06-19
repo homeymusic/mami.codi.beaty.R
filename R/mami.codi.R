@@ -80,37 +80,29 @@ generate_stimulus <- function(
 
 }
 
-#' Generate sidebands
+#' Generate sidebands (pure‐wavelength)
 #'
-#' For a given stimulus spectrum, compute the spectral sidebands
-#' (fi ± |fj – fi|) for every unordered pair of input frequencies,
-#' then convert to wavelength and filter into range.
+#' For a given stimulus spectrum, compute the spatial beat‐wavelengths
+#' for every unordered pair of input wavelengths:
+#'   λ_beat = λ_i * λ_j / |λ_j - λ_i|
+#' and filter them into range.
 #'
-#' @param x A list or tibble containing `stimulus_frequency_spectrum`
-#'   (a data.frame/tibble with `frequency` and `amplitude` columns).
+#' @param x A list/tibble containing `stimulus_wavelength_spectrum`
+#'   (a tibble with `wavelength` and `amplitude`).
 #' @return The input `x` augmented with:
-#'   - `sidebands_frequency_spectrum`: filtered sideband frequencies & amplitudes
-#'   - `sidebands_wavelength_spectrum`: corresponding wavelengths & amplitudes
-#' @rdname generate_sidebands
+#'   - `sidebands_wavelength_spectrum`: filtered sideband wavelengths & amplitudes
 #' @export
 generate_sidebands <- function(x) {
-  stimulus_frequency_spectrum <- x$stimulus_frequency_spectrum[[1]]
+  wav_spec <- x$stimulus_wavelength_spectrum[[1]]
 
-  sidebands_frequency_spectrum <- compute_sidebands(
-    frequency = stimulus_frequency_spectrum$frequency,
-    amplitude = stimulus_frequency_spectrum$amplitude
-  ) %>%
-    filter_spectrum_in_range()
-
-  sidebands_wavelength_spectrum <- tibble::tibble(
-    wavelength = C_SOUND / sidebands_frequency_spectrum$frequency,
-    amplitude  = sidebands_frequency_spectrum$amplitude
+  sidebands_wavelength_spectrum <- compute_sidebands_wavelength(
+    wavelength = wav_spec$wavelength,
+    amplitude  = wav_spec$amplitude
   ) %>%
     filter_spectrum_in_range()
 
   x %>%
     dplyr::mutate(
-      sidebands_frequency_spectrum = list(sidebands_frequency_spectrum),
       sidebands_wavelength_spectrum = list(sidebands_wavelength_spectrum)
     )
 }
