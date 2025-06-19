@@ -271,7 +271,7 @@ compute_harmony_perception <- function(x) {
     space_dissonance = log2(.data$space_cycle_length),
 
     dissonance = log2(space_time_sum),
-    majorness  = sign(space_time_diff) * log2(abs(1 + space_time_diff))
+    majorness  = sign(space_time_diff) * log2(1 + abs(space_time_diff))
   )
 
 }
