@@ -5,7 +5,7 @@ using namespace Rcpp;
 typedef SEXP (*coprimer_first_coprime_t)(SEXP,SEXP,SEXP);
 static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
 
-//' compute_pseudo_octave
+ //' compute_pseudo_octave
  //'
  //' Find the highest fundamental freq
  //'
@@ -134,11 +134,11 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
    }
 
    // 2) compute the psycho-acoustic transform
-   DataFrame harm = approximate_harmonics(x, deviation);
-   double pseudo_octave_double = pseudo_octave(harm["pseudo_octave"]);
+   DataFrame harmonics = approximate_harmonics(x, deviation);
+   double pseudo_octave_double = pseudo_octave(harmonics["pseudo_octave"]);
 
    // 3) build the vectors we'll pass to coprimer
-   NumericVector pseudo_x(n), uvec(n, uncertainty);
+   NumericVector pseudo_x(n), uncertainties(n, uncertainty);
    for (int i = 0; i < n; ++i) {
      pseudo_x[i] = std::pow(2.0,
                             std::log(x[i]) / std::log(pseudo_octave_double));
@@ -152,8 +152,8 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
 
    // 5) single, vectorized call into coprimer
    DataFrame df = coprimer_first_coprime(wrap(pseudo_x),
-                                         wrap(uvec),
-                                         wrap(uvec));
+                                         wrap(uncertainties),
+                                         wrap(uncertainties));
 
    // 6) augment only with pseudo outputs
    df["pseudo_x"]      = pseudo_x;
