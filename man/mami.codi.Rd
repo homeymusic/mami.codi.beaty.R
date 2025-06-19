@@ -4,26 +4,12 @@
 \alias{mami.codi}
 \title{Major-Minor Consonance-Dissonance}
 \usage{
-mami.codi(
-  x,
-  space_uncertainty = UNCERTAINTY_LIMIT,
-  time_uncertainty = UNCERTAINTY_LIMIT,
-  integer_harmonics_tolerance = INTEGER_HARMONICS_TOLERANCE,
-  metadata = NA,
-  verbose = FALSE,
-  ...
-)
+mami.codi(x, metadata = NA, verbose = FALSE, ...)
 }
 \arguments{
 \item{x}{Chord to analyze, which is parsed using
 \code{hrep::sparse_fr_spectrum}. For more details, see
 \href{https://github.com/pmcharrison/hrep/blob/master/R/sparse-fr-spectrum.R}{hrep::sparse_fr_spectrum documentation}.}
-
-\item{space_uncertainty}{Optional space uncertainty value for finding rational fractions.}
-
-\item{time_uncertainty}{Optional time uncertainty value for finding rational fractions.}
-
-\item{integer_harmonics_tolerance}{Optional tolerance for harmonics to deviate from perfect integers.}
 
 \item{metadata}{User-provided list of metadata that accompanies each call. Useful for analysis and plots.}
 

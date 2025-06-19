@@ -5,9 +5,6 @@
 #' @param x Chord to analyze, which is parsed using
 #'   \code{hrep::sparse_fr_spectrum}. For more details, see
 #'   \href{https://github.com/pmcharrison/hrep/blob/master/R/sparse-fr-spectrum.R}{hrep::sparse_fr_spectrum documentation}.
-#' @param space_uncertainty Optional space uncertainty value for finding rational fractions.
-#' @param time_uncertainty Optional time uncertainty value for finding rational fractions.
-#' @param integer_harmonics_tolerance Optional tolerance for harmonics to deviate from perfect integers.
 #' @param metadata User-provided list of metadata that accompanies each call. Useful for analysis and plots.
 #' @param verbose Determines the amount of data to return from chord evaluation. Options are:
 #'   \describe{
@@ -23,11 +20,8 @@
 #' @export
 mami.codi <- function(
     x,
-    space_uncertainty                = UNCERTAINTY_LIMIT,
-    time_uncertainty                 = UNCERTAINTY_LIMIT,
-    integer_harmonics_tolerance      = INTEGER_HARMONICS_TOLERANCE,
-    metadata                         = NA,
-    verbose                          = FALSE,
+    metadata = NA,
+    verbose  = FALSE,
     ...
 ) {
 
@@ -38,16 +32,10 @@ mami.codi <- function(
     generate_stimulus() %>%
     generate_sidebands() %>%
     # Frequency Domain
-    compute_space_cycles(
-      space_uncertainty,
-      integer_harmonics_tolerance
-    ) %>%
-    compute_time_cycles(
-      time_uncertainty,
-      integer_harmonics_tolerance
-    ) %>%
+    compute_space_cycles() %>%
+    compute_time_cycles() %>%
     # Psychophysical Domain
-    compute_energy_per_cycle()   %>%
+    compute_energy_per_cycle()   %>% # TODO: move this to the phsical domain
     compute_harmony_perception() %>%
     # App Domain
     format_output(metadata, verbose)
@@ -113,17 +101,13 @@ generate_sidebands <- function(x) {
 #' includes stimulus, side bands.
 #'
 #' @param x Wavelength spectrum that include stimulus, side bands.
-#' @param space_uncertainty Uncertainty factor applied when creating rational approximations for spatial wavelength.
-#' @param integer_harmonics_tolerance Allowable deviation for harmonics that are not perfect integers.
 #'
 #' @return spatial cycle length
 #'
 #' @rdname compute_space_cycles
 #' @export
 compute_space_cycles <- function(
-    x,
-    space_uncertainty,
-    integer_harmonics_tolerance
+    x
 ) {
 
   wavelength_spectrum = combine_spectra(
@@ -137,16 +121,12 @@ compute_space_cycles <- function(
 
     compute_cycle_length(
       l/min(l),
-      DIMENSION$SPACE,
-      space_uncertainty,
-      integer_harmonics_tolerance
+      DIMENSION$SPACE
     ),
 
     # Store the values
     wavelength_spectrum    = list(wavelength_spectrum),
-    wavelengths            = list(l),
-    space_uncertainty,
-    integer_harmonics_tolerance
+    wavelengths            = list(l)
   )
 
 }
@@ -157,17 +137,13 @@ compute_space_cycles <- function(
 #' includes stimulus and side bands.
 #'
 #' @param x Wavelength spectrum that include stimulus and side bands.
-#' @param time_uncertainty Uncertainty factor applied when creating rational approximations for temporal frequency.
-#' @param integer_harmonics_tolerance Allowable deviation for harmonics that are not perfect integers.
 #'
 #' @return temporal cycle length
 #'
 #' @rdname compute_time_cycles
 #' @export
 compute_time_cycles <- function(
-    x,
-    time_uncertainty,
-    integer_harmonics_tolerance
+    x
 ) {
 
   frequency_spectrum = combine_spectra(
@@ -179,15 +155,12 @@ compute_time_cycles <- function(
 
     compute_cycle_length(
       f/min(f),
-      DIMENSION$TIME,
-      time_uncertainty,
-      integer_harmonics_tolerance
+      DIMENSION$TIME
     ),
 
     # Store the values
     frequency_spectrum     = list(frequency_spectrum),
-    frequencies            = list(f),
-    time_uncertainty
+    frequencies            = list(f)
 
   )
 
@@ -197,16 +170,14 @@ compute_time_cycles <- function(
 #'
 #' @param x Spectrum representing a complex waveform
 #' @param dimension Space or time, used to label the output
-#' @param uncertainty Precision for creating rational approximations
-#' @param integer_harmonics_tolerance Allowable toleance for approximating least common multiples (LCM).
 #'
 #' @return Estimated cycle length of the complex waveform.
 #'
 #' @rdname compute_cycle_length
 #' @export
-compute_cycle_length <- function(x, dimension, uncertainty, integer_harmonics_tolerance) {
+compute_cycle_length <- function(x, dimension) {
 
-  fractions = approximate_rational_fractions(x, uncertainty, integer_harmonics_tolerance)
+  fractions = approximate_rational_fractions(x, UNCERTAINTY_LIMIT, INTEGER_HARMONICS_TOLERANCE)
 
   t = tibble::tibble_row(
     cycle_length = lcm_integers(fractions$den),

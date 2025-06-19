@@ -4,14 +4,10 @@
 \alias{compute_space_cycles}
 \title{Compute the spatial cycle length of the complex waveform.}
 \usage{
-compute_space_cycles(x, space_uncertainty, integer_harmonics_tolerance)
+compute_space_cycles(x)
 }
 \arguments{
 \item{x}{Wavelength spectrum that include stimulus, side bands.}
-
-\item{space_uncertainty}{Uncertainty factor applied when creating rational approximations for spatial wavelength.}
-
-\item{integer_harmonics_tolerance}{Allowable deviation for harmonics that are not perfect integers.}
 }
 \value{
 spatial cycle length

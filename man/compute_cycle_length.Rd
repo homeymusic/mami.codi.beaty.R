@@ -4,16 +4,12 @@
 \alias{compute_cycle_length}
 \title{Compute the cycle length of a complex wave}
 \usage{
-compute_cycle_length(x, dimension, uncertainty, integer_harmonics_tolerance)
+compute_cycle_length(x, dimension)
 }
 \arguments{
 \item{x}{Spectrum representing a complex waveform}
 
 \item{dimension}{Space or time, used to label the output}
-
-\item{uncertainty}{Precision for creating rational approximations}
-
-\item{integer_harmonics_tolerance}{Allowable toleance for approximating least common multiples (LCM).}
 }
 \value{
 Estimated cycle length of the complex waveform.

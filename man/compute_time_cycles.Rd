@@ -4,14 +4,10 @@
 \alias{compute_time_cycles}
 \title{Compute the temporal cycle length of a complex waveform.}
 \usage{
-compute_time_cycles(x, time_uncertainty, integer_harmonics_tolerance)
+compute_time_cycles(x)
 }
 \arguments{
 \item{x}{Wavelength spectrum that include stimulus and side bands.}
-
-\item{time_uncertainty}{Uncertainty factor applied when creating rational approximations for temporal frequency.}
-
-\item{integer_harmonics_tolerance}{Allowable deviation for harmonics that are not perfect integers.}
 }
 \value{
 temporal cycle length
