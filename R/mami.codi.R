@@ -135,8 +135,8 @@ compute_fundamental_wavenumber <- function(
 ) {
 
   wavelength_spectrum = combine_spectra(
-    x$stimulus_wavelength_spectrum[[1]],
-    x$sidebands_wavelength_spectrum[[1]]
+    x$stimulus_wavelength_spectrum[[1]] #,
+    # x$sidebands_wavelength_spectrum[[1]]
   )
 
   l = wavelength_spectrum$wavelength
