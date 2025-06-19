@@ -192,12 +192,6 @@ p = params %>% purrr::map(\(p) {
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_stern_brocot_depth(chords,title = "Stern-Brocot Depth",
-                                         goal=experiment,include_points=T,include_line=T,
-                                         black_vlines = black_vlines,gray_vlines  = gray_vlines)
-  )
-  cat("  \n")
-  
   print(plot_semitone_space_time(chords, paste('space and time beats Consonance'),
                                  dashed_minor = p$dashed_minor,
                                  goal=NULL,sigma=sigma,include_points=T,
@@ -209,10 +203,24 @@ p = params %>% purrr::map(\(p) {
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
+  print(plot_semitone_stern_brocot_depth(chords,title = "Stern-Brocot Depth",
+                                         goal=experiment,include_points=T,include_line=T,
+                                         black_vlines = black_vlines,gray_vlines  = gray_vlines)
+  )
+  cat("  \n")
+  
+  print(plot_semitone_stern_brocot_depth_space_time(chords,title = "Stern-Brocot Depth",
+                                         goal=experiment,include_points=T,include_line=T,
+                                         black_vlines = black_vlines,gray_vlines  = gray_vlines)
+  )
+  cat("  \n")
+  
   print(plot_semitone_energy_per_cycle(chords, paste('Energy Per Cycle'),
                               goal=experiment, sigma=sigma,include_points=T,include_line=F,
                               black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
+
+  
 
   
   
