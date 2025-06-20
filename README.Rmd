@@ -127,7 +127,7 @@ p = params %>% purrr::map(\(p) {
   chords <- dyads %>% dplyr::filter(timbre == p$t)
 
   chords$consonance_z = z_scores(-chords$dissonance)
-  chords$major_z = z_scores(chords$majorness)
+  chords$majorness_z = z_scores(chords$majorness)
   
   chords$space_consonance = -chords$space_dissonance
   chords$time_consonance = -chords$time_dissonance
@@ -159,7 +159,7 @@ p = params %>% purrr::map(\(p) {
     dplyr::rename(semitone=interval)
   
   experiment <- experiment %>% dplyr::mutate(
-    consonance = rating
+    consonance = z_scores(rating)
   )
   
   experiment_raw = experiment_all$data %>% 

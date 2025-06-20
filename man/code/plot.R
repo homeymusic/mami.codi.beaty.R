@@ -19,7 +19,7 @@ smoothed <- function(x,val,sigma=0.2) {
 colors_homey <- list(
   'background'        = '#000000',
   'highlight'         = '#BBBBBB',
-  'foreground'        = '#222222',
+  'foreground'        = '#888888',
   'subtle_foreground' = '#7F745A',
   'minor'             = '#8AC5FF',
   'minor_dark'        = '#6894BF',
@@ -599,8 +599,8 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
     gray_vlines = whole_semitones
   }
 
-  chords$smoothed.majorness = smoothed(chords$semitone,
-                                       chords$majorness,
+  chords$smoothed.majorness_z = smoothed(chords$semitone,
+                                       chords$majorness_z,
                                        sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
@@ -615,7 +615,7 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
     { if (include_line)
       ggplot2::geom_line(data=chords,
                          ggplot2::aes(x = semitone,
-                                      y = smoothed.majorness,
+                                      y = smoothed.majorness_z,
                                       color=color_factor_homey(chords,'majorness'),
                                       group=1), linewidth = 1)} +
     {if (!is.null(goal))
