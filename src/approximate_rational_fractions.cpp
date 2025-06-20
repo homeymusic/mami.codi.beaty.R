@@ -102,10 +102,10 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
    return df;
  }
 
- //' Compute Sidebands
+ //' Compute amplitude modulation
  //'
  //' For each unordered pair of input frequencies, compute:
- //'   Two sidebands: fi ± |f2 - f1|
+ //'   Difference frequency and two sidebands: fi ± |f2 - f1|
  //'
  //' Returns a DataFrame of sideband frequencies and amplitudes.
  //'
@@ -114,7 +114,7 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
  //' @return DataFrame with columns `frequency` and `amplitude`
  //' @export
  // [[Rcpp::export]]
- DataFrame compute_sidebands(
+ DataFrame compute_amplitude_modulation(
      NumericVector frequency,
      NumericVector amplitude
  ) {

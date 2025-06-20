@@ -30,7 +30,7 @@ mami.codi.beaty <- function(
     parse_input(...) %>%
     # Physical Domain
     generate_stimulus() %>%
-    generate_sidebands() %>%
+    generate_amplitude_modulation() %>%
     # Frequency Domain
     compute_space_cycles() %>%
     compute_time_cycles() %>%
@@ -68,36 +68,36 @@ generate_stimulus <- function(
 
 }
 
-#' Generate sidebands
+#' Generate amplitude modulation
 #'
-#' For a given stimulus spectrum, compute the spectral sidebands
-#' (fi ± |fj – fi|) for every unordered pair of input frequencies,
-#' then convert to wavelength and filter into range.
+#' For a given stimulus spectrum, compute the difference frequncies
+#' and the spectral sidebands (fi ± |fj – fi|) for every unordered
+#' pair of input frequencies, then convert to wavelength and filter into range.
 #'
 #' @param x A list or tibble containing `stimulus_frequency_spectrum`
 #'   (a data.frame/tibble with `frequency` and `amplitude` columns).
 #' @return The input `x` augmented with:
-#'   - `sidebands_frequency_spectrum`: filtered sideband frequencies & amplitudes
-#'   - `sidebands_wavelength_spectrum`: corresponding wavelengths & amplitudes
+#'   - `amplitude_modulation_frequency_spectrum`: filtered sideband frequencies & amplitudes
+#'   - `amplitude_modulation_wavelength_spectrum`: corresponding wavelengths & amplitudes
 #' @rdname generate_sidebands
 #' @export
-generate_sidebands <- function(x) {
+generate_amplitude_modulation <- function(x) {
 
-  sidebands_frequency_spectrum <- compute_sidebands(
+  amplitude_modulation_frequency_spectrum <- compute_amplitude_modulation(
     frequency = x$stimulus_frequency_spectrum[[1]]$frequency,
     amplitude  = x$stimulus_frequency_spectrum[[1]]$amplitude
   ) %>% filter_spectrum_in_range()
 
-  sidebands_wavelength_spectrum <- tibble::tibble(
-    wavelength = SPEED_OF_SOUND / sidebands_frequency_spectrum$frequency,
-    amplitude  = sidebands_frequency_spectrum$amplitude
+  amplitude_modulation_wavelength_spectrum <- tibble::tibble(
+    wavelength = SPEED_OF_SOUND / amplitude_modulation_frequency_spectrum$frequency,
+    amplitude  = amplitude_modulation_frequency_spectrum$amplitude
   ) %>%
     filter_spectrum_in_range()
 
   x %>%
     dplyr::mutate(
-      sidebands_frequency_spectrum = list(sidebands_frequency_spectrum),
-      sidebands_wavelength_spectrum = list(sidebands_wavelength_spectrum)
+      amplitude_modulation_frequency_spectrum = list(amplitude_modulation_frequency_spectrum),
+      amplitude_modulation_wavelength_spectrum = list(amplitude_modulation_wavelength_spectrum)
     )
 }
 
@@ -118,7 +118,7 @@ compute_space_cycles <- function(
 
   wavelength_spectrum = combine_spectra(
     x$stimulus_wavelength_spectrum[[1]],
-    x$sidebands_wavelength_spectrum[[1]]
+    x$amplitude_modulation_wavelength_spectrum[[1]]
   )
 
   l = wavelength_spectrum$wavelength
