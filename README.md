@@ -11,7 +11,7 @@ For 10 harmonics, behavioral results and theoretical predictions agree.
 
 | smoothing_sigma | pseudo_octave |
 |----------------:|--------------:|
-|             0.2 |             2 |
+|             0.2 |           1.8 |
 
 ![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-2.png)<!-- -->  
@@ -63,7 +63,7 @@ be relatively higher than the behavioral results.
 
 | smoothing_sigma | pseudo_octave |
 |----------------:|--------------:|
-|             0.2 |      1.851852 |
+|             0.2 |      1.846154 |
 
 ![](man/figures/README-unnamed-chunk-4-16.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-17.png)<!-- -->  
