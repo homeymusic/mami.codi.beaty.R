@@ -191,15 +191,21 @@ p = params %>% purrr::map(\(p) {
                                  black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
+  print(plot_semitone_energy_per_cycle(chords, paste('Energy Per Cycle'),
+                              goal=experiment, sigma=sigma,include_points=T,include_line=T,
+                              black_vlines=black_vlines,gray_vlines=gray_vlines))
+  cat("  \n")
+  
   print(plot_semitone_stern_brocot_depth(chords,title = "Beating (Stern-Brocot Depth)",
                                          goal=experiment,sigma=sigma,include_points=T,include_line=T,
                                          black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
   cat("  \n")
   
-  print(plot_semitone_energy_per_cycle(chords, paste('Energy Per Cycle'),
-                              goal=experiment, sigma=sigma,include_points=T,include_line=T,
-                              black_vlines=black_vlines,gray_vlines=gray_vlines))
+  print(plot_semitone_stern_brocot_depth_space_time(chords,title = "Space and Time Beating (Stern-Brocot Depth)",
+                                         goal=experiment,sigma=sigma,include_points=T,include_line=T,
+                                         black_vlines = black_vlines,gray_vlines  = gray_vlines)
+  )
   cat("  \n")
   
   
