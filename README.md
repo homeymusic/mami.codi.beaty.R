@@ -63,7 +63,7 @@ be relatively higher than the behavioral results.
 
 | smoothing_sigma | pseudo_octave |
 |----------------:|--------------:|
-|             0.2 |      1.846154 |
+|             0.2 |             2 |
 
 ![](man/figures/README-unnamed-chunk-4-16.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-17.png)<!-- -->  
