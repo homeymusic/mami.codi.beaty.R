@@ -18,19 +18,19 @@ smoothed <- function(x,val,sigma=0.2) {
 }
 colors_homey <- list(
   'background'        = '#000000',
+  'foreground'        = '#333333',
+  'neutral'           = '#AAAAAA',
   'highlight'         = '#BBBBBB',
-  'foreground'        = '#888888',
+  'gray'              = '#C0C0C0',
+  'light_neutral'     = '#DDDDDD',
   'subtle_foreground' = '#7F745A',
   'minor'             = '#8AC5FF',
   'minor_dark'        = '#6894BF',
-  'neutral'           = '#AAAAAA',
   'major'             = '#FFB000',
   'major_dark'        = '#BF8400',
-  'light_neutral'     = '#DDDDDD',
   'fundamental'       = '#FF5500',
   'green'             = '#74DE7E',
-  'green_lighter'     = '#9EE8A5',
-  'gray'              = '#C0C0C0'
+  'green_lighter'     = '#9EE8A5'
 )
 
 saturation_colors_homey <- list(
@@ -78,7 +78,7 @@ theme_homey <- function(aspect.ratio=NULL){
     plot.background = ggplot2::element_rect(fill = colors_homey$neutral),
     panel.background = ggplot2::element_rect(fill = colors_homey$background),
     panel.grid.major = ggplot2::element_line(color = colors_homey$foreground, linewidth=0.2),
-    panel.grid.minor = ggplot2::element_line(color = colors_homey$foreground, linewidth=0.05, linetype ="dashed"),
+    panel.grid.minor = ggplot2::element_line(color = colors_homey$foreground, linewidth=0.1, linetype ="dashed"),
     legend.background = ggplot2::element_rect(fill = colors_homey$light_neutral),
     legend.key = ggplot2::element_rect(fill = colors_homey$background, color = NA),
     legend.position='bottom',
@@ -283,9 +283,7 @@ plot_semitone_codi <- function(chords, title='', include_line=T, sigma=0.2,
                                ylab='Consonance (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
-  if (length(gray_vlines) == 0) {
-    gray_vlines = whole_semitones
-  }
+
   color_factor_homey <- function(x,column_name) {
     cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
   }
@@ -334,9 +332,7 @@ plot_semitone_thomaes_function <- function(chords, title='', include_line=T, sig
                                              ylab='Consonance (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
-  if (length(gray_vlines) == 0) {
-    gray_vlines = whole_semitones
-  }
+
   color_factor_homey <- function(x,column_name) {
     cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
   }
@@ -384,9 +380,7 @@ plot_semitone_stern_brocot_depth_space_time <- function(chords, title='', includ
                                                         ylab='Negative Stern Brocot Depth  (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
-  if (length(gray_vlines) == 0) {
-    gray_vlines = whole_semitones
-  }
+
   color_factor_homey <- function(x,column_name) {
     cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
   }
@@ -449,9 +443,7 @@ plot_semitone_stern_brocot_depth <- function(chords, title='', include_line=T, s
                                                  ylab='Negative Stern Brocot Depth  (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
-  if (length(gray_vlines) == 0) {
-    gray_vlines = whole_semitones
-  }
+
   color_factor_homey <- function(x,column_name) {
     cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
   }
@@ -498,9 +490,7 @@ plot_semitone_stern_brocot_depth_diff <- function(chords, title='', include_line
                                              ylab='Stern Brocot Depth Diff (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
-  if (length(gray_vlines) == 0) {
-    gray_vlines = whole_semitones
-  }
+
   color_factor_homey <- function(x,column_name) {
     cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
   }
@@ -545,9 +535,7 @@ plot_semitone_euclids_orchard_height <- function(chords, title='', include_line=
                                ylab='Consonance (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
-  if (length(gray_vlines) == 0) {
-    gray_vlines = whole_semitones
-  }
+
   color_factor_homey <- function(x,column_name) {
     cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
   }
@@ -595,9 +583,6 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
                                ylab='Major-Minor (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
-  if (length(gray_vlines) == 0) {
-    gray_vlines = whole_semitones
-  }
 
   chords$smoothed.majorness_z = smoothed(chords$semitone,
                                        chords$majorness_z,
@@ -635,16 +620,13 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
 }
 
 plot_semitone_space_time <- function(chords, title='', include_line=T, sigma=0.2,
-                                     dashed_minor = F,include_points=T,
+                                     dashed_minor = F, include_points=T,
                                      include_linear_regression = F, goal=NULL,
                                      black_vlines=c(),gray_vlines=c(),
                                      xlab='Semitone',
                                      ylab='Log2 Cycle Length') {
 
   whole_semitones = integer_semitones(chords$semitone)
-  if (length(gray_vlines) == 0) {
-    gray_vlines = whole_semitones
-  }
 
   chords$smoothed.time_consonance  = smoothed(chords$semitone,
                                              chords$time_consonance,
@@ -706,9 +688,6 @@ plot_semitone_space_time_beats <- function(chords, title='', include_line=T, sig
                                      ylab='Consonance') {
 
   whole_semitones = integer_semitones(chords$semitone)
-  if (length(gray_vlines) == 0) {
-    gray_vlines = whole_semitones
-  }
 
   chords$smoothed.time_consonance  = smoothed(chords$semitone,
                                               chords$time_consonance,

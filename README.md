@@ -7,12 +7,6 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 
 ##### Harmonic ~ Partials: 10
 
-For 10 harmonics, behavioral results and theoretical predictions agree.
-
-| smoothing_sigma | pseudo_octave |
-|----------------:|--------------:|
-|             0.2 |           1.8 |
-
 ![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-2.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-3.png)<!-- -->  
@@ -20,15 +14,6 @@ For 10 harmonics, behavioral results and theoretical predictions agree.
 ![](man/figures/README-unnamed-chunk-4-5.png)<!-- -->
 
 ##### 5Partials ~ Partials: 5
-
-For 5 harmonics, behavioral results and theoretical predictions agree.
-For comparison with the study below (5 partils with the third partial
-deleted), notice that the m3 peak is only slightly lower than the M3
-peak.
-
-| smoothing_sigma | pseudo_octave |
-|----------------:|--------------:|
-|             0.2 |             2 |
 
 ![](man/figures/README-unnamed-chunk-4-6.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-7.png)<!-- -->  
@@ -38,15 +23,6 @@ peak.
 
 ##### 5PartialsNo3 ~ Partials: 5
 
-For 5 harmonics with the 3rd partial deleted, behavioral results and
-theoretical predictions mostly agree. As expected, the m3 peak without
-the third partial is now lower than the m3 peak with all 5 harmonics
-while the M3 peak is slightly higher without the 3rd partial.
-
-| smoothing_sigma | pseudo_octave |
-|----------------:|--------------:|
-|             0.2 |             2 |
-
 ![](man/figures/README-unnamed-chunk-4-11.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-12.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-13.png)<!-- -->  
@@ -54,16 +30,6 @@ while the M3 peak is slightly higher without the 3rd partial.
 ![](man/figures/README-unnamed-chunk-4-15.png)<!-- -->
 
 ##### Bonang ~ Partials: 4
-
-For gamalan dyads with a harmonic bass pitch and bonang upper pitch,
-behavioral results and theoretical predictions mostly agree. MaMi.CoDi
-predicts a dissonance trough with minor polarity at P4 that is not in
-the behavioral results. MaMi.CoDi predicts P5 to have minor polarity and
-be relatively higher than the behavioral results.
-
-| smoothing_sigma | pseudo_octave |
-|----------------:|--------------:|
-|             0.2 |             2 |
 
 ![](man/figures/README-unnamed-chunk-4-16.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-17.png)<!-- -->  
@@ -75,17 +41,6 @@ be relatively higher than the behavioral results.
 
 ##### Pure ~ Partials: 1
 
-For pure tones, the behavioral results and the theoretical predictions
-mostly agree. Only P5 and P8 have pronounced two-sided peaks. The
-behavioral results show subtle variations in consonance height across
-the 15 semitones but the overall peak structure agrees with MaMi.CoDi
-predictions. For futher comparison, the theoretical predictions for
-major-minor versus the behavioral results are included in a plot below.
-
-| smoothing_sigma | pseudo_octave |
-|----------------:|--------------:|
-|             0.2 |             2 |
-
 ![](man/figures/README-unnamed-chunk-4-21.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-22.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-23.png)<!-- -->  
@@ -94,14 +49,6 @@ major-minor versus the behavioral results are included in a plot below.
 
 ##### Stretched ~ Partials: 10
 
-For stretched harmonics, behavioral results and theoretical predictions
-mostly agree. MaMi.Codi predicts peaks with minor polarity just above m3
-and m7 that do not exist in the behavioral results.
-
-| smoothing_sigma | pseudo_octave |
-|----------------:|--------------:|
-|             0.2 |           2.1 |
-
 ![](man/figures/README-unnamed-chunk-4-26.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-27.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-28.png)<!-- -->  
@@ -109,13 +56,6 @@ and m7 that do not exist in the behavioral results.
 ![](man/figures/README-unnamed-chunk-4-30.png)<!-- -->
 
 ##### Compressed ~ Partials: 10
-
-For compressed harmonics, the pronounced behavioral peaks mostly agree
-with the theoretical peaks.
-
-| smoothing_sigma | pseudo_octave |
-|----------------:|--------------:|
-|             0.2 |           1.9 |
 
 ![](man/figures/README-unnamed-chunk-4-31.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-32.png)<!-- -->  
@@ -127,12 +67,6 @@ with the theoretical peaks.
 
 ##### M3 ~ Partials: 10
 
-Description is below.
-
-| smoothing_sigma | pseudo_octave |
-|----------------:|--------------:|
-|           0.035 |             2 |
-
 ![](man/figures/README-unnamed-chunk-4-36.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-37.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-38.png)<!-- -->  
@@ -141,12 +75,6 @@ Description is below.
 
 ##### M6 ~ Partials: 10
 
-Description is below.
-
-| smoothing_sigma | pseudo_octave |
-|----------------:|--------------:|
-|           0.035 |             2 |
-
 ![](man/figures/README-unnamed-chunk-4-41.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-42.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-43.png)<!-- -->  
@@ -154,12 +82,6 @@ Description is below.
 ![](man/figures/README-unnamed-chunk-4-45.png)<!-- -->
 
 ##### P8 ~ Partials: 10
-
-Description is below.
-
-| smoothing_sigma | pseudo_octave |
-|----------------:|--------------:|
-|           0.035 |             2 |
 
 ![](man/figures/README-unnamed-chunk-4-46.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-47.png)<!-- -->  
