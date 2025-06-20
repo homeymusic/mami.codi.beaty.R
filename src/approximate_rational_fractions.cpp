@@ -7,8 +7,8 @@ using namespace Rcpp;
 typedef SEXP (*coprimer_first_coprime_t)(SEXP,SEXP,SEXP);
 static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
 
-// [[Rcpp::export]]
-double approximate_pseudo_octave(const Rcpp::NumericVector ratios,
+ // [[Rcpp::export]]
+ double approximate_pseudo_octave(const Rcpp::NumericVector ratios,
                                  const double integer_harmonic_tolerance) {
   int n = ratios.size();
   if (n <= 2) return 2.0;
@@ -24,16 +24,16 @@ double approximate_pseudo_octave(const Rcpp::NumericVector ratios,
   for (int i = 0; i < n; ++i) {
     for (int j = i + 1; j < n; ++j) {
       bool i_larger = ratios[i] >= ratios[j];
-      int small_i   = i_larger ? j : i;
-      int large_i   = i_larger ? i : j;
+      int  small_i  = i_larger ? j : i;
+      int  large_i  = i_larger ? i : j;
 
       double log_diff = log_ratios[large_i] - log_ratios[small_i];
       double ratio    = std::exp(log_diff);
-      int    hnum     = int(std::round(ratio));
+      int    harmonic_number = int(std::round(ratio));
 
-      if (hnum >= 2 &&
-          std::abs(ratio - hnum) / hnum < integer_harmonic_tolerance) {
-        double oct = std::pow(2.0, log_diff / std::log((double)hnum));
+      if (harmonic_number >= 2 &&
+          std::abs(ratio - harmonic_number) / harmonic_number < integer_harmonic_tolerance) {
+        double oct = std::pow(2.0, log_diff / std::log((double)harmonic_number));
         candidates.push_back(oct);
       }
     }
@@ -41,18 +41,17 @@ double approximate_pseudo_octave(const Rcpp::NumericVector ratios,
 
   if (candidates.empty()) return 2.0;
 
-  // find the mode of the candidate octaves
-  Rcpp::NumericVector candVec(candidates.begin(), candidates.end());
-  Rcpp::IntegerVector counts = Rcpp::table(candVec);
-  Rcpp::CharacterVector names = counts.names();
+  Rcpp::NumericVector qualifiedCandidates(candidates.begin(), candidates.end());
+  Rcpp::IntegerVector counts = Rcpp::table(qualifiedCandidates);
+  Rcpp::CharacterVector candidateBins = counts.names();
   Rcpp::IntegerVector idx = Rcpp::seq_along(counts) - 1;
   std::sort(idx.begin(), idx.end(),
             [&](int i, int j){ return counts[i] > counts[j]; });
 
-  return std::stod(Rcpp::as<std::string>(names[idx[0]]));
+  return std::stod(Rcpp::as<std::string>(candidateBins[idx[0]]));
 }
 
-//' approximate_rational_fractions
+ //' approximate_rational_fractions
  //'
  //' Approximates floating-point numbers to arbitrary uncertainty.
  //'
@@ -103,7 +102,7 @@ double approximate_pseudo_octave(const Rcpp::NumericVector ratios,
    return df;
  }
 
-//' compute_sidebands_wavelength
+ //' compute_sidebands_wavelength
  //'
  //' For each unordered pair of input wavelengths, compute the spatial beat‐
  //' wavelength:
