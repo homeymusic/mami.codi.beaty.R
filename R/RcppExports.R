@@ -9,7 +9,7 @@ approximate_rational_fractions <- function(x, uncertainty, deviation) {
     .Call(`_mami_codi_beaty_R_approximate_rational_fractions`, x, uncertainty, deviation)
 }
 
-compute_sidebands_wavelength <- function(wavelength, amplitude) {
-    .Call(`_mami_codi_beaty_R_compute_sidebands_wavelength`, wavelength, amplitude)
+compute_sidebands <- function(frequency, amplitude) {
+    .Call(`_mami_codi_beaty_R_compute_sidebands`, frequency, amplitude)
 }
 
