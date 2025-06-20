@@ -7,132 +7,52 @@ using namespace Rcpp;
 typedef SEXP (*coprimer_first_coprime_t)(SEXP,SEXP,SEXP);
 static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
 
- //' compute_pseudo_octave
- //'
- //' Find the pseudo octave
- //'
- //' @param ratio_n ratio to eval
- //' @param ratio_0 ratio
- //' @param n  harmonic number
- //'
- //' @return Calculated pseudo octave
- //'
- //' @export
- // [[Rcpp::export]]
- const double compute_pseudo_octave(const double ratio_n, const double ratio_0, const int n) {
-   if (n==1) {
-     return 1.0;
-   } else {
-     const int tol = 1000000;
-     return std::round(tol * pow(2, log(ratio_n / ratio_0) / log(n))) / tol;
-   }
- }
-
- //' approximate_harmonics
- //'
- //' Determine pseudo octave of all tones
- //'
- //' @param x Chord tones
- //' @param deviation Deviation for estimating least common multiples
- //'
- //' @return A double of the best guess of the pseudo octave
- //'
- //' @export
- // [[Rcpp::export]]
- DataFrame approximate_harmonics(const NumericVector input_ratios,
+// [[Rcpp::export]]
+double approximate_pseudo_octave(const Rcpp::NumericVector ratios,
                                  const double integer_harmonic_tolerance) {
-   int ratio_vector_size = input_ratios.size();
-   double highest_input_ratio = max(input_ratios);
+  int n = ratios.size();
+  if (n <= 2) return 2.0;
 
-   DataFrame default_output = DataFrame::create(
-     _("harmonic_number")   = 1,
-     _("evaluation_ratio")  = highest_input_ratio,
-     _("reference_ratio")   = highest_input_ratio,
-     _("pseudo_octave")     = 2.0,
-     _("highest_ratio")     = highest_input_ratio
-   );
-   if (ratio_vector_size <= 2) {
-     return default_output;
-   }
+  std::vector<double> log_ratios(n);
+  for (int i = 0; i < n; ++i) {
+    log_ratios[i] = std::log(ratios[i]);
+  }
 
-   std::vector<double> log_input_ratios(ratio_vector_size);
-   for (int idx = 0; idx < ratio_vector_size; ++idx) {
-     log_input_ratios[idx] = std::log(input_ratios[idx]);
-   }
+  std::vector<double> candidates;
+  candidates.reserve(n * (n - 1) / 2);
 
-   std::vector<int>      harmonic_number_matches;
-   std::vector<double>   evaluation_ratios;
-   std::vector<double>   reference_ratios;
-   std::vector<double>   pseudo_octave_values;
-   std::vector<double>   highest_ratio_flags;
+  for (int i = 0; i < n; ++i) {
+    for (int j = i + 1; j < n; ++j) {
+      bool i_larger = ratios[i] >= ratios[j];
+      int small_i   = i_larger ? j : i;
+      int large_i   = i_larger ? i : j;
 
-   harmonic_number_matches.reserve(ratio_vector_size * ratio_vector_size / 2);
-   evaluation_ratios     .reserve(ratio_vector_size * ratio_vector_size / 2);
-   reference_ratios      .reserve(ratio_vector_size * ratio_vector_size / 2);
-   pseudo_octave_values  .reserve(ratio_vector_size * ratio_vector_size / 2);
-   highest_ratio_flags   .reserve(ratio_vector_size * ratio_vector_size / 2);
+      double log_diff = log_ratios[large_i] - log_ratios[small_i];
+      double ratio    = std::exp(log_diff);
+      int    hnum     = int(std::round(ratio));
 
-   for (int i = 0; i < ratio_vector_size; ++i) {
-     for (int j = i + 1; j < ratio_vector_size; ++j) {
-       bool i_is_larger = (input_ratios[i] >= input_ratios[j]);
-       int  idx_large   = i_is_larger ? i : j;
-       int  idx_small   = i_is_larger ? j : i;
-       double evaluation_ratio_value = input_ratios[idx_large];
-       double reference_ratio_value  = input_ratios[idx_small];
-       double log_ratio_difference   = log_input_ratios[idx_large]
-       - log_input_ratios[idx_small];
-       double ratio_value            = std::exp(log_ratio_difference);
-       int    harmonic_candidate     = int(std::round(ratio_value));
+      if (hnum >= 2 &&
+          std::abs(ratio - hnum) / hnum < integer_harmonic_tolerance) {
+        double oct = std::pow(2.0, log_diff / std::log((double)hnum));
+        candidates.push_back(oct);
+      }
+    }
+  }
 
-       if (harmonic_candidate >= 2 &&
-           std::abs(ratio_value - harmonic_candidate) / harmonic_candidate < integer_harmonic_tolerance) {
-         double pseudo_octave_value = std::pow(
-           2.0,
-           log_ratio_difference / std::log((double)harmonic_candidate)
-         );
+  if (candidates.empty()) return 2.0;
 
-         harmonic_number_matches.push_back(harmonic_candidate);
-         evaluation_ratios     .push_back(evaluation_ratio_value);
-         reference_ratios      .push_back(reference_ratio_value);
-         pseudo_octave_values  .push_back(pseudo_octave_value);
-         highest_ratio_flags   .push_back(highest_input_ratio);
-       }
-     }
-   }
+  // find the mode of the candidate octaves
+  Rcpp::NumericVector candVec(candidates.begin(), candidates.end());
+  Rcpp::IntegerVector counts = Rcpp::table(candVec);
+  Rcpp::CharacterVector names = counts.names();
+  Rcpp::IntegerVector idx = Rcpp::seq_along(counts) - 1;
+  std::sort(idx.begin(), idx.end(),
+            [&](int i, int j){ return counts[i] > counts[j]; });
 
-   if (harmonic_number_matches.empty()) {
-     return default_output;
-   }
+  return std::stod(Rcpp::as<std::string>(names[idx[0]]));
+}
 
-   return DataFrame::create(
-     _("harmonic_number")   = harmonic_number_matches,
-     _("evaluation_ratio")  = evaluation_ratios,
-     _("reference_ratio")   = reference_ratios,
-     _("pseudo_octave")     = pseudo_octave_values,
-     _("highest_ratio")     = highest_ratio_flags
-   );
- }
-
- //' pseudo_octave
- //'
- //' Finds the pseudo octave from approximate harmonics.
- //'
- //' @param approximate_harmonics List of candidate pseudo octaves
- //'
- //' @return A data frame of rational numbers and metadata
- //'
- //' @export
- // [[Rcpp::export]]
- const double pseudo_octave(NumericVector approximate_harmonics) {
-   const IntegerVector counts = table(approximate_harmonics);
-   IntegerVector idx = seq_along(counts) - 1;
-   std::sort(idx.begin(), idx.end(), [&](int i, int j){return counts[i] > counts[j];});
-   CharacterVector names_of_count = counts.names();
-   names_of_count = names_of_count[idx];
-   return std::stod(std::string(names_of_count[0]));
- }
-
- //' approximate_rational_fractions
+//' approximate_rational_fractions
  //'
  //' Approximates floating-point numbers to arbitrary uncertainty.
  //'
@@ -155,8 +75,8 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
    }
 
    // 2) compute the psycho-acoustic transform
-   DataFrame harmonics = approximate_harmonics(x, deviation);
-   double pseudo_octave_double = pseudo_octave(harmonics["pseudo_octave"]);
+   // new one-step
+   double pseudo_octave_double = approximate_pseudo_octave(x, deviation);
 
    // 3) build the vectors we'll pass to coprimer
    NumericVector pseudo_x(n), uncertainties(n, uncertainty);
@@ -183,7 +103,7 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
    return df;
  }
 
- //' compute_sidebands_wavelength
+//' compute_sidebands_wavelength
  //'
  //' For each unordered pair of input wavelengths, compute the spatial beat‐
  //' wavelength:

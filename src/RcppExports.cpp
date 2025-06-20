@@ -10,39 +10,15 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// compute_pseudo_octave
-const double compute_pseudo_octave(const double ratio_n, const double ratio_0, const int n);
-RcppExport SEXP _mami_codi_beaty_R_compute_pseudo_octave(SEXP ratio_nSEXP, SEXP ratio_0SEXP, SEXP nSEXP) {
+// approximate_pseudo_octave
+double approximate_pseudo_octave(const Rcpp::NumericVector ratios, const double integer_harmonic_tolerance);
+RcppExport SEXP _mami_codi_beaty_R_approximate_pseudo_octave(SEXP ratiosSEXP, SEXP integer_harmonic_toleranceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double >::type ratio_n(ratio_nSEXP);
-    Rcpp::traits::input_parameter< const double >::type ratio_0(ratio_0SEXP);
-    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_pseudo_octave(ratio_n, ratio_0, n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// approximate_harmonics
-DataFrame approximate_harmonics(const NumericVector input_ratios, const double integer_harmonic_tolerance);
-RcppExport SEXP _mami_codi_beaty_R_approximate_harmonics(SEXP input_ratiosSEXP, SEXP integer_harmonic_toleranceSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector >::type input_ratios(input_ratiosSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type ratios(ratiosSEXP);
     Rcpp::traits::input_parameter< const double >::type integer_harmonic_tolerance(integer_harmonic_toleranceSEXP);
-    rcpp_result_gen = Rcpp::wrap(approximate_harmonics(input_ratios, integer_harmonic_tolerance));
-    return rcpp_result_gen;
-END_RCPP
-}
-// pseudo_octave
-const double pseudo_octave(NumericVector approximate_harmonics);
-RcppExport SEXP _mami_codi_beaty_R_pseudo_octave(SEXP approximate_harmonicsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type approximate_harmonics(approximate_harmonicsSEXP);
-    rcpp_result_gen = Rcpp::wrap(pseudo_octave(approximate_harmonics));
+    rcpp_result_gen = Rcpp::wrap(approximate_pseudo_octave(ratios, integer_harmonic_tolerance));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -73,9 +49,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mami_codi_beaty_R_compute_pseudo_octave", (DL_FUNC) &_mami_codi_beaty_R_compute_pseudo_octave, 3},
-    {"_mami_codi_beaty_R_approximate_harmonics", (DL_FUNC) &_mami_codi_beaty_R_approximate_harmonics, 2},
-    {"_mami_codi_beaty_R_pseudo_octave", (DL_FUNC) &_mami_codi_beaty_R_pseudo_octave, 1},
+    {"_mami_codi_beaty_R_approximate_pseudo_octave", (DL_FUNC) &_mami_codi_beaty_R_approximate_pseudo_octave, 2},
     {"_mami_codi_beaty_R_approximate_rational_fractions", (DL_FUNC) &_mami_codi_beaty_R_approximate_rational_fractions, 3},
     {"_mami_codi_beaty_R_compute_sidebands_wavelength", (DL_FUNC) &_mami_codi_beaty_R_compute_sidebands_wavelength, 2},
     {NULL, NULL, 0}
