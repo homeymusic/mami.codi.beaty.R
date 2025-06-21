@@ -102,12 +102,15 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
    return df;
  }
 
- //' Compute amplitude modulation
+ //' Compute amplitude modulation (difference + all sidebands)
  //'
  //' For each unordered pair of input frequencies, compute:
- //'   Difference frequency and two sidebands: fi ± |f2 - f1|
- //'
- //' Returns a DataFrame of sideband frequencies and amplitudes.
+ //'   diff = |f1 - f2|
+ //'   if diff passes the epsilon/min_freq test, emit:
+ //'     diff,
+ //'     f1 + diff, f1 - diff,
+ //'     f2 + diff, f2 - diff
+ //' Returns a DataFrame of `frequency` and `amplitude`.
  //'
  //' @param frequency NumericVector of input frequencies
  //' @param amplitude NumericVector of input amplitudes (same length)
@@ -126,51 +129,60 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
      );
    }
 
-   double min_freq = Rcpp::min(frequency);
-   int max_pairs   = n * (n - 1) / 2;
-   int max_entries = max_pairs * 3;
+   double min_freq   = Rcpp::min(frequency);
+   int max_pairs     = n * (n - 1) / 2;
+   int max_entries   = max_pairs * 5;  // diff + 2 sidebands per carrier × 2 carriers
 
    NumericVector am_freqs(max_entries);
    NumericVector am_amps (max_entries);
    int am_count = 0;
 
    for (int i = 0; i < n; ++i) {
-     double carrier_frequency = frequency[i];
+     double f1    = frequency[i];
+     double amp1h = amplitude[i] / 2.0;  // half the carrier amplitude
+
      for (int j = i + 1; j < n; ++j) {
-       double modulation_frequency = frequency[j];
-       double difference_frequency = std::abs(carrier_frequency - modulation_frequency);
-       double am_amp = amplitude[i] / 2.0;
+       double f2    = frequency[j];
+       double amp2h = amplitude[j] / 2.0;
+       double diff  = std::abs(f1 - f2);
 
        double tol = std::numeric_limits<double>::epsilon() *
-         std::max(std::abs(carrier_frequency), std::abs(modulation_frequency));
+         std::max(std::abs(f1), std::abs(f2));
 
-       if (difference_frequency > tol && difference_frequency < min_freq) {
-
-         // Difference
-         am_freqs[am_count] = difference_frequency;
-         am_amps [am_count] = am_amp;
+       if (diff > tol && diff < min_freq) {
+         // 1) Difference
+         am_freqs[am_count] = diff;
+         am_amps [am_count] = amp1h;
          ++am_count;
 
-         // Upper Sideband
-         am_freqs[am_count] = carrier_frequency + difference_frequency;
-         am_amps [am_count] = am_amp;
+         // 2) Sidebands around f1
+         am_freqs[am_count] = f1 + diff;
+         am_amps [am_count] = amp1h;
          ++am_count;
 
-         // Lower Sideband
-         am_freqs[am_count] = carrier_frequency - difference_frequency;
-         am_amps [am_count] = am_amp;
+         am_freqs[am_count] = f1 - diff;
+         am_amps [am_count] = amp1h;
          ++am_count;
 
+         // 3) Sidebands around f2
+         am_freqs[am_count] = f2 + diff;
+         am_amps [am_count] = amp2h;
+         ++am_count;
+
+         am_freqs[am_count] = f2 - diff;
+         am_amps [am_count] = amp2h;
+         ++am_count;
        }
      }
    }
 
+   // Trim to actual size
    NumericVector am_freq_out = (am_count > 0)
-     ? am_freqs[Range(0, am_count - 1)]
+     ? am_freqs[ Range(0, am_count - 1) ]
    : NumericVector();
 
    NumericVector am_amp_out = (am_count > 0)
-     ? am_amps[Range(0, am_count - 1)]
+     ? am_amps[ Range(0, am_count - 1) ]
    : NumericVector();
 
    return DataFrame::create(

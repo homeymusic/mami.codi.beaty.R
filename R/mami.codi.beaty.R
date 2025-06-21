@@ -230,8 +230,8 @@ compute_harmony_perception <- function(x) {
     stern_brocot_depth      = log2(.data$space_depth * .data$time_depth),
     stern_brocot_depth_diff = log2(.data$time_depth / .data$space_depth),
 
-    dissonance = .data$time_dissonance + .data$stern_brocot_space_depth * .data$space_fractions[[1]]$depth %>% max(),
-    majorness  = .data$stern_brocot_space_depth - .data$time_dissonance
+    dissonance = .data$time_dissonance + .data$space_dissonance,
+    majorness  = .data$space_dissonance - .data$time_dissonance
 
   )
 
