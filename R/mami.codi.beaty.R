@@ -30,7 +30,7 @@ mami.codi.beaty <- function(
     parse_input(...) %>%
     # Physical Domain
     generate_stimulus() %>%
-    generate_amplitude_modulation() %>%
+    generate_superposition_envelope() %>%
     # Frequency Domain
     compute_space_cycles() %>%
     compute_time_cycles() %>%
@@ -81,7 +81,7 @@ generate_stimulus <- function(
 #'   - `amplitude_modulation_wavelength_spectrum`: corresponding wavelengths & amplitudes
 #' @rdname generate_sidebands
 #' @export
-generate_amplitude_modulation <- function(x) {
+generate_superposition_envelope <- function(x) {
 
   amplitude_modulation_frequency_spectrum <- compute_amplitude_modulation(
     frequency = x$stimulus_frequency_spectrum[[1]]$frequency,
@@ -116,7 +116,7 @@ compute_space_cycles <- function(
     x
 ) {
 
-  wavelength_spectrum = combine_spectra(
+  wavelength_spectrum = validate_combine_spectra(
     x$stimulus_wavelength_spectrum[[1]],
     x$amplitude_modulation_wavelength_spectrum[[1]]
   )
@@ -152,7 +152,9 @@ compute_time_cycles <- function(
     x
 ) {
 
-  frequency_spectrum = x$stimulus_frequency_spectrum[[1]]
+  frequency_spectrum = validate_combine_spectra(
+    x$stimulus_frequency_spectrum[[1]]
+  )
 
   f = frequency_spectrum$frequency
 
