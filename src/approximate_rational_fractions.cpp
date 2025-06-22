@@ -139,7 +139,8 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
      for (int j = i + 1; j < n; ++j) {
        double modulation_frequency = frequency[j];
        double difference_frequency = std::abs(carrier_frequency - modulation_frequency);
-       double am_amp = amplitude[i] / 2.0;
+       double modulation_amplitude = amplitude[j];
+       double am_amp =  modulation_amplitude / 2.0;
 
        double tol = std::numeric_limits<double>::epsilon() *
          std::max(std::abs(carrier_frequency), std::abs(modulation_frequency));
