@@ -1,60 +1,6 @@
 MaMi.CoDi.Beaty: A Model of Harmony Perception
 ================
 
-# Theory
-
-## Heisenberg Uncertainty
-
-$$
-\Delta x\,\Delta  p\ge\;\frac{\hbar}{2}\,
-$$
-
-## Gabor Uncertainty
-
-$$
-\Delta t\,\Delta  \omega \ge\;\frac{1}{2}\
-$$
-
-## New: Relative Uncertainty
-
-### Reference Period of Observation
-
-$$
-\Delta t \equiv T_{ref} = \frac{2 \pi}{\omega_{ref}}
-$$ $$
-\frac{2 \pi}{\omega_{ref}} \Delta \omega_i \ge\;\frac{1}{2}\
-$$
-
-$$
-\frac{\Delta \omega_i}{\omega_{ref}} \ge\;\frac{1}{4 \pi}\
-$$
-
-### Relative Frequency Uncertainty
-
-$$
-\frac{\Delta f_i}{f_{ref}} \ge\;\frac{1}{4 \pi}\
-$$
-
-### Rational Fraction Approximation
-
-$$
-\Delta f_i = \bigl| f_i - \widetilde f_i\bigr|
-$$
-
-$$
-\Delta f_i = f_{ref} \bigl| \frac{f_i}{f_{ref}} - \frac{p}{q} \bigr|, \quad p \perp q
-$$
-
-$$
-\frac{\Delta f_i}{f_{ref}} = \bigl| \frac{f_i}{f_{ref}} - \frac{p}{q}\bigr| \ge\;\frac{1}{4 \pi}\
-$$
-
-### Stern-Brocot Stopper
-
-$$
-\bigl| \frac{f_i}{f_{ref}} - \frac{p}{q}\bigr| <\;\frac{1}{4 \pi}\
-$$
-
 # Behavioral
 
 ## Manipulating Harmonic Frequencies
@@ -152,3 +98,57 @@ $$
 ![](man/figures/README-unnamed-chunk-4-58.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-59.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-60.png)<!-- -->
+
+# Theory
+
+## Heisenberg Uncertainty
+
+$$
+\Delta x\,\Delta  p\ge \frac{\hbar}{2}\,
+$$
+
+## Gabor Uncertainty
+
+$$
+\Delta t\,\Delta  \omega \ge \frac{1}{2}\
+$$
+
+## New: Relative Uncertainty
+
+### Reference Period of Observation
+
+$$
+\Delta t \equiv T_{ref} = \frac{2 \pi}{\omega_{ref}}
+$$ $$
+\frac{2 \pi}{\omega_{ref}} \Delta \omega_i \ge \frac{1}{2}\
+$$
+
+$$
+\frac{\Delta \omega_i}{\omega_{ref}} \ge \frac{1}{4 \pi}\
+$$
+
+### Relative Frequency Uncertainty
+
+$$
+\frac{\Delta f_i}{f_{ref}} \ge \frac{1}{4 \pi}\
+$$
+
+### Rational Fraction Approximation
+
+$$
+\Delta f_i = \bigl| f_i - \widetilde f_i\bigr|
+$$
+
+$$
+\Delta f_i = f_{ref} \bigl| \frac{f_i}{f_{ref}} - \frac{p}{q} \bigr|, \quad p \perp q
+$$
+
+$$
+\frac{\Delta f_i}{f_{ref}} = \bigl| \frac{f_i}{f_{ref}} - \frac{p}{q}\bigr| \ge \frac{1}{4 \pi}\
+$$
+
+### Stern-Brocot Stopper
+
+$$
+\bigl| \frac{f_i}{f_{ref}} - \frac{p}{q}\bigr| < \frac{1}{4 \pi}\
+$$
