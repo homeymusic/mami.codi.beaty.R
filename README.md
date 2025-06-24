@@ -93,49 +93,82 @@ $$
 \Delta t \Delta \omega \ge \frac{1}{2}
 $$
 
-## New: Relative Uncertainty
+## Relative Uncertainty
 
-### Reference Period of Observation
+### Reference Time Period
 
 $$
-\Delta t \equiv T_{ref} = \frac{2 \pi}{\omega_{ref}}
+\Delta t = T_{ref} = \frac{2 \pi}{\omega_{ref}}
 $$ $$
-\Delta t \Delta \omega = T_{ref} \Delta \omega_i = \frac{2 \pi}{\omega_{ref}} \Delta \omega_i \ge \frac{1}{2}
+\Delta t \Delta \omega = T_{ref} \Delta \omega = \frac{2 \pi}{\omega_{ref}} \Delta \omega \ge \frac{1}{2}
 $$
 
-### Relative Uncertainty
+### Relative Uncertainty Principle
 
 $$
-\frac{\Delta \omega_i}{\omega_{ref}} \ge \frac{1}{4 \pi} \quad \text{and} \quad \frac{\Delta f_i}{f_{ref}} \ge \frac{1}{4 \pi}\
+\frac{\Delta \omega}{\omega_{ref}} \ge \frac{1}{4 \pi} \quad \text{and} \quad \frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi}\
 $$
 
-### Rational Fraction Approximation
+## Rational Approximation Uncertainty
+
+### Relative Rational Approximation
 
 $$
-\Delta f_i = \bigl| f_i - \widetilde f_i\bigr|
+\Delta f = \bigl| f - \widetilde f \bigr| \quad \text{where} \quad \widetilde f = f_{ref} \frac{a}{b} \quad
+\text{and} \quad a \in \mathbb{Z}, b \in \mathbb{N}
 $$
 
 $$
-\Delta f_i = f_{ref} \bigl| \frac{f_i}{f_{ref}} - \frac{p}{q} \bigr|, \quad p \perp q
+\Delta f = f_{ref} \bigl| \frac{f}{f_{ref}} - \frac{a}{b} \bigr|
+$$
+
+### Rational Approximation Uncertainty Principle
+
+$$
+\frac{\Delta f}{f_{ref}} =  \frac{f_{ref} \bigl| \frac{f}{f_{ref}} - \frac{a}{b} \bigr|}{f_{ref}}  = \bigl| \frac{f}{f_{ref}} - \frac{a}{b}\bigr| \ge \frac{1}{4 \pi}
 $$
 
 $$
-\frac{\Delta f_i}{f_{ref}} = \bigl| \frac{f_i}{f_{ref}} - \frac{p}{q}\bigr| \ge \frac{1}{4 \pi}\
+\bigl| \frac{f}{f_{ref}} - \frac{a}{b}\bigr| \ge \frac{1}{4 \pi}
 $$
 
-### Stern-Brocot Traversal
+## Stern-Brocot Traversal
 
 $$
 \begin{aligned}
-&\mathbf{WHILE}\;\Bigl|\tfrac{f_i}{f_{\mathrm{ref}}}-\tfrac{p}{q}\Bigr|\;\ge\;\tfrac{1}{4\pi}
+&\mathbf{WHILE} \Bigl|\tfrac{f}{f_{\mathrm{ref}}}-\tfrac{a}{b}\Bigr| \ge \tfrac{1}{4\pi}
 \quad\mathbf{DO}\\
-&\quad p \;\gets\; p_{\mathrm{left}} + p_{\mathrm{right}}\\
-&\quad q \;\gets\; q_{\mathrm{left}} + q_{\mathrm{right}}\\
-&\quad \mathbf{IF}\;\tfrac{f_i}{f_{\mathrm{ref}}} > \tfrac{p}{q}\;\mathbf{THEN}\\
-&\quad\quad p_{\mathrm{left}}\;\gets\;p,\quad q_{\mathrm{left}}\;\gets\;q\\
+&\quad a  \gets  a_{\mathrm{left}} + a_{\mathrm{right}}\\
+&\quad b  \gets  b_{\mathrm{left}} + b_{\mathrm{right}}\\
+&\quad \mathbf{IF} \tfrac{f}{f_{\mathrm{ref}}} > \tfrac{a}{b} \mathbf{THEN}\\
+&\quad\quad a_{\mathrm{left}} \gets a,\quad b_{\mathrm{left}} \gets b\\
 &\quad \mathbf{ELSE}\\
-&\quad\quad p_{\mathrm{right}}\;\gets\;p,\quad q_{\mathrm{right}}\;\gets\;q\\
+&\quad\quad a_{\mathrm{right}} \gets a,\quad b_{\mathrm{right}} \gets b\\
 &\quad \mathbf{END\_IF}\\
 &\mathbf{END\_WHILE}
 \end{aligned}
+$$
+
+$$
+a \perp b \quad \Longrightarrow \quad  \operatorname{gcd}(a,b)=1
+$$
+
+## Fundamental Frequency
+
+$$
+f_0 = f_{ref}\frac{\operatorname{gcd}(a_1, a_2, \dots, a_n)}{\operatorname{lcm}(b_1, b_2, \dots, b_n)}, \quad a_i \perp b_i
+$$
+
+## Stolzenburg Periodicity Perception
+
+### Fundamental Cycle Length
+
+$$
+\Lambda  = \mathrm{lcm}(b_1,b_2,\dots,b_n) \quad \text{when} \quad \gcd(a_1,\dots,a_n)=1
+$$
+
+### Psychophysical Periodicity
+
+$$
+\Psi  = \log_2\!\bigl(\Lambda\bigr) \quad \bigl[\text{units: Sz}\bigr]
 $$
