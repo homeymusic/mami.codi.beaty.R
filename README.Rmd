@@ -217,14 +217,14 @@ p = params %>% purrr::map(\(p) {
 ## Heisenberg Uncertainty
 
 $$
-\Delta x\,\Delta  p\ge \frac{\hbar}{2}\,
+\Delta x\,\Delta p \ge \frac{\hbar}{2}\
 $$
 
 ## Gabor Uncertainty
 
 
 $$
-\Delta t\,\Delta  \omega \ge \frac{1}{2}\
+\Delta t \Delta \omega \ge \frac{1}{2}\
 $$
 
 ## New: Relative Uncertainty
@@ -262,9 +262,19 @@ $$
 \frac{\Delta f_i}{f_{ref}} = \bigl| \frac{f_i}{f_{ref}} - \frac{p}{q}\bigr| \ge \frac{1}{4 \pi}\
 $$
 
-### Stern-Brocot Stopper
+### Stern-Brocot Traversal
 
 $$
-\bigl| \frac{f_i}{f_{ref}} - \frac{p}{q}\bigr| < \frac{1}{4 \pi}\
+\begin{aligned}
+&\mathbf{WHILE}\;\Bigl|\tfrac{f_i}{f_{\mathrm{ref}}}-\tfrac{p}{q}\Bigr|\;\ge\;\tfrac{1}{4\pi}
+\quad\mathbf{DO}\\
+&\quad p \;\gets\; p_{\mathrm{left}} + p_{\mathrm{right}}\\
+&\quad q \;\gets\; q_{\mathrm{left}} + q_{\mathrm{right}}\\
+&\quad \mathbf{IF}\;\tfrac{f_i}{f_{\mathrm{ref}}} > \tfrac{p}{q}\;\mathbf{THEN}\\
+&\quad\quad p_{\mathrm{left}}\;\gets\;p,\quad q_{\mathrm{left}}\;\gets\;q\\
+&\quad \mathbf{ELSE}\\
+&\quad\quad p_{\mathrm{right}}\;\gets\;p,\quad q_{\mathrm{right}}\;\gets\;q\\
+&\quad \mathbf{END\_IF}\\
+&\mathbf{END\_WHILE}
+\end{aligned}
 $$
-
