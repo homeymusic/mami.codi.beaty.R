@@ -137,13 +137,14 @@ compute_space_cycles <- function(
     x$sideband_wavelength_spectrum[[1]]
   )
 
+  l_min <- min(x$stimulus_wavelength_spectrum[[1]]$wavelength)
   l = wavelength_spectrum$wavelength
 
   x %>% dplyr::mutate(
 
     compute_cycle_length(
       l,
-      min(l),
+      l_min,
       DIMENSION$SPACE
     ),
 
@@ -176,7 +177,6 @@ compute_time_cycles <- function(
 
   f_min <- min(x$stimulus_frequency_spectrum[[1]]$frequency)
   f     <- frequency_spectrum$frequency
-  # f     <- f[f >= f_min]
 
   x %>% dplyr::mutate(
 
