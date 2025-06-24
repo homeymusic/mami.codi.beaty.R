@@ -151,6 +151,12 @@ p = params %>% purrr::map(\(p) {
   chords$energy_per_cycle = -log2(1+chords$energy_per_cycle)
   chords$energy_per_cycle_z = z_scores(chords$energy_per_cycle)
   
+  chords$relative_uncertainty = -chords$relative_uncertainty
+  chords$relative_uncertainty_z = z_scores(chords$relative_uncertainty)
+  
+  chords$time_relative_uncertainty = -chords$time_relative_uncertainty
+  chords$space_relative_uncertainty = -chords$space_relative_uncertainty
+  
   experiment.rds = paste0('./man/data/input/',
                           p$t,
                           '.rds')
@@ -202,6 +208,18 @@ p = params %>% purrr::map(\(p) {
   )
   cat("  \n")
   
+  print(plot_semitone_relative_uncertainty(chords,title = "Relative Uncertainty",
+                                         goal=experiment,sigma=sigma,include_points=T,include_line=T,
+                                         black_vlines = black_vlines,gray_vlines  = gray_vlines)
+  )
+  cat("  \n")
+  
+  print(plot_semitone_relative_uncertainty_space_time(chords,title = "Relative Uncertainty Space Time",
+                                         goal=experiment,sigma=sigma,include_points=T,include_line=T,
+                                         black_vlines = black_vlines,gray_vlines  = gray_vlines)
+  )
+  cat("  \n")
+  
   print(plot_semitone_stern_brocot_depth_space_time(chords,title = "Space and Time Beating (Stern-Brocot Depth)",
                                          goal=experiment,sigma=sigma,include_points=T,include_line=T,
                                          black_vlines = black_vlines,gray_vlines  = gray_vlines)
@@ -217,14 +235,14 @@ p = params %>% purrr::map(\(p) {
 ## Heisenberg Uncertainty
 
 $$
-\Delta x\,\Delta p \ge \frac{\hbar}{2}\
+\Delta x \Delta p \ge \frac{\hbar}{2}
 $$
 
 ## Gabor Uncertainty
 
 
 $$
-\Delta t \Delta \omega \ge \frac{1}{2}\
+\Delta t \Delta \omega \ge \frac{1}{2}
 $$
 
 ## New: Relative Uncertainty
@@ -235,17 +253,13 @@ $$
 \Delta t \equiv T_{ref} = \frac{2 \pi}{\omega_{ref}}
 $$
 $$
-\frac{2 \pi}{\omega_{ref}} \Delta \omega_i \ge \frac{1}{2}\
+\Delta t \Delta \omega = T_{ref} \Delta \omega_i = \frac{2 \pi}{\omega_{ref}} \Delta \omega_i \ge \frac{1}{2}
 $$
 
-$$
-\frac{\Delta \omega_i}{\omega_{ref}} \ge \frac{1}{4 \pi}\
-$$
-
-### Relative Frequency Uncertainty
+### Relative Uncertainty
 
 $$
-\frac{\Delta f_i}{f_{ref}} \ge \frac{1}{4 \pi}\
+\frac{\Delta \omega_i}{\omega_{ref}} \ge \frac{1}{4 \pi} \quad \text{and} \quad \frac{\Delta f_i}{f_{ref}} \ge \frac{1}{4 \pi}\
 $$
 
 ### Rational Fraction Approximation

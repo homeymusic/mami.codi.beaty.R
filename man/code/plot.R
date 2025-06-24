@@ -323,6 +323,54 @@ plot_semitone_codi <- function(chords, title='', include_line=T, sigma=0.2,
     theme_homey()
 }
 
+plot_semitone_relative_uncertainty <- function(chords, title='', include_line=T, sigma=0.2,
+                               include_points=T,
+                               include_linear_regression = F, goal=NULL,
+                               black_vlines=c(),gray_vlines=c(),
+                               xlab='Semitone',
+                               ylab='Relative Uncertainty') {
+
+  whole_semitones = integer_semitones(chords$semitone)
+
+  color_factor_homey <- function(x,column_name) {
+    cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
+  }
+
+  chords$smoothed_relative_uncertainty_z = smoothed(chords$semitone,
+                                          chords$relative_uncertainty_z,
+                                          sigma)
+
+  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
+                                       y = .data$relative_uncertainty_z)) +
+    ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
+    ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
+    { if (include_points)
+      ggplot2::geom_point(shape=21, stroke=NA, size=1,
+                          ggplot2::aes(fill=color_factor_homey(chords,'majorness')))
+    } +
+    { if (include_linear_regression) ggplot2::stat_smooth(method=lm)} +
+    { if (include_line)
+      ggplot2::geom_line(data=chords,
+                         ggplot2::aes(x = semitone,
+                                      y = smoothed_relative_uncertainty_z,
+                                      color=color_factor_homey(chords,'majorness'),
+                                      group=1), linewidth = 1)} +
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance,
+                                      color = 'behavioral'
+                         ), linewidth = 0.5)} +
+    ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
+    ggplot2::scale_color_manual(values=color_values_homey()) +
+    ggplot2::ggtitle(title) +
+    ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
+    ggplot2::ylab(ylab) +
+    ggplot2::xlab(xlab) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+}
+
 
 plot_semitone_thomaes_function <- function(chords, title='', include_line=T, sigma=0.2,
                                              include_points=T,
@@ -615,6 +663,67 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::ylab(ylab) +
     ggplot2::xlab(xlab) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+}
+
+plot_semitone_relative_uncertainty_space_time  <- function(chords, title='', include_line=T, sigma=0.2,
+                                                           dashed_minor = F, include_points=T,
+                                                           include_linear_regression = F, goal=NULL,
+                                                           black_vlines=c(),gray_vlines=c(),
+                                                           xlab='Semitone',
+                                                           ylab='Relative Uncertainty') {
+
+  whole_semitones = integer_semitones(chords$semitone)
+
+  chords$smoothed.time_relative_uncertainty  = smoothed(chords$semitone,
+                                              chords$time_relative_uncertainty,
+                                              sigma)
+  chords$smoothed.space_relative_uncertainty = smoothed(chords$semitone,
+                                              chords$space_relative_uncertainty,
+                                              sigma)
+
+  mean_theoretical = mean(c(chords$smoothed.time_relative_uncertainty,
+                            chords$smoothed.space_relative_uncertainty))
+
+  linetype_for_minor = if (dashed_minor) {'dashed'} else {'solid'}
+
+  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone)) +
+    ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
+    ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
+    { if (include_points)
+      ggplot2::geom_point(ggplot2::aes(y = .data$time_relative_uncertainty),
+                          shape=21, stroke=NA, size=1,
+                          fill=colors_homey$major)
+    } +
+    { if (include_points)
+      ggplot2::geom_point(ggplot2::aes(y = .data$space_relative_uncertainty),
+                          shape=21, stroke=NA, size=1,
+                          fill=colors_homey$minor)
+    } +
+    ggplot2::geom_line(ggplot2::aes(
+      y = .data$smoothed.time_relative_uncertainty,
+      color = 'time'),
+      linewidth = 1) +
+    ggplot2::geom_line(ggplot2::aes(
+      y = .data$smoothed.space_relative_uncertainty,
+      color = 'space'),
+      linewidth = 1,
+      linetype = linetype_for_minor) +
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance + mean_theoretical,
+                                      color = 'behavioral',
+                                      group=1), linewidth = 0.5)} +
+    ggplot2::ggtitle(title) +
+    ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
+    ggplot2::guides(col = ggplot2::guide_legend()) +
+    ggplot2::ylab(ylab) +
+    ggplot2::xlab(xlab) +
+    ggplot2::scale_color_manual(
+      values=space_time_colors(),
+      breaks=c('space', 'time', 'behavioral')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }

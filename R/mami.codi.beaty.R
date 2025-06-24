@@ -126,7 +126,8 @@ compute_space_cycles <- function(
   x %>% dplyr::mutate(
 
     compute_cycle_length(
-      l/min(l),
+      l,
+      min(l),
       DIMENSION$SPACE
     ),
 
@@ -161,7 +162,8 @@ compute_time_cycles <- function(
   x %>% dplyr::mutate(
 
     compute_cycle_length(
-      f/min(f),
+      f,
+      min(f),
       DIMENSION$TIME
     ),
 
@@ -182,15 +184,16 @@ compute_time_cycles <- function(
 #'
 #' @rdname compute_cycle_length
 #' @export
-compute_cycle_length <- function(x, dimension) {
+compute_cycle_length <- function(x, ref, dimension) {
 
-  fractions = approximate_rational_fractions(x, UNCERTAINTY_LIMIT, INTEGER_HARMONICS_TOLERANCE)
+  fractions = approximate_rational_fractions(x / ref, UNCERTAINTY_LIMIT, INTEGER_HARMONICS_TOLERANCE)
 
   t = tibble::tibble_row(
     cycle_length = lcm_integers(fractions$den),
     euclids_orchard_height = sum(fractions$euclids_orchard_height),
     thomae = sum(fractions$thomae),
     depth = sum(fractions$depth),
+    relative_uncertainty = sum(abs(fractions$error)),
     fractions = list(fractions)
   ) %>% dplyr::rename_with(~ paste0(dimension, '_' , .))
   t
@@ -233,7 +236,9 @@ compute_harmony_perception <- function(x) {
     stern_brocot_space_depth = log2(.data$space_depth),
 
     stern_brocot_depth      = log2(.data$space_depth * .data$time_depth),
-    stern_brocot_depth_diff = log2(.data$time_depth / .data$space_depth)
+    stern_brocot_depth_diff = log2(.data$time_depth / .data$space_depth),
+
+    relative_uncertainty    = .data$space_relative_uncertainty + .data$time_relative_uncertainty
 
   )
 
