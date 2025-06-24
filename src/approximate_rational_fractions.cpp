@@ -102,21 +102,22 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
    return df;
  }
 
- //' Compute amplitude modulation
+ //' Compute amplitude modulation (sidebands or beats)
  //'
- //' For each unordered pair of input frequencies, compute:
- //'   Difference frequency and two sidebands: fi ± |f2 - f1|
- //'
- //' Returns a DataFrame of sideband frequencies and amplitudes.
+ //' For each unordered pair of input frequencies, compute either:
+ //'   • Sidebands: fi ± |fi - fj|
+ //'   • Beats:   |fi - fj|
  //'
  //' @param frequency NumericVector of input frequencies
  //' @param amplitude NumericVector of input amplitudes (same length)
+ //' @param mode      Character string, either "sidebands" or "beats"
  //' @return DataFrame with columns `frequency` and `amplitude`
  //' @export
  // [[Rcpp::export]]
  DataFrame compute_amplitude_modulation(
      NumericVector frequency,
-     NumericVector amplitude
+     NumericVector amplitude,
+     std::string mode = "sidebands"
  ) {
    int n = frequency.size();
    if (n < 2) {
@@ -126,56 +127,67 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
      );
    }
 
-   double min_freq = Rcpp::min(frequency);
-   int max_pairs   = n * (n - 1) / 2;
-   int max_entries = max_pairs * 3;
+   bool wantSidebands = (mode == "sidebands");
+   bool wantBeats     = (mode == "beats");
+   if (!wantSidebands && !wantBeats) {
+     stop("`mode` must be either \"sidebands\" or \"beats\"");
+   }
 
-   NumericVector am_freqs(max_entries);
-   NumericVector am_amps (max_entries);
-   int am_count = 0;
+   double minFreq  = Rcpp::min(frequency);
+   int    maxPairs = n * (n - 1) / 2;
+   int    maxEntries = wantSidebands
+   ? maxPairs * 2      // up to 2 sidebands per pair
+   : maxPairs;          // 1 beat per pair
+
+   NumericVector outFreqs(maxEntries);
+   NumericVector outAmps (maxEntries);
+   int count = 0;
 
    for (int i = 0; i < n; ++i) {
-     double carrier_frequency = frequency[i];
+     double fi = frequency[i];
      for (int j = i + 1; j < n; ++j) {
-       double modulation_frequency = frequency[j];
-       double difference_frequency = std::abs(carrier_frequency - modulation_frequency);
-       double modulation_amplitude = amplitude[j];
-       double am_amp =  modulation_amplitude / 2.0;
+       double fj  = frequency[j];
+       double Aj  = amplitude[j];
+       double diff = std::abs(fi - fj);
 
        double tol = std::numeric_limits<double>::epsilon() *
-         std::max(std::abs(carrier_frequency), std::abs(modulation_frequency));
+         std::max(std::abs(fi), std::abs(fj));
 
-       if (difference_frequency > tol && difference_frequency < min_freq) {
+       if (diff > tol && diff < minFreq) {
+         double ampVal = Aj * 0.5;
 
-         // Difference
-         am_freqs[am_count] = difference_frequency;
-         am_amps [am_count] = am_amp;
-         ++am_count;
+         if (wantSidebands) {
+           // Upper sideband
+           outFreqs[count] = fi + diff;
+           outAmps [count] = ampVal;
+           ++count;
 
-         // Upper Sideband
-         am_freqs[am_count] = carrier_frequency + difference_frequency;
-         am_amps [am_count] = am_amp;
-         ++am_count;
+           // Lower sideband (only if above lowest input)
+           outFreqs[count] = fi - diff;
+           outAmps [count] = ampVal;
+           ++count;
+         }
 
-         // Lower Sideband
-         am_freqs[am_count] = carrier_frequency - difference_frequency;
-         am_amps [am_count] = am_amp;
-         ++am_count;
-
+         if (wantBeats) {
+           // Beat (difference) frequency
+           outFreqs[count] = diff;
+           outAmps [count] = ampVal;
+           ++count;
+         }
        }
      }
    }
 
-   NumericVector am_freq_out = (am_count > 0)
-     ? am_freqs[Range(0, am_count - 1)]
+   // Trim to actual size
+   NumericVector freqOut = (count > 0)
+     ? outFreqs[ Range(0, count - 1) ]
    : NumericVector();
-
-   NumericVector am_amp_out = (am_count > 0)
-     ? am_amps[Range(0, am_count - 1)]
+   NumericVector ampOut  = (count > 0)
+     ? outAmps [ Range(0, count - 1) ]
    : NumericVector();
 
    return DataFrame::create(
-     _["frequency"] = am_freq_out,
-     _["amplitude"] = am_amp_out
+     _["frequency"] = freqOut,
+     _["amplitude"] = ampOut
    );
  }
