@@ -11,37 +11,37 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // approximate_pseudo_octave
-double approximate_pseudo_octave(const Rcpp::NumericVector ratios, const double uncertainty);
+double approximate_pseudo_octave(const Rcpp::NumericVector& ratios, const double uncertainty);
 RcppExport SEXP _mami_codi_beaty_R_approximate_pseudo_octave(SEXP ratiosSEXP, SEXP uncertaintySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type ratios(ratiosSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type ratios(ratiosSEXP);
     Rcpp::traits::input_parameter< const double >::type uncertainty(uncertaintySEXP);
     rcpp_result_gen = Rcpp::wrap(approximate_pseudo_octave(ratios, uncertainty));
     return rcpp_result_gen;
 END_RCPP
 }
 // approximate_rational_fractions
-DataFrame approximate_rational_fractions(NumericVector x, const double uncertainty);
+DataFrame approximate_rational_fractions(NumericVector& x, const double uncertainty);
 RcppExport SEXP _mami_codi_beaty_R_approximate_rational_fractions(SEXP xSEXP, SEXP uncertaintySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const double >::type uncertainty(uncertaintySEXP);
     rcpp_result_gen = Rcpp::wrap(approximate_rational_fractions(x, uncertainty));
     return rcpp_result_gen;
 END_RCPP
 }
 // compute_amplitude_modulation
-DataFrame compute_amplitude_modulation(NumericVector frequency, NumericVector amplitude);
+DataFrame compute_amplitude_modulation(NumericVector& frequency, NumericVector& amplitude);
 RcppExport SEXP _mami_codi_beaty_R_compute_amplitude_modulation(SEXP frequencySEXP, SEXP amplitudeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type frequency(frequencySEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type amplitude(amplitudeSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type frequency(frequencySEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type amplitude(amplitudeSEXP);
     rcpp_result_gen = Rcpp::wrap(compute_amplitude_modulation(frequency, amplitude));
     return rcpp_result_gen;
 END_RCPP

@@ -8,7 +8,7 @@ typedef SEXP (*coprimer_first_coprime_t)(SEXP,SEXP,SEXP);
 static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
 
  // [[Rcpp::export]]
- double approximate_pseudo_octave(const Rcpp::NumericVector ratios,
+ double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
                                  const double uncertainty) {
   int n = ratios.size();
   if (n <= 2) return 2.0;
@@ -65,7 +65,7 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
  //'
  //' @export
  // [[Rcpp::export]]
- DataFrame approximate_rational_fractions(NumericVector x,
+ DataFrame approximate_rational_fractions(NumericVector& x,
                                           const double uncertainty) {
    // 1) dedupe and early-return
    x = unique(x);
@@ -114,8 +114,8 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
  //' @export
  // [[Rcpp::export]]
  DataFrame compute_amplitude_modulation(
-     NumericVector frequency,
-     NumericVector amplitude
+     NumericVector& frequency,
+     NumericVector& amplitude
  ) {
    int n = frequency.size();
    if (n < 2) {
