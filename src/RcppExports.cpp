@@ -11,27 +11,26 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // approximate_pseudo_octave
-double approximate_pseudo_octave(const Rcpp::NumericVector ratios, const double integer_harmonic_tolerance);
-RcppExport SEXP _mami_codi_beaty_R_approximate_pseudo_octave(SEXP ratiosSEXP, SEXP integer_harmonic_toleranceSEXP) {
+double approximate_pseudo_octave(const Rcpp::NumericVector ratios, const double uncertainty);
+RcppExport SEXP _mami_codi_beaty_R_approximate_pseudo_octave(SEXP ratiosSEXP, SEXP uncertaintySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type ratios(ratiosSEXP);
-    Rcpp::traits::input_parameter< const double >::type integer_harmonic_tolerance(integer_harmonic_toleranceSEXP);
-    rcpp_result_gen = Rcpp::wrap(approximate_pseudo_octave(ratios, integer_harmonic_tolerance));
+    Rcpp::traits::input_parameter< const double >::type uncertainty(uncertaintySEXP);
+    rcpp_result_gen = Rcpp::wrap(approximate_pseudo_octave(ratios, uncertainty));
     return rcpp_result_gen;
 END_RCPP
 }
 // approximate_rational_fractions
-DataFrame approximate_rational_fractions(NumericVector x, const double uncertainty, const double deviation);
-RcppExport SEXP _mami_codi_beaty_R_approximate_rational_fractions(SEXP xSEXP, SEXP uncertaintySEXP, SEXP deviationSEXP) {
+DataFrame approximate_rational_fractions(NumericVector x, const double uncertainty);
+RcppExport SEXP _mami_codi_beaty_R_approximate_rational_fractions(SEXP xSEXP, SEXP uncertaintySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< const double >::type uncertainty(uncertaintySEXP);
-    Rcpp::traits::input_parameter< const double >::type deviation(deviationSEXP);
-    rcpp_result_gen = Rcpp::wrap(approximate_rational_fractions(x, uncertainty, deviation));
+    rcpp_result_gen = Rcpp::wrap(approximate_rational_fractions(x, uncertainty));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -50,7 +49,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mami_codi_beaty_R_approximate_pseudo_octave", (DL_FUNC) &_mami_codi_beaty_R_approximate_pseudo_octave, 2},
-    {"_mami_codi_beaty_R_approximate_rational_fractions", (DL_FUNC) &_mami_codi_beaty_R_approximate_rational_fractions, 3},
+    {"_mami_codi_beaty_R_approximate_rational_fractions", (DL_FUNC) &_mami_codi_beaty_R_approximate_rational_fractions, 2},
     {"_mami_codi_beaty_R_compute_amplitude_modulation", (DL_FUNC) &_mami_codi_beaty_R_compute_amplitude_modulation, 2},
     {NULL, NULL, 0}
 };

@@ -189,7 +189,7 @@ compute_time_cycles <- function(
 #' @export
 compute_cycle_length <- function(x, ref, dimension) {
 
-  fractions = approximate_rational_fractions(x / ref, UNCERTAINTY_LIMIT, INTEGER_HARMONICS_TOLERANCE)
+  fractions = approximate_rational_fractions(x / ref, UNCERTAINTY_LIMIT)
 
   t = tibble::tibble_row(
     cycle_length = lcm_integers(fractions$den),
@@ -296,18 +296,6 @@ energy_per_cycle <- function(
 #' @export
 uncertainty_limit <- function() { UNCERTAINTY_LIMIT }
 UNCERTAINTY_LIMIT = 1 / (4 * pi)
-
-#' Default integer harmonic tolerance
-#'
-#' Tolerance for the case when harmonics are not perfect integers
-#' useful for approximating the Least Common Multiple (LCM) and
-#' to determine the pseudo octave in the case of stretched timbre
-#'
-#''
-#' @rdname default_integer_harmonics_tolerance
-#' @export
-default_integer_harmonics_tolerance <- function() { INTEGER_HARMONICS_TOLERANCE }
-INTEGER_HARMONICS_TOLERANCE = 0.11
 
 #' Speed of Sound
 #'

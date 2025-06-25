@@ -9,7 +9,7 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
 
  // [[Rcpp::export]]
  double approximate_pseudo_octave(const Rcpp::NumericVector ratios,
-                                 const double integer_harmonic_tolerance) {
+                                 const double uncertainty) {
   int n = ratios.size();
   if (n <= 2) return 2.0;
 
@@ -17,6 +17,8 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
   for (int i = 0; i < n; ++i) {
     log_ratios[i] = std::log(ratios[i]);
   }
+
+  double log_uncertainty = log(1 + uncertainty) / log(2);
 
   std::vector<double> candidates;
   candidates.reserve(n * (n - 1) / 2);
@@ -32,7 +34,7 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
       int    harmonic_number = int(std::round(ratio));
 
       if (harmonic_number >= 2 &&
-          std::abs(ratio - harmonic_number) / harmonic_number < integer_harmonic_tolerance) {
+          std::abs(ratio - harmonic_number) / harmonic_number < log_uncertainty) {
         double oct = std::pow(2.0, log_diff / std::log((double)harmonic_number));
         candidates.push_back(oct);
       }
@@ -64,8 +66,7 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
  //' @export
  // [[Rcpp::export]]
  DataFrame approximate_rational_fractions(NumericVector x,
-                                          const double uncertainty,
-                                          const double deviation) {
+                                          const double uncertainty) {
    // 1) dedupe and early-return
    x = unique(x);
    int n = x.size();
@@ -75,7 +76,7 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
 
    // 2) compute the psycho-acoustic transform
    // new one-step
-   double pseudo_octave_double = approximate_pseudo_octave(x, deviation);
+   double pseudo_octave_double = approximate_pseudo_octave(x, uncertainty);
 
    // 3) build the vectors we'll pass to coprimer
    NumericVector pseudo_x(n), uncertainties(n, uncertainty);
