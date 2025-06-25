@@ -280,13 +280,13 @@ $$
 $$
 
 $$
-a \perp b \quad \Longrightarrow \quad  \operatorname{gcd}(a,b)=1
+a \perp b \quad \Longrightarrow \quad  \mathrm{gcd}(a,b)=1
 $$
 
 ## Fundamental Frequency
 
 $$
-f_0 = f_{ref}\frac{\operatorname{gcd}(a_1, a_2, \dots, a_n)}{\operatorname{lcm}(b_1, b_2, \dots, b_n)}, \quad a_i \perp b_i
+f_0 = f_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_n)}{\mathrm{lcm}(b_1, b_2, \dots, b_n)}, \quad a_i \perp b_i
 $$
 
 ## Stolzenburg Periodicity Perception
