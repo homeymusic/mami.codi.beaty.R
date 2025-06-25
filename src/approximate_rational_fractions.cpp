@@ -33,11 +33,31 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
       double ratio    = std::exp(log_diff);
       int    harmonic_number = int(std::round(ratio));
 
-      if (harmonic_number >= 2 &&
-          std::abs(ratio - harmonic_number) / harmonic_number < log_uncertainty) {
-        double oct = std::pow(2.0, log_diff / std::log((double)harmonic_number));
+
+      if (harmonic_number >= 2) {
+
+        Rcpp::Rcout << "ratio="           << ratio                                           << "\n"
+                    << "harmonic_number=" << harmonic_number                                 << "\n"
+                    << "eq="              << std::abs(ratio - harmonic_number) / harmonic_number << "\n"
+                    << "this="            << std::pow(2.0, log_diff / std::log((double)harmonic_number)) << "\n";
+
+        NumericVector pseudo_x(1, std::pow(2.0, log_diff / std::log((double)harmonic_number))), uncertainties(1, log_uncertainty);
+
+        // 4) grab the coprimer callable once
+        if (!coprimer_first_coprime) {
+          coprimer_first_coprime = (coprimer_first_coprime_t)
+          R_GetCCallable("coprimer", "first_coprime");
+        }
+
+        // 5) single, vectorized call into coprimer
+        DataFrame df = coprimer_first_coprime(wrap(pseudo_x),
+                                              wrap(uncertainties),
+                                              wrap(uncertainties));
+
+        double oct = df["approximation"];
         candidates.push_back(oct);
       }
+
     }
   }
 
