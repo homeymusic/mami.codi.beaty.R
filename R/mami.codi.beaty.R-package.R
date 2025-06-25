@@ -2,7 +2,6 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @import     coprimer
 #' @importFrom tibble tibble_row add_column
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data

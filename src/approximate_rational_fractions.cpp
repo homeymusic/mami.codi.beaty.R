@@ -4,9 +4,6 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
-typedef SEXP (*coprimer_first_coprime_t)(SEXP,SEXP,SEXP);
-static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
-
 // [[Rcpp::export]]
 double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
                                  const double uncertainty) {
@@ -75,6 +72,12 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
                            _["uncertainty"] = uncertainty);
 }
 
+// forward declaration of round_to_precision
+inline double round_to_precision(double value, int precision = 15) {
+  double scale = std::pow(10.0, precision);
+  return std::round(value * scale) / scale;
+}
+
  // -------------------------------------------------------------------------
  // Main: simplified Stern–Brocot with direct uncertainty test
  // -------------------------------------------------------------------------
@@ -97,13 +100,11 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
    NumericVector approximations(n), errors(n), thomae(n), euclids_orchard_height(n);
    CharacterVector paths(n);
 
-   std::vector<char> path;
-
    const int MAX_ITER = 10000;
 
    for (int i = 0; i < n; ++i) {
-     double ratio = x[i] / x_ref;
-
+     double ratio = round_to_precision(x[i] / x_ref, 15);
+     std::vector<char> path;
      // Initialize Stern–Brocot endpoints
      int left_num = 0, left_den = 1;
      int right_num = 1, right_den = 0;
@@ -111,12 +112,14 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
      // First mediant
      int mediant_num = left_num + right_num;
      int mediant_den = left_den + right_den;
-     double mediant = static_cast<double>(mediant_num) / mediant_den;
+     double mediant = round_to_precision(
+       static_cast<double>(mediant_num) / mediant_den, 15
+     );
 
-     int iter = 0;
+     int iter = 1;
 
      // continue while |x/x_ref - num/den| >= uncertainty
-     while ((std::abs(x[i] / x_ref
+     while ((std::abs(round_to_precision(x[i] / x_ref, 15)
                         - static_cast<double>(mediant_num) / mediant_den)
                >= uncertainty) && iter < MAX_ITER) {
                if (mediant < ratio) {
@@ -129,8 +132,13 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
                mediant_num = left_num + right_num;
                mediant_den = left_den + right_den;
                if (mediant_den == 0) break;
-               mediant = static_cast<double>(mediant_num) / mediant_den;
+               mediant = round_to_precision(
+                 static_cast<double>(mediant_num) / mediant_den, 15
+               );
                ++iter;
+     }
+     if (iter >= MAX_ITER) {
+       Rcpp::warning("rational_fractions: max iterations (%d) reached at index %d", MAX_ITER, i);
      }
 
      nums[i]           = mediant_num;
@@ -192,27 +200,17 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
    // build the transformed vector for coprime search
    NumericVector pseudo_x(n), uncertainties(n, uncertainty);
    for (int i = 0; i < n; ++i) {
-     pseudo_x[i] = std::pow(2.0,
+     pseudo_x[i] = x_ref * std::pow(2.0,
                             std::log(ratios[i]) /
                               std::log(pseudo_octave_double));
    }
 
-   // resolve the first_coprime symbol if needed
-   if (!coprimer_first_coprime) {
-     coprimer_first_coprime = (coprimer_first_coprime_t)
-     R_GetCCallable("coprimer", "first_coprime");
-   }
+   DataFrame df = rational_fractions(
+     pseudo_x,
+     x_ref,
+     uncertainty
+   );
 
-   // call into the coprimer library
-   DataFrame df = as<DataFrame>( coprimer_first_coprime(
-     wrap(pseudo_x),
-     wrap(uncertainties),
-     wrap(uncertainties)
-   ));
-
-   // attach original data for reference
-   df["x"]           = x;
-   df["ratio"]       = ratios;
    df["pseudo_x"]    = pseudo_x;
    df["pseudo_octave"] = NumericVector(n, pseudo_octave_double);
 

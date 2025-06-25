@@ -23,13 +23,10 @@ Imports:
     tidyr,
     hrep (>= 0.20),
     gmp,
-    Rcpp (>= 1.0.10),
-    coprimer
+    Rcpp (>= 1.0.10)
 LinkingTo: 
-    Rcpp,
-    coprimer
+    Rcpp
 Remotes: 
-    homeymusic/hrep,
-    homeymusic/coprimer
+    homeymusic/hrep
 RoxygenNote: 7.3.1
 SystemRequirements: C++17
