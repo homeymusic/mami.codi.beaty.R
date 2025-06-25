@@ -66,38 +66,49 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
  //' @export
  // [[Rcpp::export]]
  DataFrame approximate_rational_fractions(NumericVector& x,
+                                          const double x_ref,
                                           const double uncertainty) {
-   // 1) dedupe and early-return
+   // de-duplicate
    x = unique(x);
    int n = x.size();
    if (n == 0) {
      return DataFrame::create();
    }
 
-   // 2) compute the psycho-acoustic transform
-   // new one-step
-   double pseudo_octave_double = approximate_pseudo_octave(x, uncertainty);
+   // compute ratios relative to x_ref
+   NumericVector ratios(n);
+   for (int i = 0; i < n; ++i) {
+     ratios[i] = x[i] / x_ref;
+   }
 
-   // 3) build the vectors we'll pass to coprimer
+   // find the pseudo-octave in ratio-space
+   double pseudo_octave_double = approximate_pseudo_octave(ratios, uncertainty);
+
+   // build the transformed vector for coprime search
    NumericVector pseudo_x(n), uncertainties(n, uncertainty);
    for (int i = 0; i < n; ++i) {
      pseudo_x[i] = std::pow(2.0,
-                            std::log(x[i]) / std::log(pseudo_octave_double));
+                            std::log(ratios[i]) /
+                              std::log(pseudo_octave_double));
    }
 
-   // 4) grab the coprimer callable once
+   // resolve the first_coprime symbol if needed
    if (!coprimer_first_coprime) {
      coprimer_first_coprime = (coprimer_first_coprime_t)
      R_GetCCallable("coprimer", "first_coprime");
    }
 
-   // 5) single, vectorized call into coprimer
-   DataFrame df = coprimer_first_coprime(wrap(pseudo_x),
-                                         wrap(uncertainties),
-                                         wrap(uncertainties));
+   // call into the coprimer library
+   DataFrame df = as<DataFrame>( coprimer_first_coprime(
+     wrap(pseudo_x),
+     wrap(uncertainties),
+     wrap(uncertainties)
+   ));
 
-   // 6) augment only with pseudo outputs
-   df["pseudo_x"]      = pseudo_x;
+   // attach original data for reference
+   df["x"]           = x;
+   df["ratio"]       = ratios;
+   df["pseudo_x"]    = pseudo_x;
    df["pseudo_octave"] = NumericVector(n, pseudo_octave_double);
 
    return df;

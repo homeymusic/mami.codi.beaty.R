@@ -5,8 +5,8 @@ approximate_pseudo_octave <- function(ratios, uncertainty) {
     .Call(`_mami_codi_beaty_R_approximate_pseudo_octave`, ratios, uncertainty)
 }
 
-approximate_rational_fractions <- function(x, uncertainty) {
-    .Call(`_mami_codi_beaty_R_approximate_rational_fractions`, x, uncertainty)
+approximate_rational_fractions <- function(x, x_ref, uncertainty) {
+    .Call(`_mami_codi_beaty_R_approximate_rational_fractions`, x, x_ref, uncertainty)
 }
 
 compute_amplitude_modulation <- function(frequency, amplitude) {
