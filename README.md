@@ -170,5 +170,5 @@ $$
 ### Psychophysical Periodicity
 
 $$
-\Psi  = \log_2\!\bigl(\Lambda\bigr) \quad \bigl[\text{units: Sz}\bigr]
+\Psi  = \log_2 \bigl(\Lambda\bigr) \quad \bigl[\text{units: Sz}\bigr]
 $$
