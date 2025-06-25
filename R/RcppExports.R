@@ -5,6 +5,10 @@ approximate_pseudo_octave <- function(ratios, uncertainty) {
     .Call(`_mami_codi_beaty_R_approximate_pseudo_octave`, ratios, uncertainty)
 }
 
+rational_fractions <- function(x, x_ref, uncertainty) {
+    .Call(`_mami_codi_beaty_R_rational_fractions`, x, x_ref, uncertainty)
+}
+
 approximate_rational_fractions <- function(x, x_ref, uncertainty) {
     .Call(`_mami_codi_beaty_R_approximate_rational_fractions`, x, x_ref, uncertainty)
 }
