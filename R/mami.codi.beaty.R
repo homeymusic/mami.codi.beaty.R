@@ -189,7 +189,7 @@ compute_time_cycles <- function(
 #' @export
 compute_cycle_length <- function(x, ref, dimension) {
 
-  fractions = approximate_rational_fractions(x, ref, UNCERTAINTY_LIMIT)
+  fractions = approximate_rational_fractions(x, ref, UNCERTAINTY_LIMIT / NUMBER_OF_OBSERVATION_PERIODS)
 
   t = tibble::tibble_row(
     cycle_length = lcm_integers(fractions$den),
@@ -286,28 +286,8 @@ energy_per_cycle <- function(
 
 # Constants
 
-#' Uncertainty limit
-#'
-#' Uncertainty limit for the uncertainty products of
-#' time, frequency or space, wavelength
-#'
-#'
-#' @rdname uncertainty_limit
-#' @export
-uncertainty_limit <- function() { UNCERTAINTY_LIMIT }
 UNCERTAINTY_LIMIT = 1 / (4 * pi)
-
-#' Speed of Sound
-#'
-#' Approximate speed of sound at sea level m / s
-#'
-#' using E4 numerical value so we get some nice wavelength ratios but close to
-#' value at room temp at sea level.
-#''
-#' @rdname speed_of_sound
-#' @export
-#'
-speed_of_sound <- function() { SPEED_OF_SOUND }
+NUMBER_OF_OBSERVATION_PERIODS = 1
 SPEED_OF_SOUND = hrep::midi_to_freq(65)
 
 DIMENSION <- list(
