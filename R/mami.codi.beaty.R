@@ -85,8 +85,7 @@ generate_superposition_envelope <- function(x) {
 
   sideband_frequency_spectrum <- compute_amplitude_modulation(
     frequency = x$stimulus_frequency_spectrum[[1]]$frequency,
-    amplitude  = x$stimulus_frequency_spectrum[[1]]$amplitude,
-    mode = "sidebands"
+    amplitude  = x$stimulus_frequency_spectrum[[1]]$amplitude
   ) %>% filter_spectrum_in_range()
 
   sideband_wavelength_spectrum <- tibble::tibble(
@@ -95,24 +94,10 @@ generate_superposition_envelope <- function(x) {
   ) %>%
     filter_spectrum_in_range()
 
-  beats_frequency_spectrum <- compute_amplitude_modulation(
-    frequency = x$stimulus_frequency_spectrum[[1]]$frequency,
-    amplitude  = x$stimulus_frequency_spectrum[[1]]$amplitude,
-    mode = "beats"
-  ) %>% filter_spectrum_in_range()
-
-  beats_wavelength_spectrum <- tibble::tibble(
-    wavelength = SPEED_OF_SOUND / sideband_frequency_spectrum$frequency,
-    amplitude  = sideband_frequency_spectrum$amplitude
-  ) %>%
-    filter_spectrum_in_range()
-
   x %>%
     dplyr::mutate(
       sideband_frequency_spectrum = list(sideband_frequency_spectrum),
-      sideband_wavelength_spectrum = list(sideband_wavelength_spectrum),
-      beats_frequency_spectrum = list(beats_frequency_spectrum),
-      beats_wavelength_spectrum = list(beats_wavelength_spectrum)
+      sideband_wavelength_spectrum = list(sideband_wavelength_spectrum)
     )
 }
 
@@ -133,7 +118,6 @@ compute_space_cycles <- function(
 
   wavelength_spectrum = validate_combine_spectra(
     x$stimulus_wavelength_spectrum[[1]],
-    x$beats_wavelength_spectrum[[1]],
     x$sideband_wavelength_spectrum[[1]]
   )
 

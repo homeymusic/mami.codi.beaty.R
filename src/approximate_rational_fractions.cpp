@@ -110,14 +110,12 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
  //'
  //' @param frequency NumericVector of input frequencies
  //' @param amplitude NumericVector of input amplitudes (same length)
- //' @param mode      Character string, either "sidebands" or "beats"
  //' @return DataFrame with columns `frequency` and `amplitude`
  //' @export
  // [[Rcpp::export]]
  DataFrame compute_amplitude_modulation(
      NumericVector frequency,
-     NumericVector amplitude,
-     std::string mode = "sidebands"
+     NumericVector amplitude
  ) {
    int n = frequency.size();
    if (n < 2) {
@@ -127,17 +125,9 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
      );
    }
 
-   bool wantSidebands = (mode == "sidebands");
-   bool wantBeats     = (mode == "beats");
-   if (!wantSidebands && !wantBeats) {
-     stop("`mode` must be either \"sidebands\" or \"beats\"");
-   }
-
    double minFreq  = Rcpp::min(frequency);
    int    maxPairs = n * (n - 1) / 2;
-   int    maxEntries = wantSidebands
-   ? maxPairs * 2      // up to 2 sidebands per pair
-   : maxPairs;          // 1 beat per pair
+   int    maxEntries = maxPairs * 2;
 
    NumericVector outFreqs(maxEntries);
    NumericVector outAmps (maxEntries);
@@ -156,7 +146,6 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
        if (diff > tol && diff < minFreq) {
          double ampVal = Aj * 0.5;
 
-         if (wantSidebands) {
            // Upper sideband
            outFreqs[count] = fi + diff;
            outAmps [count] = ampVal;
@@ -166,14 +155,6 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
            outFreqs[count] = fi - diff;
            outAmps [count] = ampVal;
            ++count;
-         }
-
-         if (wantBeats) {
-           // Beat (difference) frequency
-           outFreqs[count] = diff;
-           outAmps [count] = ampVal;
-           ++count;
-         }
        }
      }
    }
