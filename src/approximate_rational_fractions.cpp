@@ -26,13 +26,13 @@ double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
       int  small_i  = i_larger ? j : i;
       int  large_i  = i_larger ? i : j;
 
-      double log_diff = log_ratios[large_i] - log_ratios[small_i];
-      double ratio    = std::exp(log_diff);
-      int    harmonic_number = int(std::round(ratio));
+      double log_diff      = log_ratios[large_i] - log_ratios[small_i];
+      double approximation = std::exp(log_diff);
+      int    ideal         = int(std::round(approximation));
 
-      if (harmonic_number >= 2 &&
-          std::abs(ratio - harmonic_number) / harmonic_number < log_uncertainty) {
-        double oct = std::pow(2.0, log_diff / std::log((double)harmonic_number));
+      if (ideal >= 2 &&
+          std::abs(ideal - approximation) / ideal < log_uncertainty) {
+        double oct = std::pow(2.0, log_diff / std::log((double)ideal));
         candidates.push_back(oct);
       }
     }
@@ -103,57 +103,57 @@ inline double round_to_precision(double value, int precision = 15) {
    const int MAX_ITER = 10000;
 
    for (int i = 0; i < n; ++i) {
-     double ratio = round_to_precision(x[i] / x_ref, 15);
+     double ideal = round_to_precision(x[i] / x_ref);
      std::vector<char> path;
      // Initialize Stern–Brocot endpoints
      int left_num = 0, left_den = 1;
      int right_num = 1, right_den = 0;
 
-     // First mediant
-     int mediant_num = left_num + right_num;
-     int mediant_den = left_den + right_den;
-     double mediant = round_to_precision(
-       static_cast<double>(mediant_num) / mediant_den, 15
+     // First approximation
+     int approximation_num = left_num + right_num;
+     int approximation_den = left_den + right_den;
+     double approximation = round_to_precision(
+       static_cast<double>(approximation_num) / approximation_den
      );
 
      int iter = 1;
 
      // continue while |x/x_ref - num/den| >= uncertainty
-     while ((std::abs(round_to_precision(x[i] / x_ref, 15)
-                        - static_cast<double>(mediant_num) / mediant_den)
-               >= uncertainty) && iter < MAX_ITER) {
-               if (mediant < ratio) {
-                 left_num = mediant_num;  left_den = mediant_den;
-                 path.push_back('R');
-               } else {
-                 right_num = mediant_num; right_den = mediant_den;
-                 path.push_back('L');
-               }
-               mediant_num = left_num + right_num;
-               mediant_den = left_den + right_den;
-               if (mediant_den == 0) break;
-               mediant = round_to_precision(
-                 static_cast<double>(mediant_num) / mediant_den, 15
-               );
-               ++iter;
+     while ((
+         std::abs(ideal - approximation) >= uncertainty
+     ) && iter < MAX_ITER) {
+       if (approximation < ideal) {
+         left_num = approximation_num;  left_den = approximation_den;
+         path.push_back('R');
+       } else {
+         right_num = approximation_num; right_den = approximation_den;
+         path.push_back('L');
+       }
+       approximation_num = left_num + right_num;
+       approximation_den = left_den + right_den;
+       if (approximation_den == 0) break;
+       approximation = round_to_precision(
+         static_cast<double>(approximation_num) / approximation_den
+       );
+       ++iter;
      }
      if (iter >= MAX_ITER) {
        Rcpp::warning("rational_fractions: max iterations (%d) reached at index %d", MAX_ITER, i);
      }
 
-     nums[i]           = mediant_num;
-     dens[i]           = mediant_den;
-     approximations[i] = mediant;
-     errors[i]         = mediant - ratio;
+     nums[i]           = approximation_num;
+     dens[i]           = approximation_den;
+     approximations[i] = approximation;
+     errors[i]         = round_to_precision(approximation - ideal);
      depths[i]         = iter;
      // Build a simple path string of R/L moves
      paths[i]          = (iter < MAX_ITER
                             ? std::string(path.begin(), path.end())
                               : std::string());
-     thomae[i]         = (mediant_den ? 1.0 / mediant_den : NA_REAL);
+     thomae[i]         = (approximation_den ? 1.0 / approximation_den : NA_REAL);
      euclids_orchard_height[i]
-     = (mediant_den
-          ? 1.0 / (std::abs(mediant_num) + mediant_den)
+     = (approximation_den
+          ? 1.0 / (std::abs(approximation_num) + approximation_den)
           : NA_REAL);
    }
 
@@ -195,14 +195,14 @@ inline double round_to_precision(double value, int precision = 15) {
    }
 
    // find the pseudo-octave in ratio-space
-   double pseudo_octave_double = approximate_pseudo_octave(ratios, uncertainty);
+   double pseudo_octave = approximate_pseudo_octave(ratios, uncertainty);
 
    // build the transformed vector for coprime search
    NumericVector pseudo_x(n), uncertainties(n, uncertainty);
    for (int i = 0; i < n; ++i) {
      pseudo_x[i] = x_ref * std::pow(2.0,
                             std::log(ratios[i]) /
-                              std::log(pseudo_octave_double));
+                              std::log(pseudo_octave));
    }
 
    DataFrame df = rational_fractions(
@@ -212,7 +212,7 @@ inline double round_to_precision(double value, int precision = 15) {
    );
 
    df["pseudo_x"]    = pseudo_x;
-   df["pseudo_octave"] = NumericVector(n, pseudo_octave_double);
+   df["pseudo_octave"] = NumericVector(n, pseudo_octave);
 
    return df;
  }
