@@ -102,11 +102,10 @@ static coprimer_first_coprime_t coprimer_first_coprime = nullptr;
    return df;
  }
 
- //' Compute amplitude modulation (sidebands or beats)
+ //' Compute amplitude modulation sidebands
  //'
  //' For each unordered pair of input frequencies, compute either:
  //'   • Sidebands: fi ± |fi - fj|
- //'   • Beats:   |fi - fj|
  //'
  //' @param frequency NumericVector of input frequencies
  //' @param amplitude NumericVector of input amplitudes (same length)
