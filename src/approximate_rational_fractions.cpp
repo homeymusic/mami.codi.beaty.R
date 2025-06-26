@@ -15,7 +15,7 @@ double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
     log_ratios[i] = std::log(ratios[i]);
   }
 
-  double log_uncertainty = log(1 + uncertainty) / log(2);
+  double log_uncertainty =  std::log1p(uncertainty) / log(2);
 
   std::vector<double> candidates;
   candidates.reserve(n * (n - 1) / 2);
