@@ -256,13 +256,13 @@ $$
 ### Rational Approximation
 
 $$
-\widetilde f = f_{ref} \frac{a}{b}, \quad a \in \mathbb{Z}, \, b \in  \mathbb{N}
+\widetilde f = f_{ref} \frac{a}{b}, \quad a \in \mathbb{Z},  b \in  \mathbb{N}
 $$
 
 ### Rational Approximation Uncertainty
 
 $$
-\Delta f = \bigl| f - \widetilde f \bigr| = \bigl| f - f_{ref} \, \frac{a}{b} \bigr| = \frac{f_{ref}}{f_{ref}} \, \bigl| f - f_{ref} \, \frac{a}{b} \bigr| = f_{ref} \bigl| \frac{f}{f_{ref}} - \frac{a}{b} \bigr|
+\Delta f = \bigl| f - \widetilde f \bigr| = \bigl| f - f_{ref}  \frac{a}{b} \bigr| = \frac{f_{ref}}{f_{ref}}  \bigl| f - f_{ref}  \frac{a}{b} \bigr| = f_{ref} \bigl| \frac{f}{f_{ref}} - \frac{a}{b} \bigr|
 $$
 
 $$
@@ -362,9 +362,9 @@ $$
 &\quad \mathbf{FOR}\; j \gets i+1 \;\mathbf{TO}\; N \;\mathbf{DO}\\
 &\quad\quad \mathrm{approximation} \gets \dfrac{\mathrm{ratios}[i]}{\mathrm{ratios}[j]}\\
 &\quad\quad \mathrm{ideal} \gets \mathrm{round}(\mathrm{approximation})\\
-&\quad\quad \mathbf{IF}\;\dfrac{\lvert \mathrm{ideal} - \mathrm{approximation}\rvert}{\mathrm{ideal}} < \log_{2}\!\bigl(1 + \tfrac{1}{4\pi\,n}\bigr)\;\mathbf{THEN}\\
-&\quad\quad\quad \mathrm{octave_{\mathrm{pseudo}}} \gets 2^{\,\frac{\ln(\mathrm{approximation})}{\ln(\mathrm{ideal})}}\\
-&\quad\quad\quad \mathrm{candidates} \gets \mathrm{candidates} \,\cup\, \{\mathrm{octave_{\mathrm{pseudo}}}\}\\
+&\quad\quad \mathbf{IF}\;\dfrac{\lvert \mathrm{ideal} - \mathrm{approximation}\rvert}{\mathrm{ideal}} < \log_{2}\!\bigl(1 + \tfrac{1}{4\pin}\bigr)\;\mathbf{THEN}\\
+&\quad\quad\quad \mathrm{octave_{\mathrm{pseudo}}} \gets 2^{\frac{\ln(\mathrm{approximation})}{\ln(\mathrm{ideal})}}\\
+&\quad\quad\quad \mathrm{candidates} \gets \mathrm{candidates} \cup \{\mathrm{octave_{\mathrm{pseudo}}}\}\\
 &\quad\quad \mathbf{END\_IF}\\
 &\quad \mathbf{END\_FOR}\\
 &\mathbf{END\_FOR}\\
