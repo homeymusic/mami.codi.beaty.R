@@ -84,7 +84,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ## Heisenberg Uncertainty
 
 $$
-\Delta x \Delta p \ge \frac{\hbar}{2}
+\Delta x \Delta p \ge \frac{\hbar}{2}, \quad p = \frac{h}{\lambda}
 $$
 
 ## Gabor Uncertainty
@@ -98,28 +98,46 @@ $$
 ### Reference Time Period
 
 $$
-\Delta t = T_{ref} = n \frac{2 \pi }{\omega_{ref}}, \quad n \enspace \text{periods}
+\Delta t = T = \frac{2 \pi }{\omega} = n \frac{2 \pi }{\omega_{ref}}, \quad n \enspace \text{periods}
 $$ $$
-\Delta t \Delta \omega = T_{ref} \Delta \omega = n \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
+\Delta t \Delta \omega = T \Delta \omega = n \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
 $$
 
-### Relative Uncertainty
+### Relative Frequency Uncertainty
 
 $$
 \frac{\Delta \omega}{\omega_{ref}} \ge \frac{1}{4 \pi n} \quad \text{and} \quad \frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi n}\
 $$
 
-## Rational Approximation Uncertainty
+## Relative Rational Approximation Uncertainty
 
-### Relative Rational Approximation
-
-$$
-\Delta f = \bigl| f - \widetilde f \bigr| \quad \text{where} \quad \widetilde f = f_{ref} \frac{a}{b} \quad
-\text{and} \quad a \in \mathbb{Z}, b \in \mathbb{N}
-$$
+### Idealized Frequency and Approximate Frequency
 
 $$
-\Delta f = f_{ref} \bigl| \frac{f}{f_{ref}} - \frac{a}{b} \bigr|
+\Delta f = \bigl| f - \widetilde f \bigr|
+$$
+
+$$
+\begin{align*}
+f \; \text{is an idealized frequency} \\
+\widetilde f \; \text{is an approximate frequency}
+\end{align*}
+$$
+
+### Rational Approximation
+
+$$
+\widetilde f = f_{ref} \frac{a}{b}, \quad a \in \mathbb{Z}, \, b \in  \mathbb{N}
+$$
+
+### Rational Approximation Uncertainty
+
+$$
+\Delta f = \bigl| f - \widetilde f \bigr| = \bigl| f - f_{ref} \, \frac{a}{b} \bigr| = \frac{f_{ref}}{f_{ref}} \, \bigl| f - f_{ref} \, \frac{a}{b} \bigr| = f_{ref} \bigl| \frac{f}{f_{ref}} - \frac{a}{b} \bigr|
+$$
+
+$$
+\frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi n}
 $$
 
 $$
@@ -154,19 +172,19 @@ $$
 a \perp b \quad \Longrightarrow \quad  \mathrm{gcd}(a,b)=1
 $$
 
-### Stern–Brocot: Total Traversal Depth for All Tones in a Chord
+### Stern–Brocot: Total Traversal Depth for All Tones in a N-Tone Chord
 
 $$
 \Delta \;=\; \sum_{i=1}^{N} \delta_{i}
 $$
 
-## Fundamental Frequency
+## Fundamental Frequency of a N-Tone Chord
 
 $$
 f_0 = f_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad a_i \perp b_i
 $$
 
-## Fundamental Wavelength
+## Fundamental Wavelength of a N-Tone Chord
 
 $$
 \lambda_0 = \lambda_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad a_i \perp b_i
@@ -174,7 +192,7 @@ $$
 
 ## Stolzenburg Periodicity Perception
 
-### Fundamental Cycle Length
+### Fundamental Cycle Length of a N-Tone Chord
 
 $$
 \Lambda  = \mathrm{lcm}(b_1,b_2,\dots,b_N) \quad \text{when} \quad \gcd(a_1,\dots,a_N)=1
@@ -205,6 +223,8 @@ $$
 $$
 
 ## Pseudo-Octaves: Perception of Stretching and Compressing
+
+### Heurisitc to Find Pseudo Octave of a N-Tone Chord
 
 $$
 \begin{aligned}
