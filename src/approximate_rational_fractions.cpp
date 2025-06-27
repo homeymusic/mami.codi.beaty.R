@@ -4,52 +4,6 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
-// [[Rcpp::export]]
-double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
-                                 const double uncertainty) {
-  int n = ratios.size();
-  if (n <= 2) return 2.0;
-
-  std::vector<double> log_ratios(n);
-  for (int i = 0; i < n; ++i) {
-    log_ratios[i] = std::log(ratios[i]);
-  }
-
-  double log_uncertainty =  std::log1p(uncertainty) / log(2);
-
-  std::vector<double> candidates;
-  candidates.reserve(n * (n - 1) / 2);
-
-  for (int i = 0; i < n; ++i) {
-    for (int j = i + 1; j < n; ++j) {
-      bool i_larger = ratios[i] >= ratios[j];
-      int  small_i  = i_larger ? j : i;
-      int  large_i  = i_larger ? i : j;
-
-      double log_diff      = log_ratios[large_i] - log_ratios[small_i];
-      double approximation = std::exp(log_diff);
-      int    ideal         = int(std::round(approximation));
-
-      if (ideal >= 2 &&
-          std::abs(ideal - approximation) / ideal < log_uncertainty) {
-        double oct = std::pow(2.0, log_diff / std::log((double)ideal));
-        candidates.push_back(oct);
-      }
-    }
-  }
-
-  if (candidates.empty()) return 2.0;
-
-  Rcpp::NumericVector qualifiedCandidates(candidates.begin(), candidates.end());
-  Rcpp::IntegerVector counts = Rcpp::table(qualifiedCandidates);
-  Rcpp::CharacterVector candidateBins = counts.names();
-  Rcpp::IntegerVector idx = Rcpp::seq_along(counts) - 1;
-  std::sort(idx.begin(), idx.end(),
-            [&](int i, int j){ return counts[i] > counts[j]; });
-
-  return std::stod(Rcpp::as<std::string>(candidateBins[idx[0]]));
-}
-
 DataFrame rational_fraction_dataframe(const IntegerVector &nums,
                                       const IntegerVector &dens,
                                       const NumericVector &approximations,
@@ -102,8 +56,8 @@ inline double round_to_precision(double value, int precision = 15) {
 
    const int MAX_ITER = 10000;
 
-   for (int i = 0; i < n; ++i) {
-     double ideal = round_to_precision(x[i] / x_ref);
+   for (int i = 0; i < (n-1); ++i) {
+     double ideal = round_to_precision(x[i+1] / x[i]);
      std::vector<char> path;
      // Initialize Stern–Brocot endpoints
      int left_num = 0, left_den = 1;
@@ -188,31 +142,11 @@ inline double round_to_precision(double value, int precision = 15) {
      return DataFrame::create();
    }
 
-   // compute ratios relative to x_ref
-   NumericVector ratios(n);
-   for (int i = 0; i < n; ++i) {
-     ratios[i] = x[i] / x_ref;
-   }
-
-   // find the pseudo-octave in ratio-space
-   double pseudo_octave = approximate_pseudo_octave(ratios, uncertainty);
-
-   // build the transformed vector for coprime search
-   NumericVector pseudo_x(n), uncertainties(n, uncertainty);
-   for (int i = 0; i < n; ++i) {
-     pseudo_x[i] = x_ref * std::pow(2.0,
-                            std::log(ratios[i]) /
-                              std::log(pseudo_octave));
-   }
-
    DataFrame df = rational_fractions(
-     pseudo_x,
+     x,
      x_ref,
      uncertainty
    );
-
-   df["pseudo_x"]    = pseudo_x;
-   df["pseudo_octave"] = NumericVector(n, pseudo_octave);
 
    return df;
  }
