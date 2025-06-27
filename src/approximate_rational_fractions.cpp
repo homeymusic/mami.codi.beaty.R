@@ -10,12 +10,12 @@ double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
   int n = ratios.size();
   if (n <= 2) return 2.0;
 
-  std::vector<double> log_ratios(n);
+  std::vector<double> log2_ratios(n);
   for (int i = 0; i < n; ++i) {
-    log_ratios[i] = std::log(ratios[i]);
+    log2_ratios[i] = std::log2(ratios[i]);
   }
 
-  double log_uncertainty =  std::log1p(uncertainty) / log(2);
+  double log2_uncertainty =  std::log2(1.0 + uncertainty);
 
   std::vector<double> candidates;
   candidates.reserve(n * (n - 1) / 2);
@@ -26,13 +26,13 @@ double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
       int  small_i  = i_larger ? j : i;
       int  large_i  = i_larger ? i : j;
 
-      double log_diff      = log_ratios[large_i] - log_ratios[small_i];
-      double approximation = std::exp(log_diff);
+      double log_diff      = log2_ratios[large_i] - log2_ratios[small_i];
+      double approximation = std::exp2(log_diff);
       int    ideal         = int(std::round(approximation));
 
       if (ideal >= 2 &&
-          std::abs(ideal - approximation) / ideal < log_uncertainty) {
-        double oct = std::pow(2.0, log_diff / std::log((double)ideal));
+          std::abs(ideal - approximation) / ideal < log2_uncertainty) {
+        double oct = std::exp2(log_diff / std::log2((double)ideal));
         candidates.push_back(oct);
       }
     }
