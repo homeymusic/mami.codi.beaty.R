@@ -242,7 +242,7 @@ inline double round_to_precision(double value, int precision = 15) {
 
    double minFreq  = Rcpp::min(frequency);
    int    maxPairs = n * (n - 1) / 2;
-   int    maxEntries = maxPairs * 2;
+   int    maxEntries = maxPairs * 3;
 
    NumericVector outFreqs(maxEntries);
    NumericVector outAmps (maxEntries);
@@ -261,15 +261,17 @@ inline double round_to_precision(double value, int precision = 15) {
        if (diff > tol && diff < minFreq) {
          double ampVal = Aj * 0.5;
 
-           // Upper sideband
-           outFreqs[count] = fi + diff;
-           outAmps [count] = ampVal;
-           ++count;
+         outFreqs[count] = diff;
+         outAmps [count] = ampVal;
+         ++count;
 
-           // Lower sideband (only if above lowest input)
-           outFreqs[count] = fi - diff;
-           outAmps [count] = ampVal;
-           ++count;
+         outFreqs[count] = fi + diff;
+         outAmps [count] = ampVal;
+         ++count;
+
+         outFreqs[count] = fi - diff;
+         outAmps [count] = ampVal;
+         ++count;
        }
      }
    }
