@@ -287,3 +287,69 @@ inline double round_to_precision(double value, int precision = 15) {
      _["amplitude"] = ampOut
    );
  }
+
+ //' Compute distortion (cubic) products
+ //'
+ //' For each unordered pair, compute dp = 2*min(fi,fj) – max(fi,fj)
+ //' and amplitude = 0.5 * amplitude_of_the_lower_tone.
+ //'
+ //' @param frequency NumericVector of input frequencies
+ //' @param amplitude NumericVector of input amplitudes
+ //' @return DataFrame with columns `frequency` and `amplitude`
+ //' @export
+ // [[Rcpp::export]]
+ DataFrame compute_distortion_products(
+     NumericVector& frequency,
+     NumericVector& amplitude
+ ) {
+   int n = frequency.size();
+   if (n < 2) {
+     return DataFrame::create(
+       _["frequency"] = NumericVector(),
+       _["amplitude"] = NumericVector()
+     );
+   }
+
+   int maxPairs   = n * (n - 1) / 2;
+   NumericVector outFreqs(maxPairs);
+   NumericVector outAmps (maxPairs);
+   int count = 0;
+
+   for (int i = 0; i < n; ++i) {
+     double fi = frequency[i];
+     double Ai = amplitude[i];
+     for (int j = i + 1; j < n; ++j) {
+       double fj = frequency[j];
+       double Aj = amplitude[j];
+
+       // identify lower and higher
+       double f_low  = fi < fj ? fi : fj;
+       double f_high = fi < fj ? fj : fi;
+       double A_low  = fi < fj ? Ai : Aj;
+
+       // primary distortion product: 2*f_low - f_high
+       double dp = 2.0 * f_low - f_high;
+       if (dp > 0) {
+         outFreqs[count] = dp;
+         outAmps [count] = 0.5 * A_low;
+         ++count;
+       }
+     }
+   }
+
+   if (count == 0) {
+     return DataFrame::create(
+       _["frequency"] = NumericVector(),
+       _["amplitude"] = NumericVector()
+     );
+   }
+
+   // trim to actual length
+   NumericVector freqOut = outFreqs[ Range(0, count - 1) ];
+   NumericVector ampOut  = outAmps [ Range(0, count - 1) ];
+
+   return DataFrame::create(
+     _["frequency"] = freqOut,
+     _["amplitude"] = ampOut
+   );
+ }

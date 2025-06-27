@@ -17,3 +17,7 @@ compute_amplitude_modulation <- function(frequency, amplitude) {
     .Call(`_mami_codi_beaty_R_compute_amplitude_modulation`, frequency, amplitude)
 }
 
+compute_distortion_products <- function(frequency, amplitude) {
+    .Call(`_mami_codi_beaty_R_compute_distortion_products`, frequency, amplitude)
+}
+

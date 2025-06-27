@@ -31,6 +31,7 @@ mami.codi.beaty <- function(
     # Physical Domain
     generate_stimulus() %>%
     generate_superposition_envelope() %>%
+    generate_distortion_products() %>%
     # Frequency Domain
     compute_space_cycles() %>%
     compute_time_cycles() %>%
@@ -68,7 +69,7 @@ generate_stimulus <- function(
 
 }
 
-#' Generate amplitude modulation
+#' Generate superposition envelope
 #'
 #' For a given stimulus spectrum, compute the difference frequncies
 #' and the spectral sidebands (fi ± |fj – fi|) for every unordered
@@ -79,7 +80,7 @@ generate_stimulus <- function(
 #' @return The input `x` augmented with:
 #'   - `amplitude_modulation_frequency_spectrum`: filtered sideband frequencies & amplitudes
 #'   - `amplitude_modulation_wavelength_spectrum`: corresponding wavelengths & amplitudes
-#' @rdname generate_sidebands
+#' @rdname generate_superposition_envelope
 #' @export
 generate_superposition_envelope <- function(x) {
 
@@ -101,6 +102,34 @@ generate_superposition_envelope <- function(x) {
     )
 }
 
+#' Generate distortion products
+#'
+#'
+#' @param x A list or tibble containing `stimulus_frequency_spectrum`
+#'   (a data.frame/tibble with `frequency` and `amplitude` columns).
+#' @return The input `x` augmented with:
+#' @rdname generate_
+#' @export
+generate_distortion_products <- function(x) {
+
+  distorion_products_frequency_spectrum <- compute_distortion_products(
+    frequency = x$stimulus_frequency_spectrum[[1]]$frequency,
+    amplitude  = x$stimulus_frequency_spectrum[[1]]$amplitude
+  ) %>% filter_spectrum_in_range()
+
+  distorion_products_wavelength_spectrum <- tibble::tibble(
+    wavelength = SPEED_OF_SOUND / distorion_products_frequency_spectrum$frequency,
+    amplitude  = distorion_products_frequency_spectrum$amplitude
+  ) %>%
+    filter_spectrum_in_range()
+
+  x %>%
+    dplyr::mutate(
+      distorion_products_frequency_spectrum = list(distorion_products_frequency_spectrum),
+      distorion_products_wavelength_spectrum = list(distorion_products_wavelength_spectrum)
+    )
+}
+
 #' Compute the spatial cycle length of the complex waveform.
 #'
 #' Computes the spatial cycle length from a wavelength spectrum that
@@ -118,7 +147,8 @@ compute_space_cycles <- function(
 
   wavelength_spectrum = validate_combine_spectra(
     x$stimulus_wavelength_spectrum[[1]],
-    x$sideband_wavelength_spectrum[[1]]
+    x$sideband_wavelength_spectrum[[1]],
+    x$distorion_products_wavelength_spectrum[[1]]
   )
 
   l_min <- min(x$stimulus_wavelength_spectrum[[1]]$wavelength)
@@ -156,7 +186,8 @@ compute_time_cycles <- function(
 
   frequency_spectrum = validate_combine_spectra(
     x$stimulus_frequency_spectrum[[1]],
-    x$sideband_frequency_spectrum[[1]]
+    x$sideband_frequency_spectrum[[1]],
+    x$distorion_products_frequency_spectrum[[1]]
   )
 
   f_min <- min(x$stimulus_frequency_spectrum[[1]]$frequency)
