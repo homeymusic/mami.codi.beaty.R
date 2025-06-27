@@ -5,28 +5,29 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
+double approximate_pseudo_octave(Rcpp::NumericVector unsorted_ratios,
                                  const double uncertainty) {
-  int n = ratios.size();
+  int n = unsorted_ratios.size();
   if (n <= 2) return 2.0;
 
+  // Copy into our working 'ratios' and sort
+  std::vector<double> ratios(unsorted_ratios.begin(), unsorted_ratios.end());
+  std::sort(ratios.begin(), ratios.end());
+
+  // Precompute log2 of each ratio
   std::vector<double> log2_ratios(n);
   for (int i = 0; i < n; ++i) {
     log2_ratios[i] = std::log2(ratios[i]);
   }
 
-  double log2_uncertainty =  std::log2(1.0 + uncertainty);
+  double log2_uncertainty = std::log2(1.0 + uncertainty);
 
   std::vector<double> candidates;
   candidates.reserve(n * (n - 1) / 2);
 
   for (int i = 0; i < n; ++i) {
     for (int j = i + 1; j < n; ++j) {
-      bool i_larger = ratios[i] >= ratios[j];
-      int  small_i  = i_larger ? j : i;
-      int  large_i  = i_larger ? i : j;
-
-      double log_diff      = log2_ratios[large_i] - log2_ratios[small_i];
+      double log_diff      = log2_ratios[j] - log2_ratios[i];
       double approximation = std::exp2(log_diff);
       int    ideal         = int(std::round(approximation));
 
@@ -34,6 +35,8 @@ double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
           std::abs(ideal - approximation) / ideal < log2_uncertainty) {
         double oct = std::exp2(log_diff / std::log2((double)ideal));
         candidates.push_back(oct);
+      } else {
+        break;
       }
     }
   }
@@ -45,7 +48,7 @@ double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
   Rcpp::CharacterVector candidateBins = counts.names();
   Rcpp::IntegerVector idx = Rcpp::seq_along(counts) - 1;
   std::sort(idx.begin(), idx.end(),
-            [&](int i, int j){ return counts[i] > counts[j]; });
+            [&](int a, int b){ return counts[a] > counts[b]; });
 
   return std::stod(Rcpp::as<std::string>(candidateBins[idx[0]]));
 }
