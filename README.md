@@ -101,14 +101,6 @@ $$
 \frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi n}
 $$
 
-#### Weber’s law (just-noticeable relative threshold)
-
-$$
-\frac{\Delta f}{f_{\rm ref}} = k,
-\quad
-k = \frac{1}{4\pi n} \quad \text{Weber's Constant}
-$$
-
 ## Relative Rational Approximation Uncertainty
 
 ### Idealized Frequency and Approximate Frequency
@@ -119,8 +111,8 @@ $$
 
 $$
 \begin{align*}
-f \; \text{is an idealized frequency} \\
-\widetilde f \; \text{is an approximate frequency}
+f   \text{is an idealized frequency} \\
+\widetilde f   \text{is an approximate frequency}
 \end{align*}
 $$
 
@@ -146,16 +138,16 @@ $$
 
 $$
 \begin{aligned}
-&\mathbf{WHILE}\;\Bigl|\tfrac{f}{f_{\mathrm{ref}}}-\tfrac{a}{b}\Bigr| \ge \tfrac{1}{4\pi n}
+&\mathbf{WHILE} \Bigl|\tfrac{f}{f_{\mathrm{ref}}}-\tfrac{a}{b}\Bigr| \ge \tfrac{1}{4\pi n}
 \quad\mathbf{DO}\\
 &\quad a  \gets  a_{\mathrm{left}} + a_{\mathrm{right}}\\
 &\quad b  \gets  b_{\mathrm{left}} + b_{\mathrm{right}}\\
-&\quad \mathbf{IF}\;\tfrac{f}{f_{\mathrm{ref}}} > \tfrac{a}{b}\;\mathbf{THEN}\\
+&\quad \mathbf{IF} \tfrac{f}{f_{\mathrm{ref}}} > \tfrac{a}{b} \mathbf{THEN}\\
 &\quad\quad a_{\mathrm{left}} \gets a,\quad b_{\mathrm{left}} \gets b\\
 &\quad \mathbf{ELSE}\\
 &\quad\quad a_{\mathrm{right}} \gets a,\quad b_{\mathrm{right}} \gets b\\
 &\quad \mathbf{END\_IF}\\
-&\quad \delta \gets \delta + 1\\
+&\quad d \gets d + 1\\
 &\mathbf{END\_WHILE}
 \end{aligned}
 $$
@@ -169,7 +161,7 @@ $$
 ### Stern–Brocot: Total Traversal Depth for All Tones in a N-Tone Chord
 
 $$
-\Delta \;=\; \sum_{i=1}^{N} \delta_{i}
+D  =  \sum_{i=1}^{N} d_{i}
 $$
 
 ## Fundamental Frequency of a N-Tone Chord
@@ -200,39 +192,6 @@ $$
 \psi  = \log_2 \bigl(\Lambda\bigr) \quad \bigl[\text{units: Sz}\bigr]
 $$
 
-#### Fechner’s law (logarithmic sensation scaling)
-
-$$
-\psi = C \,\log_2\!\bigl(\tfrac{\Lambda}{\Lambda_0}\bigr)
-$$
-
-##### Special case: recover “bits of periodicity”
-
-By choosing  
-- $C = 1$  
-- $\Lambda_0 = 1$
-
-Fechner’s law reduces exactly to the psychophysical periodicity
-definition:
-
-$$
-\psi = 1 \,\log_2\!\bigl(\Lambda / 1\bigr)
-\;=\;
-\log_2(\Lambda)
-$$
-
-###### Justification for $C$
-
-We set $C=1$ because we are working with a purely relative scale—each
-doubling of $\Lambda$ maps to exactly one Sz unit with no additional
-gain factor.
-
-###### Justification for $\Lambda_0$
-
-We choose $\Lambda_0=1$ to anchor the zero‐point of perception at a
-single cycle, so that $\psi=0$ precisely when the stimulus contains one
-cycle.
-
 #### Major-Minor: Temporal and Spatial Periodicity Difference
 
 $$
@@ -257,16 +216,83 @@ $$
 
 $$
 \begin{aligned}
-&\mathbf{FOR}\; i \gets 1 \;\mathbf{TO}\; N \;\mathbf{DO}\\
-&\quad \mathbf{FOR}\; j \gets i+1 \;\mathbf{TO}\; N \;\mathbf{DO}\\
+&\mathbf{FOR}  i \gets 1  \mathbf{TO}  N  \mathbf{DO}\\
+&\quad \mathbf{FOR}  j \gets i+1  \mathbf{TO}  N  \mathbf{DO}\\
 &\quad\quad \mathrm{approximation} \gets \dfrac{\mathrm{ratios}[i]}{\mathrm{ratios}[j]}\\
 &\quad\quad \mathrm{ideal} \gets \mathrm{round}(\mathrm{approximation})\\
-&\quad\quad \mathbf{IF}\;\dfrac{\lvert \mathrm{ideal} - \mathrm{approximation}\rvert}{\mathrm{ideal}} < \log_{2}\!\bigl(1 + \tfrac{1}{4\pi n}\bigr)\;\mathbf{THEN}\\
+&\quad\quad \mathbf{IF} \dfrac{\lvert \mathrm{ideal} - \mathrm{approximation}\rvert}{\mathrm{ideal}} < \log_{2} \bigl(1 + \tfrac{1}{4\pi n}\bigr) \mathbf{THEN}\\
 &\quad\quad\quad \mathrm{octave_{\mathrm{pseudo}}} \gets 2^{\frac{\ln(\mathrm{approximation})}{\ln(\mathrm{ideal})}}\\
 &\quad\quad\quad \mathrm{candidates} \gets \mathrm{candidates} \cup \{\mathrm{octave_{\mathrm{pseudo}}}\}\\
 &\quad\quad \mathbf{END\_IF}\\
 &\quad \mathbf{END\_FOR}\\
 &\mathbf{END\_FOR}\\
-&\mathbf{RETURN}\;\mathrm{most\_frequent}(\mathrm{candidates})\\
+&\mathbf{RETURN} \mathrm{most\_frequent}(\mathrm{candidates})\\
 \end{aligned}
 $$
+
+# Related Theories
+
+## Weber’s law
+
+$$
+\frac{\Delta f}{f_{\rm ref}} = k,
+\quad
+k = \frac{1}{4\pi n} \quad \text{Weber's Constant}
+$$
+
+## Fechner’s law
+
+$$
+\psi = C  \log_2 \bigl(\tfrac{\Lambda}{\Lambda_0}\bigr)
+$$
+
+$$C = 1 \quad \text{and} \quad \Lambda_0 = 1$$
+
+$$\psi = 1  \log_2 \bigl(\Lambda / 1\bigr) = \log_2(\Lambda)$$
+
+#### Justification for C
+
+We set $C=1$ because we are working with a purely relative scale—each
+doubling of $\Lambda$ maps to exactly one Sz unit with no additional
+gain factor.
+
+#### Justification for $\Lambda_0$
+
+We choose $\Lambda_0=1$ to anchor the zero‐point of perception at a
+single cycle, so that $\psi=0$ precisely when the stimulus contains one
+cycle.
+
+## Information-Theoretic Perspective
+
+### Bits of Periodicity as Shannon Information
+
+Because
+
+$$\psi = \log_2(\Lambda)$$
+
+is literally a count of doublings (bits), we can interpret $\psi$ as the
+**information content** of the chord’s periodic structure. Each Sz is
+one bit of periodic pattern: doubling $\Lambda$ adds exactly one bit.
+
+### Spectral Entropy
+
+To capture the *uncertainty* or *complexity* of the harmonic spectrum
+itself, define a probability distribution over your $N$ partials
+(e.g. normalized amplitudes $p_i$). Then Shannon entropy
+
+$$H = -\sum_{i=1}^N p_i \log_2(p_i)$$
+
+measures how “spread out” or unpredictable the spectral content
+is—linking timbral complexity directly to information theory.
+
+### Channel-Capacity Analogy
+
+If the listener’s auditory system is viewed as a communication channel
+with an effective **bandwidth** $B$ (in Sz) and a signal-to-noise ratio
+$\mathrm{SNR}$ tied to your Weber threshold, then Shannon’s channel
+capacity
+
+$$C = B  \log_2 \bigl(1 + \mathrm{SNR}\bigr)$$
+
+gives an upper bound on how many bits per second of periodicity can be
+resolved.
