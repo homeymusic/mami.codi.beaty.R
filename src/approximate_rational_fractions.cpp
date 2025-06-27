@@ -50,13 +50,14 @@ inline double round_to_precision(double value, int precision = 15) {
                               double x_ref,
                               double uncertainty) {
    int n = x.size();
-   IntegerVector nums(n), dens(n), depths(n);
-   NumericVector approximations(n), errors(n), thomae(n), euclids_orchard_height(n);
-   CharacterVector paths(n);
+   int m = n - 1;
+   IntegerVector nums(m), dens(m), depths(m);
+   NumericVector approximations(m), errors(m), thomae(m), euclids_orchard_height(m);
+   CharacterVector paths(m);
 
    const int MAX_ITER = 10000;
 
-   for (int i = 0; i < (n-1); ++i) {
+   for (int i = 0; i < m; ++i) {
      double ideal = round_to_precision(x[i+1] / x[i]);
      std::vector<char> path;
      // Initialize Stern–Brocot endpoints
@@ -71,6 +72,12 @@ inline double round_to_precision(double value, int precision = 15) {
      );
 
      int iter = 1;
+
+     // Rcpp::Rcout << "i=" << i
+     //             << " | ideal=" << ideal
+     //             << " approximation=" << approximation
+     //             << " uncertainty=" << uncertainty
+     //             << std::endl;
 
      // continue while |x/x_ref - num/den| >= uncertainty
      while ((
@@ -90,6 +97,13 @@ inline double round_to_precision(double value, int precision = 15) {
          static_cast<double>(approximation_num) / approximation_den
        );
        ++iter;
+
+       // Rcpp::Rcout << "iter=" << iter
+       //             << " approximation=" << approximation
+       //             << " num=" << approximation_num
+       //             << " den=" << approximation_den
+       //             << std::endl;
+
      }
      if (iter >= MAX_ITER) {
        Rcpp::warning("rational_fractions: max iterations (%d) reached at index %d", MAX_ITER, i);
@@ -109,15 +123,33 @@ inline double round_to_precision(double value, int precision = 15) {
      = (approximation_den
           ? 1.0 / (std::abs(approximation_num) + approximation_den)
           : NA_REAL);
+
    }
 
    // pack constant uncertainty vector
-   NumericVector unc(n, uncertainty);
+   Range keep(0, m - 1);
+
+   // Subset every result vector:
+   IntegerVector  nums2  = nums[keep];
+   IntegerVector  dens2  = dens[keep];
+   IntegerVector  depths2= depths[keep];
+   NumericVector  approx2= approximations[keep];
+   NumericVector  err2   = errors[keep];
+   NumericVector  thom2  = thomae[keep];
+   NumericVector  eoh2   = euclids_orchard_height[keep];
+   CharacterVector paths2= paths[keep];
+   // And slice x so it lines up with i+1→i:
+   NumericVector x2 = x[ Range(1, n-1) ];
+   NumericVector unc2(m, uncertainty);
+   // ↑───────────────────────────────────────────────────────
+
+   // Now call your dataframe builder with the *shorter* vectors:
    return rational_fraction_dataframe(
-     nums, dens, approximations,
-     x, errors, thomae, euclids_orchard_height,
-     depths, paths, unc
+     nums2, dens2, approx2,
+     x2, err2, thom2, eoh2,
+     depths2, paths2, unc2
    );
+
  }
 
  //' approximate_rational_fractions
