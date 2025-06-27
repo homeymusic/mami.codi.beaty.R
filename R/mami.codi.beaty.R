@@ -196,7 +196,7 @@ compute_cycle_length <- function(x, ref, dimension) {
     euclids_orchard_height = sum(fractions$euclids_orchard_height),
     thomae = sum(fractions$thomae),
     depth = sum(fractions$depth),
-    relative_uncertainty = sum(abs(fractions$error)),
+    error_sum = sum(abs(fractions$error)),
     fractions = list(fractions)
   ) %>% dplyr::rename_with(~ paste0(dimension, '_' , .))
   t
@@ -241,7 +241,7 @@ compute_harmony_perception <- function(x) {
     stern_brocot_depth      = log2(.data$space_depth * .data$time_depth),
     stern_brocot_depth_diff = log2(.data$time_depth / .data$space_depth),
 
-    relative_uncertainty    = .data$space_relative_uncertainty + .data$time_relative_uncertainty
+    error_sum    = .data$space_error_sum + .data$time_error_sum
 
   )
 

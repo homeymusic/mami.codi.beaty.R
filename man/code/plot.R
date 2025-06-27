@@ -323,7 +323,7 @@ plot_semitone_codi <- function(chords, title='', include_line=T, sigma=0.2,
     theme_homey()
 }
 
-plot_semitone_relative_uncertainty <- function(chords, title='', include_line=T, sigma=0.2,
+plot_semitone_error_sum <- function(chords, title='', include_line=T, sigma=0.2,
                                include_points=T,
                                include_linear_regression = F, goal=NULL,
                                black_vlines=c(),gray_vlines=c(),
@@ -336,12 +336,12 @@ plot_semitone_relative_uncertainty <- function(chords, title='', include_line=T,
     cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
   }
 
-  chords$smoothed_relative_uncertainty_z = smoothed(chords$semitone,
-                                          chords$relative_uncertainty_z,
+  chords$smoothed_error_sum_z = smoothed(chords$semitone,
+                                          chords$error_sum_z,
                                           sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
-                                       y = .data$relative_uncertainty_z)) +
+                                       y = .data$error_sum_z)) +
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
     { if (include_points)
@@ -352,7 +352,7 @@ plot_semitone_relative_uncertainty <- function(chords, title='', include_line=T,
     { if (include_line)
       ggplot2::geom_line(data=chords,
                          ggplot2::aes(x = semitone,
-                                      y = smoothed_relative_uncertainty_z,
+                                      y = smoothed_error_sum_z,
                                       color=color_factor_homey(chords,'majorness'),
                                       group=1), linewidth = 1)} +
     {if (!is.null(goal))
@@ -667,7 +667,7 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
     theme_homey()
 }
 
-plot_semitone_relative_uncertainty_space_time  <- function(chords, title='', include_line=T, sigma=0.2,
+plot_semitone_error_sum_space_time  <- function(chords, title='', include_line=T, sigma=0.2,
                                                            dashed_minor = F, include_points=T,
                                                            include_linear_regression = F, goal=NULL,
                                                            black_vlines=c(),gray_vlines=c(),
@@ -676,15 +676,15 @@ plot_semitone_relative_uncertainty_space_time  <- function(chords, title='', inc
 
   whole_semitones = integer_semitones(chords$semitone)
 
-  chords$smoothed.time_relative_uncertainty  = smoothed(chords$semitone,
-                                              chords$time_relative_uncertainty,
+  chords$smoothed.time_error_sum  = smoothed(chords$semitone,
+                                              chords$time_error_sum,
                                               sigma)
-  chords$smoothed.space_relative_uncertainty = smoothed(chords$semitone,
-                                              chords$space_relative_uncertainty,
+  chords$smoothed.space_error_sum = smoothed(chords$semitone,
+                                              chords$space_error_sum,
                                               sigma)
 
-  mean_theoretical = mean(c(chords$smoothed.time_relative_uncertainty,
-                            chords$smoothed.space_relative_uncertainty))
+  mean_theoretical = mean(c(chords$smoothed.time_error_sum,
+                            chords$smoothed.space_error_sum))
 
   linetype_for_minor = if (dashed_minor) {'dashed'} else {'solid'}
 
@@ -692,21 +692,21 @@ plot_semitone_relative_uncertainty_space_time  <- function(chords, title='', inc
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
     { if (include_points)
-      ggplot2::geom_point(ggplot2::aes(y = .data$time_relative_uncertainty),
+      ggplot2::geom_point(ggplot2::aes(y = .data$time_error_sum),
                           shape=21, stroke=NA, size=1,
                           fill=colors_homey$major)
     } +
     { if (include_points)
-      ggplot2::geom_point(ggplot2::aes(y = .data$space_relative_uncertainty),
+      ggplot2::geom_point(ggplot2::aes(y = .data$space_error_sum),
                           shape=21, stroke=NA, size=1,
                           fill=colors_homey$minor)
     } +
     ggplot2::geom_line(ggplot2::aes(
-      y = .data$smoothed.time_relative_uncertainty,
+      y = .data$smoothed.time_error_sum,
       color = 'time'),
       linewidth = 1) +
     ggplot2::geom_line(ggplot2::aes(
-      y = .data$smoothed.space_relative_uncertainty,
+      y = .data$smoothed.space_error_sum,
       color = 'space'),
       linewidth = 1,
       linetype = linetype_for_minor) +

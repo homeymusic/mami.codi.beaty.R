@@ -151,11 +151,11 @@ p = params %>% purrr::map(\(p) {
   chords$energy_per_cycle = -log2(1+chords$energy_per_cycle)
   chords$energy_per_cycle_z = z_scores(chords$energy_per_cycle)
   
-  chords$relative_uncertainty = -chords$relative_uncertainty
-  chords$relative_uncertainty_z = z_scores(chords$relative_uncertainty)
+  chords$error_sum = -chords$error_sum
+  chords$error_sum_z = z_scores(chords$error_sum)
   
-  chords$time_relative_uncertainty = -chords$time_relative_uncertainty
-  chords$space_relative_uncertainty = -chords$space_relative_uncertainty
+  chords$time_error_sum = -chords$time_error_sum
+  chords$space_error_sum = -chords$space_error_sum
   
   experiment.rds = paste0('./man/data/input/',
                           p$t,
