@@ -45,111 +45,92 @@ inline double round_to_precision(double value, int precision = 15) {
  //' @return DataFrame with columns: num, den, approximation, x, error, thomae,
  //'         euclids_orchard_height, depth, path, uncertainty.
  //' @export
+
  // [[Rcpp::export]]
  DataFrame rational_fractions(const NumericVector& x,
                               double x_ref,
                               double uncertainty) {
    int n = x.size();
-   int m = n - 1;
-   IntegerVector nums(m), dens(m), depths(m);
-   NumericVector approximations(m), errors(m), thomae(m), euclids_orchard_height(m);
-   CharacterVector paths(m);
+   if (n < 2) {
+     // nothing to do if fewer than 2 tones
+     return DataFrame::create();
+   }
+   // allocate length-n arrays
+   IntegerVector nums(n), dens(n), depths(n);
+   NumericVector approximations(n), errors(n),
+   thomae(n), euclids_orchard_height(n);
+   CharacterVector paths(n);
 
    const int MAX_ITER = 10000;
 
-   for (int i = 0; i < m; ++i) {
+   // fill indices 0..(n-2) by comparing x[i+1]/x[i]
+   for (int i = 0; i < n - 1; ++i) {
      double ideal = round_to_precision(x[i+1] / x[i]);
      std::vector<char> path;
-     // Initialize Stern–Brocot endpoints
      int left_num = 0, left_den = 1;
      int right_num = 1, right_den = 0;
-
-     // First approximation
-     int approximation_num = left_num + right_num;
-     int approximation_den = left_den + right_den;
-     double approximation = round_to_precision(
-       static_cast<double>(approximation_num) / approximation_den
-     );
-
+     int mediant_num = 1, mediant_den = 1;
+     double approximation = 1.0;
      int iter = 1;
 
-     // Rcpp::Rcout << "i=" << i
-     //             << " | ideal=" << ideal
-     //             << " approximation=" << approximation
-     //             << " uncertainty=" << uncertainty
-     //             << std::endl;
-
-     // continue while |x/x_ref - num/den| >= uncertainty
-     while ((
-         std::abs(ideal - approximation) >= uncertainty
-     ) && iter < MAX_ITER) {
+     while (std::abs(ideal - approximation) >= uncertainty
+              && iter < MAX_ITER) {
        if (approximation < ideal) {
-         left_num = approximation_num;  left_den = approximation_den;
+         left_num = mediant_num;
+         left_den = mediant_den;
          path.push_back('R');
        } else {
-         right_num = approximation_num; right_den = approximation_den;
+         right_num = mediant_num;
+         right_den = mediant_den;
          path.push_back('L');
        }
-       approximation_num = left_num + right_num;
-       approximation_den = left_den + right_den;
-       if (approximation_den == 0) break;
+       mediant_num = left_num + right_num;
+       mediant_den = left_den + right_den;
+       if (mediant_den == 0) break;
        approximation = round_to_precision(
-         static_cast<double>(approximation_num) / approximation_den
+         double(mediant_num) / mediant_den
        );
        ++iter;
-
-       // Rcpp::Rcout << "iter=" << iter
-       //             << " approximation=" << approximation
-       //             << " num=" << approximation_num
-       //             << " den=" << approximation_den
-       //             << std::endl;
-
      }
      if (iter >= MAX_ITER) {
-       Rcpp::warning("rational_fractions: max iterations (%d) reached at index %d", MAX_ITER, i);
+       Rcpp::warning("rational_fractions: max iterations (%d) reached at index %d",
+                     MAX_ITER, i);
      }
 
-     nums[i]           = approximation_num;
-     dens[i]           = approximation_den;
+     // record into slot i
+     nums[i]           = mediant_num;
+     dens[i]           = mediant_den;
      approximations[i] = approximation;
      errors[i]         = round_to_precision(approximation - ideal);
      depths[i]         = iter;
-     // Build a simple path string of R/L moves
-     paths[i]          = (iter < MAX_ITER
-                            ? std::string(path.begin(), path.end())
-                              : std::string());
-     thomae[i]         = (approximation_den ? 1.0 / approximation_den : NA_REAL);
-     euclids_orchard_height[i]
-     = (approximation_den
-          ? 1.0 / (std::abs(approximation_num) + approximation_den)
-          : NA_REAL);
-
+     paths[i]          = std::string(path.begin(), path.end());
+     if (mediant_den != 0) {
+       thomae[i]               = 1.0 / mediant_den;
+       euclids_orchard_height[i] = 1.0 / (std::abs(mediant_num) + mediant_den);
+     }
    }
 
-   // pack constant uncertainty vector
+   // ─── slice off the last, unused row (index n-1) ───
+   R_xlen_t m = n - 1;
    Range keep(0, m - 1);
 
-   // Subset every result vector:
-   IntegerVector  nums2  = nums[keep];
-   IntegerVector  dens2  = dens[keep];
-   IntegerVector  depths2= depths[keep];
-   NumericVector  approx2= approximations[keep];
-   NumericVector  err2   = errors[keep];
-   NumericVector  thom2  = thomae[keep];
-   NumericVector  eoh2   = euclids_orchard_height[keep];
-   CharacterVector paths2= paths[keep];
-   // And slice x so it lines up with i+1→i:
-   NumericVector x2 = x[ Range(1, n-1) ];
-   NumericVector unc2(m, uncertainty);
-   // ↑───────────────────────────────────────────────────────
+   IntegerVector  nums2    = nums[keep];
+   IntegerVector  dens2    = dens[keep];
+   IntegerVector  depths2  = depths[keep];
+   NumericVector  approx2  = approximations[keep];
+   NumericVector  errors2  = errors[keep];
+   NumericVector  thomae2  = thomae[keep];
+   NumericVector  eoh2     = euclids_orchard_height[keep];
+   CharacterVector paths2  = paths[keep];
+   // align x so row i corresponds to x[i+1]
+   NumericVector  x2       = x[ Range(1, n - 1) ];
+   NumericVector  unc2(m, uncertainty);
 
-   // Now call your dataframe builder with the *shorter* vectors:
    return rational_fraction_dataframe(
      nums2, dens2, approx2,
-     x2, err2, thom2, eoh2,
+     x2, errors2, thomae2, eoh2,
      depths2, paths2, unc2
    );
-
  }
 
  //' approximate_rational_fractions
