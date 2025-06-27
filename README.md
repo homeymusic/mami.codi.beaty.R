@@ -106,7 +106,17 @@ $$
 ### Relative Frequency Uncertainty
 
 $$
-\frac{\Delta \omega}{\omega_{ref}} \ge \frac{1}{4 \pi n} \quad \text{and} \quad \frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi n}\
+\frac{\Delta \omega}{\omega_{ref}} \ge \frac{1}{4 \pi n}
+\quad \text{and} \quad
+\frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi n}
+$$
+
+#### Weber’s law (just-noticeable relative threshold)
+
+$$
+\frac{\Delta f}{f_{\rm ref}} = k_W,
+\quad
+k_W = \frac{1}{4\pi n}
 $$
 
 ## Relative Rational Approximation Uncertainty
@@ -133,30 +143,24 @@ $$
 ### Rational Approximation Uncertainty
 
 $$
-\Delta f = \bigl| f - \widetilde f \bigr| = \bigl| f - f_{ref}  \frac{a}{b} \bigr| = \frac{f_{ref}}{f_{ref}}  \bigl| f - f_{ref}  \frac{a}{b} \bigr| = f_{ref} \bigl| \frac{f}{f_{ref}} - \frac{a}{b} \bigr|
+\Delta f = \bigl| f - \widetilde f \bigr|
+= \bigl| f - f_{ref}  \frac{a}{b} \bigr|
+= f_{ref} \bigl| \tfrac{f}{f_{ref}} - \tfrac{a}{b}\bigr|
 $$
 
 $$
-\frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi n}
-$$
-
-$$
-\frac{\Delta f}{f_{ref}} =  \frac{f_{ref} \bigl| \frac{f}{f_{ref}} - \frac{a}{b} \bigr|}{f_{ref}}  = \bigl| \frac{f}{f_{ref}} - \frac{a}{b}\bigr| \ge \frac{1}{4 \pi n}
-$$
-
-$$
-\bigl| \frac{f}{f_{ref}} - \frac{a}{b}\bigr| \ge \frac{1}{4 \pi n}
+\bigl| \tfrac{f}{f_{ref}} - \tfrac{a}{b}\bigr| \ge \frac{1}{4 \pi n}
 $$
 
 ## Stern-Brocot: Traversal
 
 $$
 \begin{aligned}
-&\mathbf{WHILE} \Bigl|\tfrac{f}{f_{\mathrm{ref}}}-\tfrac{a}{b}\Bigr| \ge \tfrac{1}{4\pi n}
+&\mathbf{WHILE}\;\Bigl|\tfrac{f}{f_{\mathrm{ref}}}-\tfrac{a}{b}\Bigr| \ge \tfrac{1}{4\pi n}
 \quad\mathbf{DO}\\
 &\quad a  \gets  a_{\mathrm{left}} + a_{\mathrm{right}}\\
 &\quad b  \gets  b_{\mathrm{left}} + b_{\mathrm{right}}\\
-&\quad \mathbf{IF} \tfrac{f}{f_{\mathrm{ref}}} > \tfrac{a}{b} \mathbf{THEN}\\
+&\quad \mathbf{IF}\;\tfrac{f}{f_{\mathrm{ref}}} > \tfrac{a}{b}\;\mathbf{THEN}\\
 &\quad\quad a_{\mathrm{left}} \gets a,\quad b_{\mathrm{left}} \gets b\\
 &\quad \mathbf{ELSE}\\
 &\quad\quad a_{\mathrm{right}} \gets a,\quad b_{\mathrm{right}} \gets b\\
@@ -195,13 +199,21 @@ $$
 ### Fundamental Cycle Length of a N-Tone Chord
 
 $$
-\Lambda  = \mathrm{lcm}(b_1,b_2,\dots,b_N) \quad \text{when} \quad \gcd(a_1,\dots,a_N)=1
+\Lambda  = \mathrm{lcm}(b_1,b_2,\dots,b_N)
+\quad\text{when}\quad
+\gcd(a_1,\dots,a_N)=1
 $$
 
 ### Psychophysical Periodicity
 
 $$
 \psi  = \log_2 \bigl(\Lambda\bigr) \quad \bigl[\text{units: Sz}\bigr]
+$$
+
+#### Fechner’s law (logarithmic sensation scaling)
+
+$$
+\psi = C \,\log_2\!\bigl(\Lambda/\Lambda_0\bigr)
 $$
 
 #### Major-Minor: Temporal and Spatial Periodicity Difference
@@ -224,7 +236,7 @@ $$
 
 ## Pseudo-Octaves: Perception of Stretching and Compressing
 
-### Heurisitc to Find Pseudo Octave of a N-Tone Chord
+### Heuristic to Find Pseudo Octave of a N-Tone Chord
 
 $$
 \begin{aligned}
@@ -232,7 +244,7 @@ $$
 &\quad \mathbf{FOR}\; j \gets i+1 \;\mathbf{TO}\; N \;\mathbf{DO}\\
 &\quad\quad \mathrm{approximation} \gets \dfrac{\mathrm{ratios}[i]}{\mathrm{ratios}[j]}\\
 &\quad\quad \mathrm{ideal} \gets \mathrm{round}(\mathrm{approximation})\\
-&\quad\quad \mathbf{IF}\;\dfrac{\lvert \mathrm{ideal} - \mathrm{approximation}\rvert}{\mathrm{ideal}} < \log_{2}\!\bigl(1 + \tfrac{1}{4\pin}\bigr)\;\mathbf{THEN}\\
+&\quad\quad \mathbf{IF}\;\dfrac{\lvert \mathrm{ideal} - \mathrm{approximation}\rvert}{\mathrm{ideal}} < \log_{2}\!\bigl(1 + \tfrac{1}{4\pi n}\bigr)\;\mathbf{THEN}\\
 &\quad\quad\quad \mathrm{octave_{\mathrm{pseudo}}} \gets 2^{\frac{\ln(\mathrm{approximation})}{\ln(\mathrm{ideal})}}\\
 &\quad\quad\quad \mathrm{candidates} \gets \mathrm{candidates} \cup \{\mathrm{octave_{\mathrm{pseudo}}}\}\\
 &\quad\quad \mathbf{END\_IF}\\
