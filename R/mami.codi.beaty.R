@@ -32,6 +32,8 @@ mami.codi.beaty <- function(
     generate_stimulus() %>%
     generate_superposition_envelope() %>%
     # Frequency Domain
+    compute_space_octave_cycles() %>%
+    # compute_time_octave_cycles() %>%
     compute_space_cycles() %>%
     compute_time_cycles() %>%
     compute_energy_per_cycle() %>%
@@ -101,6 +103,41 @@ generate_superposition_envelope <- function(x) {
     )
 }
 
+#' Compute the spatial octave cycle length of the complex waveform.
+#'
+#' Computes the spatial octave cycle length from a wavelength spectrum that
+#' includes stimulus, side bands.
+#'
+#' @param x Wavelength spectrum that include stimulus, side bands.
+#'
+#' @return spatial octave cycle length
+#'
+#' @rdname compute_space_octave_cycles
+#' @export
+compute_space_octave_cycles <- function(
+    x
+) {
+
+  wavelength_spectrum = validate_combine_spectra(
+    x$stimulus_wavelength_spectrum[[1]]
+  )
+
+  l_min <- min(x$stimulus_wavelength_spectrum[[1]]$wavelength)
+  l = wavelength_spectrum$wavelength
+
+  x %>% dplyr::mutate(
+
+    compute_cycle_length(
+      log2(OCTAVE_RATIO + (l - l_min)),
+      log2(OCTAVE_RATIO),
+      UNCERTAINTY,
+      DIMENSION$SPACE_OCTAVE
+    )
+
+  )
+
+}
+
 #' Compute the spatial cycle length of the complex waveform.
 #'
 #' Computes the spatial cycle length from a wavelength spectrum that
@@ -129,6 +166,7 @@ compute_space_cycles <- function(
     compute_cycle_length(
       l,
       l_min,
+      UNCERTAINTY,
       DIMENSION$SPACE
     ),
 
@@ -167,6 +205,7 @@ compute_time_cycles <- function(
     compute_cycle_length(
       f,
       f_min,
+      UNCERTAINTY,
       DIMENSION$TIME
     ),
 
@@ -187,9 +226,9 @@ compute_time_cycles <- function(
 #'
 #' @rdname compute_cycle_length
 #' @export
-compute_cycle_length <- function(x, ref, dimension) {
+compute_cycle_length <- function(x, ref, uncertainty, dimension) {
 
-  fractions = approximate_rational_fractions(x, ref, UNCERTAINTY_LIMIT / NUMBER_OF_OBSERVATION_PERIODS)
+  fractions = approximate_rational_fractions(x, ref, uncertainty)
 
   t = tibble::tibble_row(
     cycle_length = lcm_integers(fractions$den),
@@ -288,9 +327,13 @@ energy_per_cycle <- function(
 
 UNCERTAINTY_LIMIT = 1 / (4 * pi)
 NUMBER_OF_OBSERVATION_PERIODS = 1
+UNCERTAINTY = UNCERTAINTY_LIMIT / NUMBER_OF_OBSERVATION_PERIODS
 SPEED_OF_SOUND = hrep::midi_to_freq(65)
+OCTAVE_RATIO = 2.0
 
 DIMENSION <- list(
+  SPACE_OCTAVE = 'space_octave',
+  TIME_OCTAVE  = 'time_octave',
   SPACE = 'space',
   TIME  = 'time'
 )
