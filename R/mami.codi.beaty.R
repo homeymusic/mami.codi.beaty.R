@@ -233,7 +233,7 @@ compute_harmony_perception <- function(x) {
     stern_brocot_time_depth  = log2(.data$time_depth),
     stern_brocot_space_depth = log2(.data$space_depth),
 
-    stern_brocot_depth      = log2(.data$space_depth * .data$time_depth),
+    stern_brocot_depth      = .data$stern_brocot_time_depth + .data$stern_brocot_space_depth,
     stern_brocot_depth_diff = log2(.data$time_depth / .data$space_depth),
     # end legacy
 
@@ -245,7 +245,7 @@ compute_harmony_perception <- function(x) {
     time_roughness  = log2(.data$time_depth),
     space_roughness = log2(.data$space_depth),
 
-    time_dissonance  = .data$time_periodicity -  .data$time_roughness,
+    time_dissonance  = .data$time_periodicity  - .data$time_roughness,
     space_dissonance = .data$space_periodicity - .data$space_roughness,
 
     dissonance = .data$space_dissonance + .data$time_dissonance,

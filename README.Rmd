@@ -198,11 +198,6 @@ p = params %>% purrr::map(\(p) {
   )
   cat("  \n")
   
-  print(plot_semitone_energy_per_cycle(chords, paste('Energy Per Cycle'),
-                              goal=experiment, sigma=sigma,include_points=T,include_line=T,
-                              black_vlines=black_vlines,gray_vlines=gray_vlines))
-  cat("  \n")
-  
 })
 ```
 
@@ -242,9 +237,9 @@ $$
 #### Weber’s law (just-noticeable relative threshold)
 
 $$
-\frac{\Delta f}{f_{\rm ref}} = k_W,
+\frac{\Delta f}{f_{\rm ref}} = k,
 \quad
-k_W = \frac{1}{4\pi n}
+k = \frac{1}{4\pi n} \quad \text{Weber's Constant}
 $$
 
 ## Relative Rational Approximation Uncertainty
@@ -341,8 +336,30 @@ $$
 #### Fechner’s law (logarithmic sensation scaling)
 
 $$
-\psi = C \,\log_2\!\bigl(\Lambda/\Lambda_0\bigr)
+\psi = C \,\log_2\!\bigl(\tfrac{\Lambda}{\Lambda_0}\bigr)
 $$
+
+##### Special case: recover “bits of periodicity”
+
+By choosing  
+- \(C = 1\)  
+- \(\Lambda_0 = 1\)  
+
+Fechner’s law reduces exactly to the psychophysical periodicity definition:
+
+$$
+\psi = 1 \,\log_2\!\bigl(\Lambda / 1\bigr)
+\;=\;
+\log_2(\Lambda)
+$$
+
+###### Justification for \(C\)
+
+We set \(C=1\) because we are working with a purely relative scale—each doubling of \(\Lambda\) maps to exactly one Sz unit with no additional gain factor.
+
+###### Justification for \(\Lambda_0\)
+
+We choose \(\Lambda_0=1\) to anchor the zero‐point of perception at a single cycle, so that \(\psi=0\) precisely when the stimulus contains one cycle.
 
 #### Major-Minor: Temporal and Spatial Periodicity Difference
 
