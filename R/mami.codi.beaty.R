@@ -33,7 +33,7 @@ mami.codi.beaty <- function(
     generate_superposition_envelope() %>%
     # Frequency Domain
     compute_space_octave_cycles() %>%
-    # compute_time_octave_cycles() %>%
+    compute_time_octave_cycles() %>%
     compute_space_cycles() %>%
     compute_time_cycles() %>%
     compute_energy_per_cycle() %>%
@@ -130,8 +130,43 @@ compute_space_octave_cycles <- function(
     compute_cycle_length(
       log2(OCTAVE_RATIO + (l - l_min)),
       log2(OCTAVE_RATIO),
-      UNCERTAINTY,
+      log2(1+UNCERTAINTY),
       DIMENSION$SPACE_OCTAVE
+    )
+
+  )
+
+}
+
+#' Compute the temporal octave cycle length of a complex waveform.
+#'
+#' Computes the temporal octave cycle length from a frequency spectrum that
+#' includes stimulus and side bands.
+#'
+#' @param x Frequency spectrum that include stimulus and side bands.
+#'
+#' @return temporal cycle length
+#'
+#' @rdname compute_time_octave_cycles
+#' @export
+compute_time_octave_cycles <- function(
+    x
+) {
+
+  frequency_spectrum = validate_combine_spectra(
+    x$stimulus_frequency_spectrum[[1]]
+  )
+
+  f_min <- min(x$stimulus_frequency_spectrum[[1]]$frequency)
+  f     <- frequency_spectrum$frequency
+
+  x %>% dplyr::mutate(
+
+    compute_cycle_length(
+      log2(OCTAVE_RATIO + (f - f_min)),
+      log2(OCTAVE_RATIO),
+      log2(1+UNCERTAINTY),
+      DIMENSION$TIME_OCTAVE
     )
 
   )
@@ -182,7 +217,7 @@ compute_space_cycles <- function(
 #' Computes the temporal cycle length from a frequency spectrum that
 #' includes stimulus and side bands.
 #'
-#' @param x Wavelength spectrum that include stimulus and side bands.
+#' @param x Frequency spectrum that include stimulus and side bands.
 #'
 #' @return temporal cycle length
 #'
@@ -235,7 +270,7 @@ compute_cycle_length <- function(x, ref, uncertainty, dimension) {
     euclids_orchard_height = sum(fractions$euclids_orchard_height),
     thomae = sum(fractions$thomae),
     depth = sum(fractions$depth),
-    relative_uncertainty = sum(abs(fractions$error)),
+    error_sum = sum(abs(fractions$error)),
     fractions = list(fractions)
   ) %>% dplyr::rename_with(~ paste0(dimension, '_' , .))
   t
@@ -280,7 +315,7 @@ compute_harmony_perception <- function(x) {
     stern_brocot_depth      = log2(.data$space_depth * .data$time_depth),
     stern_brocot_depth_diff = log2(.data$time_depth / .data$space_depth),
 
-    relative_uncertainty    = .data$space_relative_uncertainty + .data$time_relative_uncertainty
+    error_sum    = .data$space_error_sum + .data$time_error_sum
 
   )
 
