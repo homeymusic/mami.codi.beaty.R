@@ -11,12 +11,12 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // approximate_pseudo_octave
-double approximate_pseudo_octave(const Rcpp::NumericVector& ratios, const double uncertainty);
+double approximate_pseudo_octave(Rcpp::NumericVector ratios, const double uncertainty);
 RcppExport SEXP _mami_codi_beaty_R_approximate_pseudo_octave(SEXP ratiosSEXP, SEXP uncertaintySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type ratios(ratiosSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ratios(ratiosSEXP);
     Rcpp::traits::input_parameter< const double >::type uncertainty(uncertaintySEXP);
     rcpp_result_gen = Rcpp::wrap(approximate_pseudo_octave(ratios, uncertainty));
     return rcpp_result_gen;

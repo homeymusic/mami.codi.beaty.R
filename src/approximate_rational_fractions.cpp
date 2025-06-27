@@ -5,10 +5,12 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
+double approximate_pseudo_octave(Rcpp::NumericVector ratios,
                                  const double uncertainty) {
   int n = ratios.size();
   if (n <= 2) return 2.0;
+
+  std::sort(ratios.begin(), ratios.end());
 
   std::vector<double> log2_ratios(n);
   for (int i = 0; i < n; ++i) {
@@ -22,11 +24,8 @@ double approximate_pseudo_octave(const Rcpp::NumericVector& ratios,
 
   for (int i = 0; i < n; ++i) {
     for (int j = i + 1; j < n; ++j) {
-      bool i_larger = ratios[i] >= ratios[j];
-      int  small_i  = i_larger ? j : i;
-      int  large_i  = i_larger ? i : j;
 
-      double log_diff      = log2_ratios[large_i] - log2_ratios[small_i];
+      double log_diff      = log2_ratios[j] - log2_ratios[i];
       double approximation = std::exp2(log_diff);
       int    ideal         = int(std::round(approximation));
 
