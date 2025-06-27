@@ -35,8 +35,6 @@ double approximate_pseudo_octave(Rcpp::NumericVector unsorted_ratios,
           std::abs(ideal - approximation) / ideal < log2_uncertainty) {
         double oct = std::exp2(log_diff / std::log2((double)ideal));
         candidates.push_back(oct);
-      } else {
-        break;
       }
     }
   }
