@@ -230,8 +230,8 @@ compute_harmony_perception <- function(x) {
 
   x %>% dplyr::mutate(
 
-    space_roughness   = -.data$space_thomae,
-    time_roughness    = -.data$time_thomae,
+    space_roughness   = log(.data$space_depth, base=GOLDEN_RATIO),
+    time_roughness    = log(.data$time_depth,  base=GOLDEN_RATIO),
 
     space_periodicity = log2(.data$space_cycle_length),
     time_periodicity  = log2(.data$time_cycle_length),
@@ -306,3 +306,4 @@ MAX_FREQUENCY    <- 4000
 MAX_WAVELENGTH   <- SPEED_OF_SOUND / 20
 MIN_WAVELENGTH   <- SPEED_OF_SOUND / 20000
 
+GOLDEN_RATIO   = (1+sqrt(5)) / 2
