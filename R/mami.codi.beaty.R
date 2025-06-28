@@ -230,8 +230,8 @@ compute_harmony_perception <- function(x) {
 
   x %>% dplyr::mutate(
 
-    space_roughness   = log(.data$space_depth, base=GOLDEN_RATIO),
-    time_roughness    = log(.data$time_depth,  base=GOLDEN_RATIO),
+    space_roughness   = log(.data$space_depth, base = GOLDEN_RATIO),
+    time_roughness    = log(.data$time_depth,  base = GOLDEN_RATIO),
 
     space_periodicity = log(.data$space_cycle_length, base=OCTAVE_RATIO),
     time_periodicity  = log(.data$time_cycle_length,  base=OCTAVE_RATIO),
