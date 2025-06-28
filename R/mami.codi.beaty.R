@@ -195,6 +195,7 @@ compute_cycle_length <- function(x, ref, dimension) {
     cycle_length = lcm_integers(fractions$den),
     euclids_orchard_height = sum(fractions$euclids_orchard_height),
     thomae = sum(fractions$thomae),
+    minkowski = sum(fractions$minkowski),
     depth = sum(fractions$depth),
     error_sum = sum(abs(fractions$error)),
     fractions = list(fractions)
@@ -229,21 +230,25 @@ compute_harmony_perception <- function(x) {
 
   x %>% dplyr::mutate(
 
+    space_roughness   = -.data$space_thomae,
+    time_roughness    = -.data$time_thomae,
+
     space_periodicity = log2(.data$space_cycle_length),
     time_periodicity  = log2(.data$time_cycle_length),
 
-    space_roughness = log2(.data$space_depth),
-    time_roughness  = log2(.data$time_depth),
+    space_dissonance  = .data$space_periodicity + .data$space_roughness,
+    time_dissonance   = .data$time_periodicity  + .data$time_roughness,
 
-    space_dissonance = .data$space_periodicity - .data$space_roughness,
-    time_dissonance  = .data$time_periodicity  - .data$time_roughness,
-
-    dissonance = .data$space_dissonance + .data$time_dissonance,
-    majorness  = .data$space_dissonance - .data$time_dissonance
+    dissonance        = .data$space_dissonance + .data$time_dissonance,
+    majorness         = .data$space_dissonance - .data$time_dissonance
 
   )
 
 }
+
+triangular_root <- function(x) {
+  (sqrt(8 * x + 1) - 1) / 2
+ }
 
 #' Compute energy per cycle
 #'
@@ -300,3 +305,4 @@ MAX_FREQUENCY    <- 4000
 # Place-coding (BM) range
 MAX_WAVELENGTH   <- SPEED_OF_SOUND / 20
 MIN_WAVELENGTH   <- SPEED_OF_SOUND / 20000
+
