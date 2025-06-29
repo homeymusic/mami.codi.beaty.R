@@ -32,6 +32,7 @@ mami.codi.beaty <- function(
     generate_stimulus() %>%
     generate_superposition_envelope() %>%
     # Frequency Domain
+    # TODO: make pseudo octave a primary step here
     compute_space_cycles() %>%
     compute_time_cycles() %>%
     compute_energy_per_cycle() %>%
