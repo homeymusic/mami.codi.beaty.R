@@ -192,7 +192,8 @@ compute_cycle_length <- function(x, ref, dimension) {
   fractions = approximate_rational_fractions(x, ref, UNCERTAINTY_LIMIT / NUMBER_OF_OBSERVATION_PERIODS)
 
   t = tibble::tibble_row(
-    cycle_length = lcm_integers(fractions$den),
+    actual_cycle_length = lcm_integers(fractions$den),
+    cycle_length = min(.data$actual_cycle_length, 80),
     euclids_orchard_height = sum(fractions$euclids_orchard_height),
     thomae = sum(fractions$thomae),
     minkowski = sum(fractions$minkowski),
