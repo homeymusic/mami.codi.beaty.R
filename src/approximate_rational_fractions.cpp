@@ -4,53 +4,6 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
-// [[Rcpp::export]]
-double approximate_pseudo_octave(Rcpp::NumericVector unsorted_ratios,
-                                 const double uncertainty) {
-  int n = unsorted_ratios.size();
-  if (n <= 2) return 2.0;
-
-  // Copy into our working 'ratios' and sort
-  std::vector<double> ratios(unsorted_ratios.begin(), unsorted_ratios.end());
-  std::sort(ratios.begin(), ratios.end());
-
-  // Precompute log2 of each ratio
-  std::vector<double> log2_ratios(n);
-  for (int i = 0; i < n; ++i) {
-    log2_ratios[i] = std::log2(ratios[i]);
-  }
-
-  double log2_uncertainty = std::log2(1.0 + uncertainty);
-
-  std::vector<double> candidates;
-  candidates.reserve(n * (n - 1) / 2);
-
-  for (int i = 0; i < n; ++i) {
-    for (int j = i + 1; j < n; ++j) {
-      double log_diff      = log2_ratios[j] - log2_ratios[i];
-      double approximation = std::exp2(log_diff);
-      int    ideal         = int(std::round(approximation));
-
-      if (ideal >= 2 &&
-          std::abs(ideal - approximation) / ideal < log2_uncertainty) {
-        double oct = std::exp2(log_diff / std::log2((double)ideal));
-        candidates.push_back(oct);
-      }
-    }
-  }
-
-  if (candidates.empty()) return 2.0;
-
-  Rcpp::NumericVector qualifiedCandidates(candidates.begin(), candidates.end());
-  Rcpp::IntegerVector counts = Rcpp::table(qualifiedCandidates);
-  Rcpp::CharacterVector candidateBins = counts.names();
-  Rcpp::IntegerVector idx = Rcpp::seq_along(counts) - 1;
-  std::sort(idx.begin(), idx.end(),
-            [&](int a, int b){ return counts[a] > counts[b]; });
-
-  return std::stod(Rcpp::as<std::string>(candidateBins[idx[0]]));
-}
-
 DataFrame rational_fraction_dataframe(const IntegerVector &nums,
                                       const IntegerVector &dens,
                                       const NumericVector &approximations,
@@ -178,6 +131,71 @@ inline double round_to_precision(double value, int precision = 15) {
      depths, paths, unc
    );
  }
+
+// [[Rcpp::export]]
+double approximate_pseudo_octave(Rcpp::NumericVector unsorted_ratios,
+                                 const double uncertainty) {
+  int n = unsorted_ratios.size();
+  if (n <= 2) return 2.0;
+
+  // 1) sort & precompute logs
+  std::vector<double> ratios(unsorted_ratios.begin(), unsorted_ratios.end());
+  std::sort(ratios.begin(), ratios.end());
+  std::vector<double> log2_ratios(n);
+  for (int i = 0; i < n; ++i) log2_ratios[i] = std::log2(ratios[i]);
+
+  double log2_uncertainty = std::log2(1.0 + uncertainty);
+  std::vector<double> rawOcts;
+  rawOcts.reserve(n * (n - 1) / 2);
+
+  // 2) collect all raw octave candidates
+  for (int i = 0; i < n; ++i) {
+    for (int j = i + 1; j < n; ++j) {
+      double log_diff      = log2_ratios[j] - log2_ratios[i];
+      double approximation = std::exp2(log_diff);
+      int    ideal         = int(std::round(approximation));
+
+      if (ideal >= 2 &&
+          std::abs(ideal - approximation) / ideal < log2_uncertainty) {
+        double oct = std::exp2(log_diff / std::log2((double)ideal));
+        rawOcts.push_back(oct);
+      }
+    }
+  }
+
+  if (rawOcts.empty()) return 2.0;
+
+  // 3) pick the most-frequent raw octave
+  Rcpp::NumericVector vc(rawOcts.begin(), rawOcts.end());
+  Rcpp::IntegerVector counts = Rcpp::table(vc);
+  Rcpp::CharacterVector bins = counts.names();
+  Rcpp::IntegerVector idx = Rcpp::seq_along(counts) - 1;
+  std::sort(idx.begin(), idx.end(),
+            [&](int a, int b){ return counts[a] > counts[b]; });
+  double bestOct = std::stod(Rcpp::as<std::string>(bins[idx[0]]));
+  int    ideal   = int(std::round(bestOct));
+
+  // 4) rationalize *once* using your original call signature
+  double rawError = std::abs(ideal - bestOct);
+  Rcpp::NumericVector x_err = Rcpp::NumericVector::create(rawError);
+  Rcpp::DataFrame    rf    = rational_fractions(
+    x_err,
+    ideal,
+    log2_uncertainty
+  );
+  double rationalError = Rcpp::as<Rcpp::NumericVector>(rf["approximation"])[0];
+
+  // 5) reconstruct and compute final octave
+  double reconstructed = (bestOct >= ideal)
+    ? ideal * (1 + rationalError)
+      : ideal * (1 - rationalError);
+  double finalOct = std::exp2(
+    std::log2(reconstructed)
+    / std::log2((double)ideal)
+  );
+
+  return finalOct;
+}
 
  //' approximate_rational_fractions
  //'
