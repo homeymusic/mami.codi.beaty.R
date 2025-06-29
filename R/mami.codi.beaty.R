@@ -193,7 +193,7 @@ compute_cycle_length <- function(x, ref, dimension) {
 
   t = tibble::tibble_row(
     actual_cycle_length = lcm_integers(fractions$den),
-    cycle_length = min(.data$actual_cycle_length, 80),
+    cycle_length = min(.data$actual_cycle_length, 300),
     euclids_orchard_height = sum(fractions$euclids_orchard_height),
     thomae = sum(fractions$thomae),
     minkowski = sum(fractions$minkowski),
