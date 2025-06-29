@@ -193,6 +193,7 @@ inline double round_to_precision(double value, int precision = 15) {
  // [[Rcpp::export]]
  DataFrame approximate_rational_fractions(NumericVector& x,
                                           const double x_ref,
+                                          const double pseudo_octave,
                                           const double uncertainty) {
    // de-duplicate
    x = unique(x);
@@ -206,9 +207,6 @@ inline double round_to_precision(double value, int precision = 15) {
    for (int i = 0; i < n; ++i) {
      ratios[i] = x[i] / x_ref;
    }
-
-   // find the pseudo-octave in ratio-space
-   double pseudo_octave = approximate_pseudo_octave(ratios, uncertainty);
 
    // build the transformed vector for coprime search
    NumericVector pseudo_x(n), uncertainties(n, uncertainty);

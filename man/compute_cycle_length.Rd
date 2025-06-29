@@ -4,7 +4,7 @@
 \alias{compute_cycle_length}
 \title{Compute the cycle length of a complex wave}
 \usage{
-compute_cycle_length(x, ref, dimension)
+compute_cycle_length(x, ref, pseudo_octave, dimension)
 }
 \arguments{
 \item{x}{Spectrum representing a complex waveform}

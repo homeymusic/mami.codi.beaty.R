@@ -33,6 +33,8 @@ mami.codi.beaty <- function(
     generate_superposition_envelope() %>%
     # Frequency Domain
     # TODO: make pseudo octave a primary step here
+    compute_space_pseudo_octave() %>%
+    compute_time_pseudo_octave() %>%
     compute_space_cycles() %>%
     compute_time_cycles() %>%
     compute_energy_per_cycle() %>%
@@ -102,6 +104,60 @@ generate_superposition_envelope <- function(x) {
     )
 }
 
+#' Compute the spatial pseudo octave of the complex waveform.
+#'
+#' Computes the spatial pseudo octave from a wavelength spectrum that
+#' includes stimulus, side bands.
+#'
+#' @param x Wavelength spectrum that include stimulus, side bands.
+#'
+#' @return spatial pseudo octave
+#'
+#' @rdname compute_space_pseudo_octave
+#' @export
+compute_space_pseudo_octave <- function(
+    x
+) {
+
+  l     = x$stimulus_wavelength_spectrum[[1]]$wavelength
+  l_min = min(l)
+  r     = l / l_min
+  real_pseudo_octave = approximate_pseudo_octave(r, UNCERTAINTY_LIMIT)
+  rational_pseudo_octave = rational_fractions(real_pseudo_octave, 1.0, UNCERTAINTY_LIMIT)$approximation
+
+  x %>% dplyr::mutate(
+    space_pseudo_octave = rational_pseudo_octave
+  )
+
+}
+
+#' Compute the temporal pseudo octave of the complex waveform.
+#'
+#' Computes the temporal pseudo octave from a frequency spectrum that
+#' includes stimulus, side bands.
+#'
+#' @param x Frequency spectrum that include stimulus, side bands.
+#'
+#' @return temporal pseudo octave
+#'
+#' @rdname compute_time_pseudo_octave
+#' @export
+compute_time_pseudo_octave <- function(
+    x
+) {
+
+  f     = x$stimulus_frequency_spectrum[[1]]$frequency
+  f_min = min(f)
+  r     = f / f_min
+  real_pseudo_octave = approximate_pseudo_octave(r, UNCERTAINTY_LIMIT)
+  rational_pseudo_octave = rational_fractions(real_pseudo_octave, 1.0, UNCERTAINTY_LIMIT)$approximation
+
+  x %>% dplyr::mutate(
+    time_pseudo_octave = rational_pseudo_octave
+  )
+
+}
+
 #' Compute the spatial cycle length of the complex waveform.
 #'
 #' Computes the spatial cycle length from a wavelength spectrum that
@@ -130,6 +186,7 @@ compute_space_cycles <- function(
     compute_cycle_length(
       l,
       l_min,
+      .data$space_pseudo_octave,
       DIMENSION$SPACE
     ),
 
@@ -168,6 +225,7 @@ compute_time_cycles <- function(
     compute_cycle_length(
       f,
       f_min,
+      .data$time_pseudo_octave,
       DIMENSION$TIME
     ),
 
@@ -188,9 +246,9 @@ compute_time_cycles <- function(
 #'
 #' @rdname compute_cycle_length
 #' @export
-compute_cycle_length <- function(x, ref, dimension) {
+compute_cycle_length <- function(x, ref, pseudo_octave, dimension) {
 
-  fractions = approximate_rational_fractions(x, ref, UNCERTAINTY_LIMIT / NUMBER_OF_OBSERVATION_PERIODS)
+  fractions = approximate_rational_fractions(x, ref, pseudo_octave, UNCERTAINTY_LIMIT / NUMBER_OF_OBSERVATION_PERIODS)
 
   t = tibble::tibble_row(
     cycle_length = lcm_integers(fractions$den),
