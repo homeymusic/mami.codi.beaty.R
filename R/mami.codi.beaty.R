@@ -236,13 +236,10 @@ compute_harmony_perception <- function(x) {
     space_roughness   = log2(.data$space_depth), # spatial  energy density
     time_roughness    = log2(.data$time_depth),  # temporal energy density
 
-    space_dissonance  = .data$space_periodicity + .data$space_roughness, # spatial energy
-    time_dissonance   = .data$time_periodicity  + .data$time_roughness,  # temporal energy
+    space_dissonance  = sqrt(.data$space_periodicity^2 + .data$space_roughness^2), # spatial energy
+    time_dissonance   = sqrt(.data$time_periodicity^2  + .data$time_roughness^2),  # temporal energy
 
-    roughness         = .data$space_roughness + .data$time_roughness,
-    periodicity       = .data$space_periodicity + .data$time_periodicity,
-
-    dissonance        = sqrt(.data$roughness^2 + .data$periodicity^2),
+    dissonance        = .data$space_dissonance + .data$time_dissonance,
     majorness         = .data$space_dissonance - .data$time_dissonance
 
   )
