@@ -208,6 +208,11 @@ $$
 $$
 \Delta t = T = \frac{2 \pi }{\omega} = n \frac{2 \pi }{\omega_{ref}}, \quad n \enspace \text{periods}
 $$
+
+::: note
+NOTE: For our consonance modeling we use $n=1$ for all computations, but we leave $n$ throughout this text for completeness.
+:::
+
 $$
 \Delta t \Delta \omega = T \Delta \omega = n \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
 $$
@@ -216,9 +221,16 @@ $$
 
 $$
 \frac{\Delta \omega}{\omega_{ref}} \ge \frac{1}{4 \pi n}
-\quad \text{and} \quad
-\frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi n}
 $$
+
+$$
+\boxed 
+{
+\frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi n}
+}
+$$
+
+
 
 ## Relative Rational Approximation Uncertainty
 
@@ -246,18 +258,24 @@ $$
 $$
 \Delta f = \bigl| f - \widetilde f \bigr|
 = \bigl| f - f_{ref}  \frac{a}{b} \bigr|
+= \frac{f_{ref}}{f_{ref}} \bigl| f - f_{ref}  \frac{a}{b} \bigr|
 = f_{ref} \bigl| \tfrac{f}{f_{ref}} - \tfrac{a}{b}\bigr|
 $$
 
 $$
+\boxed {
 \bigl| \tfrac{f}{f_{ref}} - \tfrac{a}{b}\bigr| \ge \frac{1}{4 \pi n}
+}
 $$
 
 ## Stern-Brocot: Traversal
 
 $$
 \begin{aligned}
-&\mathbf{WHILE} \Bigl|\tfrac{f}{f_{\mathrm{ref}}}-\tfrac{a}{b}\Bigr| \ge \tfrac{1}{4\pi n}
+&\mathbf{WHILE} 
+\boxed {
+\Bigl|\tfrac{f}{f_{\mathrm{ref}}}-\tfrac{a}{b}\Bigr| \ge \tfrac{1}{4\pi n}
+}
 \quad\mathbf{DO}\\
 &\quad a  \gets  a_{\mathrm{left}} + a_{\mathrm{right}}\\
 &\quad b  \gets  b_{\mathrm{left}} + b_{\mathrm{right}}\\
@@ -286,13 +304,13 @@ $$
 ## Fundamental Frequency of a N-Tone Chord
 
 $$
-f_0 = f_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad a_i \perp b_i
+f_0 = f_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad f_{ref} = \mathrm{min}(f_1, f_2, \dots, f_N), \quad a_i \perp b_i
 $$
 
 ## Fundamental Wavelength of a N-Tone Chord
 
 $$
-\lambda_0 = \lambda_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad a_i \perp b_i
+\lambda_0 = \lambda_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad \lambda_{ref} = \mathrm{min}(\lambda_1, \lambda_2, \dots, \lambda_N), \quad a_i \perp b_i
 $$
 
 ## Stolzenburg Periodicity Perception
@@ -300,33 +318,57 @@ $$
 ### Fundamental Cycle Length of a N-Tone Chord
 
 $$
-\Lambda  = \mathrm{lcm}(b_1,b_2,\dots,b_N)
+L  = \mathrm{lcm}(b_1,b_2,\dots,b_N)
 \quad\text{when}\quad
 \gcd(a_1,\dots,a_N)=1
 $$
 
-### Psychophysical Periodicity
+### Periodicity: Rational Approximation Cycle Length
 
 $$
-\psi  = \log_2 \bigl(\Lambda\bigr) \quad \bigl[\text{units: Sz}\bigr]
+P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L_\lambda\bigr) 
 $$
 
-#### Major-Minor: Temporal and Spatial Periodicity Difference
+### Roughness: Stern-Brocot Traversal Depth
 
 $$
-\Psi_{MaMi}  = \psi_{t} - \psi_{x} \quad \bigl[\text{units: Sz}\bigr]
+R_f  = \log_2 \bigl(D_f\bigr) \quad \text{and} \quad R_\lambda  = \log_2 \bigl(D_\lambda\bigr)
 $$
 
-#### Consonance-Dissonance: Temporal and Spatial Periodicity Sum
+### Overall Frequency Dissonance
 
 $$
-\Psi_{CoDi}  = \psi_{t} + \psi_{x} \quad \bigl[\text{units: Sz}\bigr]
+\psi_f = P_f + R_f
 $$
 
-#### Beating: Stern-Brocot Traversal Depth
+### Overall Wavelength Dissonance
 
 $$
-\Psi_{Beaty} = \log_{2}(\Delta)
+\psi_\lambda = P_\lambda + R_\lambda
+$$
+
+### Major-Minor: Frequency and Wavelength Dissonance Difference
+
+$$
+\boxed {
+\Psi_{MaMi}  = \psi_\lambda - \psi_f
+}
+$$
+
+### Consonance-Dissonance: Frequency and Wavelength Dissonance Sum
+
+$$
+\boxed{
+\Psi_{CoDi}  = \psi_\lambda + \psi_f
+}
+$$
+
+### Beating: Frequency and Wavelength Roughness
+
+$$
+\boxed{
+\Psi_{Beaty}  = R_\lambda + R_f
+}
 $$
 
 ## Pseudo-Octaves: Perception of Stretching and Compressing
@@ -335,21 +377,78 @@ $$
 
 $$
 \begin{aligned}
-&\mathbf{FOR}  i \gets 1  \mathbf{TO}  N  \mathbf{DO}\\
-&\quad \mathbf{FOR}  j \gets i+1  \mathbf{TO}  N  \mathbf{DO}\\
-&\quad\quad \mathrm{approximation} \gets \dfrac{\mathrm{ratios}[i]}{\mathrm{ratios}[j]}\\
-&\quad\quad \mathrm{ideal} \gets \mathrm{round}(\mathrm{approximation})\\
-&\quad\quad \mathbf{IF} \dfrac{\lvert \mathrm{ideal} - \mathrm{approximation}\rvert}{\mathrm{ideal}} < \log_{2} \bigl(1 + \tfrac{1}{4\pi n}\bigr) \mathbf{THEN}\\
-&\quad\quad\quad \mathrm{octave_{\mathrm{pseudo}}} \gets 2^{\frac{\ln(\mathrm{approximation})}{\ln(\mathrm{ideal})}}\\
-&\quad\quad\quad \mathrm{candidates} \gets \mathrm{candidates} \cup \{\mathrm{octave_{\mathrm{pseudo}}}\}\\
+&\mathbf{FOR} i\gets 1 \mathbf{TO} N \mathbf{DO}\\
+&\quad \mathbf{FOR} j\gets i+1 \mathbf{TO} N \mathbf{DO}\\
+&\quad\quad approximation \gets \dfrac{r_{j}}{r_{i}}\\
+&\quad\quad ideal \gets \mathrm{round}(approximation)\\
+&\quad\quad \mathbf{UNLESS}
+\boxed{
+\dfrac{
+\bigl\lvert
+\log_{2}(approximation)
+-
+\log_{2}(ideal)
+\bigr\rvert
+}{
+\log_{2}(2.0)
+}
+\ge
+\log_{2}\bigl(1+\tfrac{1}{4\pi n}\bigr)
+}
+\mathbf{THEN}\\
+&\quad\quad\quad octave_{\mathrm{pseudo}}\gets  
+2.0^{\frac{\log_{2}(approximation)}{\log_{2}(ideal)}}\\
+&\quad\quad\quad candidates\gets candidates\cup\{octave_{\mathrm{pseudo}}\}\\
 &\quad\quad \mathbf{END\_IF}\\
 &\quad \mathbf{END\_FOR}\\
 &\mathbf{END\_FOR}\\
-&\mathbf{RETURN} \mathrm{most\_frequent}(\mathrm{candidates})\\
+&\mathbf{RETURN} most\_frequent(candidates)
 \end{aligned}
 $$
 
-# Related Theories
+
+
+# Appendix A: Relative Wavelength Uncertainty
+
+$$
+\Delta x \Delta k \ge \frac{1}{2}
+$$
+
+$$
+k = \frac{2\pi}{\lambda} = 2 \pi \lambda^-1
+$$
+
+$$
+\Delta k = 
+\left|\frac{dk}{d\lambda}\right|\Delta\lambda =
+\left|\frac{d (2 \pi \lambda^{-1})}{d\lambda}\right|\Delta\lambda = 
+2 \pi \lambda^{-2} \Delta \lambda =
+\frac{2\pi}{\lambda^2}\Delta\lambda
+$$
+
+$$
+\Delta x \frac{2\pi}{\lambda^2}\,\Delta\lambda \ge \frac{1}{2}
+$$
+
+$$
+\Delta x = n \lambda_{ref}, \quad n \enspace \text{wavelengths}
+$$
+
+$$
+\Delta x \frac{2\pi}{\lambda^2} \Delta\lambda =
+n \lambda_{ref} \frac{2\pi}{\lambda^2_{ref}} \Delta\lambda =
+n \frac{2 \pi \Delta \lambda}{\lambda_{ref}} 
+ \ge \frac{1}{2}
+$$
+
+$$
+\boxed{
+\frac{\Delta \lambda}{\lambda_{ref}} 
+ \ge \frac{1}{4 \pi n}
+}
+$$
+
+# Appendix B: Related Theories
 
 ## Weber’s law
 
