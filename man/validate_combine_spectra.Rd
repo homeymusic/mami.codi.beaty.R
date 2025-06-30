@@ -4,7 +4,7 @@
 \alias{validate_combine_spectra}
 \title{Helper functions to combine spectra}
 \usage{
-validate_combine_spectra(..., tolerance = 1e-06)
+validate_combine_spectra(..., tolerance = 1e-15)
 }
 \description{
 Helper functions to combine spectra

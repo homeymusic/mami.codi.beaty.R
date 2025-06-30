@@ -75,7 +75,7 @@ empty_frequency_spectrum <- function() {
 }
 
 #' Helper functions to combine spectra
-validate_combine_spectra <- function(..., tolerance = 1e-6) {
+validate_combine_spectra <- function(..., tolerance = 1e-15) {
   # Collect all spectra passed in as a list
   spectra_list <- list(...)
 

@@ -189,7 +189,7 @@ compute_time_cycles <- function(
 #' @export
 compute_cycle_length <- function(x, ref, dimension) {
 
-  fractions = approximate_rational_fractions(x, ref, UNCERTAINTY_LIMIT / NUMBER_OF_OBSERVATION_PERIODS)
+  fractions = approximate_rational_fractions(x, ref, uncertainty())
 
   t = tibble::tibble_row(
     cycle_length = lcm_integers(fractions$den),
@@ -287,6 +287,20 @@ energy_per_cycle <- function(
 
 UNCERTAINTY_LIMIT = 1 / (4 * pi)
 NUMBER_OF_OBSERVATION_PERIODS = 1
+
+#' Compute uncertainty
+#'
+#' Uncertainty is the Heisenberg uncertainty limit divided by number of periods
+#'
+#'
+#' @return Uncertainty
+#'
+#' @rdname uncertainty
+#' @export
+uncertainty <- function() {
+  UNCERTAINTY_LIMIT / NUMBER_OF_OBSERVATION_PERIODS
+}
+
 SPEED_OF_SOUND = hrep::midi_to_freq(65)
 
 DIMENSION <- list(

@@ -344,6 +344,9 @@ $$
 
 ## Gabor Wavelet
 
+![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-5-2.png)<!-- -->
+
 TODO: show the error histogram.
 
 ### Daugman on Vision

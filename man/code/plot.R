@@ -233,8 +233,15 @@ plot_cofreq.cowave <- function(chords, title, chords_to_label=NULL,
     #            max(c(chords$time_consonance,chords$space_consonance)))) +
     {if (minimal) theme_homey_minimal(aspect.ratio=aspect.ratio) else theme_homey(aspect.ratio=aspect.ratio)}
 }
-plot_error_hist <- function(errors, bins=21, signal, variance, title='') {
+
+plot_error_hist <- function(errors, bins=21, signal, variance, title_expr) {
   px = pretty(c(-variance, errors, variance))
+  n_pts <- length(errors)
+
+  title_call <- substitute(title_expr)
+  full_title <- bquote(
+    .(title_call) ~ " with " * n == .(format(n_pts, big.mark=","))
+  )
   ggplot2::ggplot(tibble::tibble(errors), ggplot2::aes(errors)) +
     ggplot2::geom_histogram(
       fill = colors_homey[signal],
@@ -267,7 +274,7 @@ plot_error_hist <- function(errors, bins=21, signal, variance, title='') {
       fill=colors_homey$neutral,
       color=colors_homey$background
     ) +
-    ggplot2::ggtitle(title) +
+    ggplot2::ggtitle(full_title) +
     theme_homey()
 }
 

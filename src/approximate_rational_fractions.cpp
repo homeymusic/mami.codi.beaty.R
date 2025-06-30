@@ -195,7 +195,6 @@ inline double round_to_precision(double value, int precision = 15) {
                                           const double x_ref,
                                           const double uncertainty) {
    // de-duplicate
-   x = unique(x);
    int n = x.size();
    if (n == 0) {
      return DataFrame::create();
@@ -260,6 +259,10 @@ inline double round_to_precision(double value, int precision = 15) {
    NumericVector outAmps (maxEntries);
    int count = 0;
 
+
+   constexpr double ABS_TOL = 1e-15;
+
+
    for (int i = 0; i < n; ++i) {
      double fi = frequency[i];
      for (int j = i + 1; j < n; ++j) {
@@ -267,8 +270,9 @@ inline double round_to_precision(double value, int precision = 15) {
        double Aj  = amplitude[j];
        double diff = std::abs(fi - fj);
 
-       double tol = std::numeric_limits<double>::epsilon() *
-         std::max(std::abs(fi), std::abs(fj));
+       double rel_tol = std::numeric_limits<double>::epsilon()
+         * std::max(std::abs(fi), std::abs(fj));
+       double tol = std::max(ABS_TOL, rel_tol);
 
        if (diff > tol && diff < minFreq) {
          double ampVal = Aj * 0.5;

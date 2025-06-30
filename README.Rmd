@@ -463,6 +463,19 @@ $$
 
 ## Gabor Wavelet 
 
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+  chords <- dyads %>% dplyr::filter(timbre == '5Partials')
+  time_error = chords$time_fractions %>% purrr::map("error") %>% purrr::flatten_dbl()
+  print(plot_error_hist(time_error, bins=31, 'major', uncertainty(), 
+                        "Rational Approximation Error for Frequencies (5 Harmonic Dyads): " * Delta~f == abs(f - tilde(f))))
+  cat("  \n")
+  
+  space_error = chords$space_fractions %>% purrr::map("error") %>% purrr::flatten_dbl()
+  print(plot_error_hist(space_error, bins=31, 'minor', uncertainty(), 
+                        "Rational Approximation Error for Wavelengths (5 Harmonic Dyads): " * Delta~lambda == abs(lambda - tilde(lambda))))
+  cat("  \n")
+```
+
 TODO: show the error histogram.
 
 ### Daugman on Vision
