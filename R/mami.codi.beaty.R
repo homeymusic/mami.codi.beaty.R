@@ -196,6 +196,7 @@ compute_cycle_length <- function(x, ref, dimension) {
     euclids_orchard_height = sum(fractions$euclids_orchard_height),
     thomae = sum(fractions$thomae),
     minkowski = sum(fractions$minkowski),
+    entropy = sum(fractions$entropy),
     depth = sum(fractions$depth),
     error_sum = sum(abs(fractions$error)),
     fractions = list(fractions)

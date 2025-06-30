@@ -240,7 +240,7 @@ plot_error_hist <- function(errors, bins=21, signal, variance, title_expr) {
 
   title_call <- substitute(title_expr)
   full_title <- bquote(
-    .(title_call) ~ " with " * n == .(format(n_pts, big.mark=","))
+    .(title_call) ~ " with " * N == .(format(n_pts, big.mark=","))  *  " and " ~ bins == .(bins)
   )
   ggplot2::ggplot(tibble::tibble(errors), ggplot2::aes(errors)) +
     ggplot2::geom_histogram(

@@ -188,6 +188,23 @@ $$
 a \perp b \quad \Longrightarrow \quad  \mathrm{gcd}(a,b)=1
 $$
 
+### Stern-Brocot Example
+
+For these example frequencies: $f = 850.28, \quad f_{ref} = 260.0$
+
+We traverse the Stern–Brocot tree six levels down along the path
+*RRRRLL* landing us on the fraction $\frac{10}{3}$.
+
+$$
+\bigl| \tfrac{850.28}{260.0} - \tfrac{10}{3}\bigr| = 
+\bigl| 3.270308 - 3.333333 \bigr| =
+0.063025 < 
+\frac{1}{4 \pi} =
+0.079577
+$$
+
+![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
+
 ## Fundamental Frequency of a N-Tone Chord
 
 $$
@@ -213,7 +230,7 @@ $$
 ### Periodicity: Rational Approximation Cycle Length
 
 $$
-P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L_\lambda\bigr) 
+P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L_\lambda\bigr) \quad \text{[Proposed Units: Sz]}
 $$
 
 ### Roughness: Stern-Brocot Traversal Depth
@@ -342,16 +359,22 @@ $$
 
 # Appendix B: Related Theories
 
-## Gabor Wavelet
+## Gabor Wavelets from Rational Approximations
 
-![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-5-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-6-2.png)<!-- -->
 
-TODO: show the error histogram.
+### Daugman’s Gabor Wavelet in Computer Vision
 
-### Daugman on Vision
+John Daugman pioneered the use of Gabor wavelets for image analysis in
+computer vision.
 
-### Shamma on Vision
+### Shamma’s Spectro-Temporal Analogy Between 2D Vision and 2D Hearing
+
+Shamma proposed that the auditory system utilizes two-dimensional
+spectro-temporal receptive fields—processing sound across both time and
+frequency—analogous to how the visual system processes images in two
+spatial dimensions.
 
 ## Weber’s law
 

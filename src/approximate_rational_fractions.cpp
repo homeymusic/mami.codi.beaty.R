@@ -57,6 +57,7 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
                                       const NumericVector &x,
                                       const NumericVector &errors,
                                       const NumericVector &minkowski,
+                                      const NumericVector &entropy,
                                       const NumericVector &thomae,
                                       const NumericVector &euclids_orchard_height,
                                       const IntegerVector &depths,
@@ -68,6 +69,7 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
                            _["x"] = x,
                            _["error"] = errors,
                            _["minkowski"] = minkowski,
+                           _["entropy"] = entropy,
                            _["thomae"] = thomae,
                            _["euclids_orchard_height"] = euclids_orchard_height,
                            _["depth"] = depths,
@@ -100,7 +102,7 @@ inline double round_to_precision(double value, int precision = 15) {
                               double uncertainty) {
    int n = x.size();
    IntegerVector nums(n), dens(n), depths(n);
-   NumericVector approximations(n), errors(n), minkowski(n), thomae(n), euclids_orchard_height(n);
+   NumericVector approximations(n), errors(n), minkowski(n), entropy(n), thomae(n), euclids_orchard_height(n);
    CharacterVector paths(n);
 
    const int MAX_ITER = 10000;
@@ -163,6 +165,21 @@ inline double round_to_precision(double value, int precision = 15) {
      }
      minkowski[i] = qm_val;
 
+     // count R’s and L’s
+     int countR = std::count(paths[i].begin(), paths[i].end(), 'R');
+     int countL = std::count(paths[i].begin(), paths[i].end(), 'L');
+     int total  = countR + countL;
+
+     double H = 0.0;
+     if (total > 0) {
+       double pR = double(countR) / total;
+       double pL = double(countL) / total;
+       H = 0.0;
+       if (pR > 0) H -= pR * std::log2(pR);
+       if (pL > 0) H -= pL * std::log2(pL);
+     }
+     entropy[i] = H;
+
      thomae[i]         = (approximation_den ? 1.0 / approximation_den : NA_REAL);
      euclids_orchard_height[i]
      = (approximation_den
@@ -174,7 +191,7 @@ inline double round_to_precision(double value, int precision = 15) {
    NumericVector unc(n, uncertainty);
    return rational_fraction_dataframe(
      nums, dens, approximations,
-     x, errors, minkowski, thomae, euclids_orchard_height,
+     x, errors, minkowski, entropy, thomae, euclids_orchard_height,
      depths, paths, unc
    );
  }
