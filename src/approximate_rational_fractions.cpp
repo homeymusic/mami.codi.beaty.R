@@ -268,6 +268,7 @@ inline double round_to_precision(double value, int precision = 15) {
      );
    }
 
+   double minFreq  = Rcpp::min(frequency);
    int    maxPairs = n * (n - 1) / 2;
    int    maxEntries = maxPairs * 3;
 
@@ -277,7 +278,6 @@ inline double round_to_precision(double value, int precision = 15) {
 
 
    constexpr double ABS_TOL = 1e-15;
-
 
    for (int i = 0; i < n; ++i) {
      double fi = frequency[i];
@@ -290,18 +290,17 @@ inline double round_to_precision(double value, int precision = 15) {
          * std::max(std::abs(fi), std::abs(fj));
        double tol = std::max(ABS_TOL, rel_tol);
 
-       if (diff > tol) {
+       if (diff > tol && diff < minFreq) {
          double ampVal = Aj * 0.5;
 
-         outFreqs[count] = diff;
+         double fLow  = std::min(fi, fj);
+         double fHigh = std::max(fi, fj);
+
+         outFreqs[count] = fLow - diff;
          outAmps [count] = ampVal;
          ++count;
 
-         outFreqs[count] = fi + diff;
-         outAmps [count] = ampVal;
-         ++count;
-
-         outFreqs[count] = fi - diff;
+         outFreqs[count] = fHigh + diff;
          outAmps [count] = ampVal;
          ++count;
        }
