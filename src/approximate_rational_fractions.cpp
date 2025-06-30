@@ -294,11 +294,14 @@ inline double round_to_precision(double value, int precision = 15) {
        if (diff > tol && diff < minFreq) {
          double ampVal = Aj * 0.5;
 
-         outFreqs[count] = fi + diff;
+         double fLow  = std::min(fi, fj);
+         double fHigh = std::max(fi, fj);
+
+         outFreqs[count] = fLow - diff;
          outAmps [count] = ampVal;
          ++count;
 
-         outFreqs[count] = fi - diff;
+         outFreqs[count] = fHigh + diff;
          outAmps [count] = ampVal;
          ++count;
        }
