@@ -116,12 +116,13 @@ compute_space_cycles <- function(
     x
 ) {
 
+  l_min <- min(x$stimulus_wavelength_spectrum[[1]]$wavelength)
+
   wavelength_spectrum = validate_combine_spectra(
     x$stimulus_wavelength_spectrum[[1]],
     x$sideband_wavelength_spectrum[[1]]
-  )
+  ) %>% filter_spectrum_in_range(wavelength_min = l_min)
 
-  l_min <- min(x$stimulus_wavelength_spectrum[[1]]$wavelength)
   l = wavelength_spectrum$wavelength
 
   x %>% dplyr::mutate(
@@ -154,12 +155,13 @@ compute_time_cycles <- function(
     x
 ) {
 
+  f_min <- min(x$stimulus_frequency_spectrum[[1]]$frequency)
+
   frequency_spectrum = validate_combine_spectra(
     x$stimulus_frequency_spectrum[[1]],
     x$sideband_frequency_spectrum[[1]]
-  )
+  ) %>% filter_spectrum_in_range(frequency_min = f_min)
 
-  f_min <- min(x$stimulus_frequency_spectrum[[1]]$frequency)
   f     <- frequency_spectrum$frequency
 
   x %>% dplyr::mutate(
