@@ -88,7 +88,7 @@ $$
 ### Reference Time Period
 
 $$
-\Delta t = T = \frac{2 \pi }{\omega} = n \frac{2 \pi }{\omega_{ref}}, \quad n \enspace \text{periods}
+\Delta t = n T = n \frac{2 \pi }{\omega_{ref}}, \quad n \enspace \text{periods}
 $$
 
 <div class="note">
@@ -99,7 +99,7 @@ we leave $n$ throughout this text for completeness.
 </div>
 
 $$
-\Delta t \Delta \omega = T \Delta \omega = n \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
+\Delta t \Delta \omega = n T \Delta \omega = n \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
 $$
 
 ### Relative Frequency Uncertainty
@@ -146,6 +146,10 @@ $$
 $$
 
 $$
+\frac{\Delta f}{f_{ref}} = \frac{f_{ref} \bigl| \tfrac{f}{f_{ref}} - \tfrac{a}{b}\bigr|}{f_{ref}} \ge \frac{1}{4 \pi n}
+$$
+
+$$
 \boxed {
 \bigl| \tfrac{f}{f_{ref}} - \tfrac{a}{b}\bigr| \ge \frac{1}{4 \pi n}
 }
@@ -172,16 +176,16 @@ $$
 \end{aligned}
 $$
 
-### Stern–Brocot: Rational Fractions Lowest Terms
-
-$$
-a \perp b \quad \Longrightarrow \quad  \mathrm{gcd}(a,b)=1
-$$
-
 ### Stern–Brocot: Total Traversal Depth for All Tones in a N-Tone Chord
 
 $$
 D  =  \sum_{i=1}^{N} d_{i}
+$$
+
+### Stern–Brocot: Rational Fractions Lowest Terms
+
+$$
+a \perp b \quad \Longrightarrow \quad  \mathrm{gcd}(a,b)=1
 $$
 
 ## Fundamental Frequency of a N-Tone Chord
@@ -230,19 +234,19 @@ $$
 \psi_\lambda = P_\lambda + R_\lambda
 $$
 
-### Major-Minor: Frequency and Wavelength Dissonance Difference
-
-$$
-\boxed {
-\Psi_{MaMi}  = \psi_\lambda - \psi_f
-}
-$$
-
 ### Consonance-Dissonance: Frequency and Wavelength Dissonance Sum
 
 $$
 \boxed{
 \Psi_{CoDi}  = \psi_\lambda + \psi_f
+}
+$$
+
+### Major-Minor: Frequency and Wavelength Dissonance Difference
+
+$$
+\boxed {
+\Psi_{MaMi}  = \psi_\lambda - \psi_f
 }
 $$
 
@@ -255,6 +259,25 @@ $$
 $$
 
 ## Pseudo-Octaves: Perception of Stretching and Compressing
+
+### Relative Octave Uncertainty
+
+$$
+{
+\frac{\Delta O}{O_{ref}} =
+\frac{\bigl| O - \tilde O \bigr|}{O_{ref}} =
+\frac{\bigl| \log_2(O) - \log_2(\tilde O) \bigr|}{\log_2(O_{ref})} \ge 
+\log_2\bigl(1 +\frac{1}{4 \pi n}\bigr)
+}
+$$
+
+$$
+\boxed
+{
+\frac{\bigl| \log_2(O) - \log_2(\tilde O) \bigr|}{\log_2(O_{ref})} \ge 
+\log_2\bigl(1 +\frac{1}{4 \pi n}\bigr)
+}
+$$
 
 ### Heuristic to Find Pseudo Octave of a N-Tone Chord
 
@@ -318,6 +341,14 @@ $$
 $$
 
 # Appendix B: Related Theories
+
+## Gabor Wavelet
+
+TODO: show the error histogram.
+
+### Daugman on Vision
+
+### Shamma on Vision
 
 ## Weber’s law
 
