@@ -120,13 +120,13 @@ $$
 ### Idealized Frequency and Approximate Frequency
 
 $$
-\Delta f = \bigl| f - \widetilde f \bigr|
+\Delta f = \bigl| \widetilde f - f \bigr|
 $$
 
 $$
 \begin{align*}
+\widetilde f   \text{is an approximate frequency} \\
 f   \text{is an idealized frequency} \\
-\widetilde f   \text{is an approximate frequency}
 \end{align*}
 $$
 
@@ -139,19 +139,20 @@ $$
 ### Rational Approximation Uncertainty
 
 $$
-\Delta f = \bigl| f - \widetilde f \bigr|
-= \bigl| f - f_{ref}  \frac{a}{b} \bigr|
-= \frac{f_{ref}}{f_{ref}} \bigl| f - f_{ref}  \frac{a}{b} \bigr|
-= f_{ref} \bigl| \tfrac{f}{f_{ref}} - \tfrac{a}{b}\bigr|
+\Delta f = \bigl| \widetilde f - f \bigr|
+= \bigl| f_{ref}  \frac{a}{b} - f\bigr|
+= \frac{f_{ref}}{f_{ref}} \bigl| f_{ref} \frac{a}{b} - f \bigr|
+= f_{ref} \bigl| \tfrac{a}{b} - \tfrac{f}{f_{ref}}\bigr|
 $$
 
 $$
-\frac{\Delta f}{f_{ref}} = \frac{f_{ref} \bigl| \tfrac{f}{f_{ref}} - \tfrac{a}{b}\bigr|}{f_{ref}} \ge \frac{1}{4 \pi n}
+\frac{\Delta f}{f_{ref}} = 
+\frac{f_{ref} \bigl| \frac{a}{b} - \frac{f}{f_{ref}} \bigr|}{f_{ref}} \ge \frac{1}{4 \pi n}
 $$
 
 $$
 \boxed {
-\bigl| \tfrac{f}{f_{ref}} - \tfrac{a}{b}\bigr| \ge \frac{1}{4 \pi n}
+\bigl| \frac{a}{b} - \tfrac{f}{f_{ref}} \bigr| \ge \frac{1}{4 \pi n}
 }
 $$
 
@@ -161,7 +162,7 @@ $$
 \begin{aligned}
 &\mathbf{WHILE} 
 \boxed {
-\Bigl|\tfrac{f}{f_{\mathrm{ref}}}-\tfrac{a}{b}\Bigr| \ge \tfrac{1}{4\pi n}
+\Bigl|\tfrac{a}{b} - \tfrac{f}{f_{\mathrm{ref}}}\Bigr| \ge \tfrac{1}{4\pi n}
 }
 \quad\mathbf{DO}\\
 &\quad a  \gets  a_{\mathrm{left}} + a_{\mathrm{right}}\\
@@ -174,18 +175,6 @@ $$
 &\quad d \gets d + 1\\
 &\mathbf{END\_WHILE}
 \end{aligned}
-$$
-
-### Stern–Brocot: Total Traversal Depth for All Tones in a N-Tone Chord
-
-$$
-D  =  \sum_{i=1}^{N} d_{i}
-$$
-
-### Stern–Brocot: Rational Fractions Lowest Terms
-
-$$
-a \perp b \quad \Longrightarrow \quad  \mathrm{gcd}(a,b)=1
 $$
 
 ### Stern-Brocot Example
@@ -204,6 +193,18 @@ $$
 $$
 
 ![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
+
+### Stern–Brocot: Total Traversal Depth for All Tones in a N-Tone Chord
+
+$$
+D  =  \sum_{i=1}^{N} d_{i}
+$$
+
+### Stern–Brocot: Rational Fractions Lowest Terms
+
+$$
+a \perp b \quad \Longrightarrow \quad  \mathrm{gcd}(a,b)=1
+$$
 
 ## Fundamental Frequency of a N-Tone Chord
 
@@ -284,19 +285,19 @@ $$
 $$
 
 $$
-\frac{|O - \tilde O|}{O_{ref}} \ge \frac{1}{4\pi n}
+\frac{|\tilde O - O|}{O_{ref}} \ge \frac{1}{4\pi n}
 $$
 
 $$
-|\log_{2}O - \log_{2}\tilde O| = \log_{2}\Bigl(1 + \frac{|O - \tilde O|}{O_{ref}}\Bigr)
+|\log_{2} \tilde O - \log_{2} O| = \log_{2}\Bigl(1 + \frac{| \tilde O - O|}{O_{ref}}\Bigr)
 $$
 
 $$
-\log_{2}\Bigl(1 + \frac{|O - \tilde O|}{O_{ref}}\Bigr) \ge \log_{2}\Bigl(1 + \frac{1}{4\pi n}\Bigr)
+\log_{2}\Bigl(1 + \frac{|\tilde O - O|}{O_{ref}}\Bigr) \ge \log_{2}\Bigl(1 + \frac{1}{4\pi n}\Bigr)
 $$
 
 $$
-\boxed{\frac{|\log_{2}(O) - \log_{2}(\tilde O)|} {\log_{2}(O_{ref})} \ge \log_{2}\Bigl(1 + \frac{1}{4\pi n}\Bigr)}
+\boxed{\frac{|\log_{2}( \tilde O) - \log_{2}( O)|} {\log_{2}(O_{ref})} \ge \log_{2}\Bigl(1 + \frac{1}{4\pi n}\Bigr)}
 $$
 
 ### Heuristic to Find Pseudo Octave of a N-Tone Chord
