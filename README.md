@@ -265,24 +265,12 @@ $$
 &\quad\quad approximation \gets \dfrac{r_{j}}{r_{i}}\\
 &\quad\quad ideal \gets \mathrm{round}(approximation)\\
 &\quad\quad \mathbf{UNLESS}
-\boxed{
-\dfrac{
-\bigl\lvert
-\log_{2}(approximation)
--
-\log_{2}(ideal)
-\bigr\rvert
-}{
-\log_{2}(2.0)
-}
-\ge
-\log_{2}\bigl(1+\tfrac{1}{4\pi n}\bigr)
-}
+\boxed{\dfrac{ \bigl\lvert \log_{2}(ideal) - \log_{2}(approximation) \bigr \rvert }{ \log_{2}(2.0) } \ge \log_{2}\bigl(1+\tfrac{1}{4\pi n}\bigr) }
 \mathbf{THEN}\\
 &\quad\quad\quad octave_{\mathrm{pseudo}}\gets  
 2.0^{\frac{\log_{2}(approximation)}{\log_{2}(ideal)}}\\
 &\quad\quad\quad candidates\gets candidates\cup\{octave_{\mathrm{pseudo}}\}\\
-&\quad\quad \mathbf{END\_IF}\\
+&\quad\quad \mathbf{END\_UNLESS}\\
 &\quad \mathbf{END\_FOR}\\
 &\mathbf{END\_FOR}\\
 &\mathbf{RETURN} most\_frequent(candidates)
