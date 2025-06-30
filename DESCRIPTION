@@ -12,7 +12,8 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    coprimer
 Imports:
     kableExtra,
     magrittr,
@@ -27,6 +28,7 @@ Imports:
 LinkingTo: 
     Rcpp
 Remotes: 
-    homeymusic/hrep
+    homeymusic/hrep,
+    homeymusic/coprimer
 RoxygenNote: 7.3.1
 SystemRequirements: C++17

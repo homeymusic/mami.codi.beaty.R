@@ -190,10 +190,10 @@ $$
 
 ### Stern-Brocot Example
 
-For these example frequencies: $f = 850.28, \quad f_{ref} = 260.0$
-
-We traverse the Stern–Brocot tree six levels down along the path
-*RRRRLL* landing us on the fraction $\frac{10}{3}$.
+To find the rational approximation of two example frequencies
+$f = 850.28, \quad f_{ref} = 260.0$, we traverse the Stern–Brocot tree
+six levels down along the path *RRRRLL* landing us on the fraction
+$\frac{10}{3}$.
 
 $$
 \bigl| \tfrac{850.28}{260.0} - \tfrac{10}{3}\bigr| = 
@@ -280,20 +280,23 @@ $$
 ### Relative Octave Uncertainty
 
 $$
-{
-\frac{\Delta O}{O_{ref}} =
-\frac{\bigl| O - \tilde O \bigr|}{O_{ref}} =
-\frac{\bigl| \log_2(O) - \log_2(\tilde O) \bigr|}{\log_2(O_{ref})} \ge 
-\log_2\bigl(1 +\frac{1}{4 \pi n}\bigr)
-}
+\frac{\Delta O}{O_{ref}} \ge \frac{1}{4\pi n}
 $$
 
 $$
-\boxed
-{
-\frac{\bigl| \log_2(O) - \log_2(\tilde O) \bigr|}{\log_2(O_{ref})} \ge 
-\log_2\bigl(1 +\frac{1}{4 \pi n}\bigr)
-}
+\frac{|O - \tilde O|}{O_{ref}} \ge \frac{1}{4\pi n}
+$$
+
+$$
+|\log_{2}O - \log_{2}\tilde O| = \log_{2}\Bigl(1 + \frac{|O - \tilde O|}{O_{ref}}\Bigr)
+$$
+
+$$
+\log_{2}\Bigl(1 + \frac{|O - \tilde O|}{O_{ref}}\Bigr) \ge \log_{2}\Bigl(1 + \frac{1}{4\pi n}\Bigr)
+$$
+
+$$
+\boxed{\frac{|\log_{2}(O) - \log_{2}(\tilde O)|} {\log_{2}(O_{ref})} \ge \log_{2}\Bigl(1 + \frac{1}{4\pi n}\Bigr)}
 $$
 
 ### Heuristic to Find Pseudo Octave of a N-Tone Chord
