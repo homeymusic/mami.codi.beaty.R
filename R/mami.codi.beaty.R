@@ -30,7 +30,7 @@ mami.codi.beaty <- function(
     parse_input(...) %>%
     # Physical Domain
     generate_stimulus() %>%
-    generate_superposition_envelope() %>%
+    generate_cubic_distortion_products() %>%
     # Frequency Domain
     compute_space_cycles() %>%
     compute_time_cycles() %>%
@@ -68,7 +68,7 @@ generate_stimulus <- function(
 
 }
 
-#' Generate amplitude modulation
+#' Generate generate_cubic_distortion_products
 #'
 #' For a given stimulus spectrum, compute the difference frequncies
 #' and the spectral sidebands (fi ± |fj – fi|) for every unordered
@@ -81,23 +81,23 @@ generate_stimulus <- function(
 #'   - `amplitude_modulation_wavelength_spectrum`: corresponding wavelengths & amplitudes
 #' @rdname generate_sidebands
 #' @export
-generate_superposition_envelope <- function(x) {
+generate_cubic_distortion_products <- function(x) {
 
-  sideband_frequency_spectrum <- compute_amplitude_modulation(
+  cubic_distortion_frequency_spectrum <- compute_cubic_distortion_products(
     frequency = x$stimulus_frequency_spectrum[[1]]$frequency,
     amplitude  = x$stimulus_frequency_spectrum[[1]]$amplitude
   ) %>% filter_spectrum_in_range()
 
-  sideband_wavelength_spectrum <- tibble::tibble(
-    wavelength = SPEED_OF_SOUND / sideband_frequency_spectrum$frequency,
-    amplitude  = sideband_frequency_spectrum$amplitude
+  cubic_distortion_wavelength_spectrum <- tibble::tibble(
+    wavelength = SPEED_OF_SOUND / cubic_distortion_frequency_spectrum$frequency,
+    amplitude  = cubic_distortion_frequency_spectrum$amplitude
   ) %>%
     filter_spectrum_in_range()
 
   x %>%
     dplyr::mutate(
-      sideband_frequency_spectrum = list(sideband_frequency_spectrum),
-      sideband_wavelength_spectrum = list(sideband_wavelength_spectrum)
+      cubic_distortion_frequency_spectrum = list(cubic_distortion_frequency_spectrum),
+      cubic_distortion_wavelength_spectrum = list(cubic_distortion_wavelength_spectrum)
     )
 }
 
@@ -118,7 +118,7 @@ compute_space_cycles <- function(
 
   wavelength_spectrum = validate_combine_spectra(
     x$stimulus_wavelength_spectrum[[1]],
-    x$sideband_wavelength_spectrum[[1]]
+    x$cubic_distortion_wavelength_spectrum[[1]]
   )
 
   l_min <- min(x$stimulus_wavelength_spectrum[[1]]$wavelength)
@@ -156,7 +156,7 @@ compute_time_cycles <- function(
 
   frequency_spectrum = validate_combine_spectra(
     x$stimulus_frequency_spectrum[[1]],
-    x$sideband_frequency_spectrum[[1]]
+    x$cubic_distortion_frequency_spectrum[[1]]
   )
 
   f_min <- min(x$stimulus_frequency_spectrum[[1]]$frequency)

@@ -246,17 +246,17 @@ inline double round_to_precision(double value, int precision = 15) {
    return df;
  }
 
- //' Compute amplitude modulation sidebands
+ //' Compute cubic distortion products (2 f_low − f_high)
  //'
- //' For each unordered pair of input frequencies, compute either:
- //'   • Sidebands: fi ± |fi - fj|
+ //' For each unordered pair of input frequencies, compute the single
+ //' lower‐order distortion product at 2 f_low − f_high.
  //'
  //' @param frequency NumericVector of input frequencies
  //' @param amplitude NumericVector of input amplitudes (same length)
- //' @return DataFrame with columns `frequency` and `amplitude`
+ //' @return DataFrame with columns `frequency` (the DP) and `amplitude`
  //' @export
  // [[Rcpp::export]]
- DataFrame compute_amplitude_modulation(
+ DataFrame compute_cubic_distortion_products(
      NumericVector& frequency,
      NumericVector& amplitude
  ) {
@@ -268,43 +268,40 @@ inline double round_to_precision(double value, int precision = 15) {
      );
    }
 
-   double minFreq  = Rcpp::min(frequency);
-   int    maxPairs = n * (n - 1) / 2;
-   int    maxEntries = maxPairs * 2;
-
-   NumericVector outFreqs(maxEntries);
-   NumericVector outAmps (maxEntries);
+   double minFreq    = Rcpp::min(frequency);
+   int    maxPairs   = n * (n - 1) / 2;
+   NumericVector outFreqs(maxPairs), outAmps(maxPairs);
    int count = 0;
 
-
    constexpr double ABS_TOL = 1e-15;
-
+   double eps = std::numeric_limits<double>::epsilon();
 
    for (int i = 0; i < n; ++i) {
      double fi = frequency[i];
      for (int j = i + 1; j < n; ++j) {
-       double fj  = frequency[j];
-       double Aj  = amplitude[j];
-       double diff = std::abs(fi - fj);
+       double fj   = frequency[j];
+       double Aj   = amplitude[j];
 
-       double rel_tol = std::numeric_limits<double>::epsilon()
-         * std::max(std::abs(fi), std::abs(fj));
-       double tol = std::max(ABS_TOL, rel_tol);
+       // sort into low/high
+       double f_low  = std::min(fi, fj);
+       double f_high = std::max(fi, fj);
 
-       if (diff > tol && diff < minFreq) {
-         double ampVal = Aj * 0.5;
+       // compute difference and apply tolerance + critical-band gate
+       double diff = f_high - f_low;
+       double tol  = std::max(ABS_TOL, eps * f_high);
+       if (!(diff > tol && diff < minFreq)) continue;
 
-         outFreqs[count] = fi + diff;
-         outAmps [count] = ampVal;
-         ++count;
+       // cubic distortion product: 2*f_low - f_high
+       double dp     = 2.0 * f_low - f_high;
+       double ampVal = Aj * 0.5;
 
-         outFreqs[count] = fi - diff;
-         outAmps [count] = ampVal;
-         ++count;
-       }
+       outFreqs[count] = dp;
+       outAmps [count] = ampVal;
+       ++count;
      }
    }
 
+   // trim to actual size
    NumericVector freqOut = (count > 0)
      ? outFreqs[ Range(0, count - 1) ]
    : NumericVector();
