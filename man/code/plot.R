@@ -469,6 +469,7 @@ plot_semitone_roughness_space_time <- function(chords, title='', include_line=T,
                           alpha    = 0.4
                           )
     } +
+
     { if (include_line)
       ggplot2::geom_line(
         ggplot2::aes(
@@ -484,6 +485,14 @@ plot_semitone_roughness_space_time <- function(chords, title='', include_line=T,
           y     = .data$smoothed_space_roughness,
           color = "space"
         ),
+        linewidth = 1
+      )
+    } +
+    { if (include_line)
+      ggplot2::geom_line(
+        ggplot2::aes(
+          y     = .data$smoothed_space_roughness + .data$smoothed_time_roughness - mean_theoretical),
+        color = colors_homey$green,
         linewidth = 1
       )
     } +
@@ -793,6 +802,11 @@ plot_semitone_periodicity_space_time <- function(chords, title='', include_line=
       y = .data$smoothed.space_periodicity,
       color = 'space'),
       linewidth = 1,
+      linetype = linetype_for_minor) +
+    ggplot2::geom_line(ggplot2::aes(
+      y = .data$smoothed.space_periodicity + .data$smoothed.time_periodicity - mean_theoretical),
+      linewidth = 1,
+      color = colors_homey$fundamental,
       linetype = linetype_for_minor) +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
