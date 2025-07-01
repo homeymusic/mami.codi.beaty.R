@@ -5,7 +5,9 @@
 
 ## Manipulating Harmonic Frequencies
 
-##### Harmonic ~ Partials: 10
+#### Dyads spanning 15 semitones
+
+##### Pure ~ Partials: 1
 
 ![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-2.png)<!-- -->  
@@ -23,47 +25,45 @@
 ![](man/figures/README-unnamed-chunk-4-8.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-9.png)<!-- -->
 
-##### Bonang ~ Partials: 4
+##### Harmonic ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-10.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-11.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-12.png)<!-- -->
 
-#### Dyads spanning 15 semitones
+#### Dyads spanning 1 quarter tone
 
-##### Pure ~ Partials: 1
+##### M3 ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-13.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-14.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-15.png)<!-- -->
 
-##### Stretched ~ Partials: 10
+##### M6 ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-16.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-17.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-18.png)<!-- -->
 
-##### Compressed ~ Partials: 10
+##### P8 ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-19.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-20.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-21.png)<!-- -->
 
-#### Dyads spanning 1 quarter tone
-
-##### M3 ~ Partials: 10
+##### Stretched ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-22.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-23.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-24.png)<!-- -->
 
-##### M6 ~ Partials: 10
+##### Compressed ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-25.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-26.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-27.png)<!-- -->
 
-##### P8 ~ Partials: 10
+##### Bonang ~ Partials: 4
 
 ![](man/figures/README-unnamed-chunk-4-28.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-29.png)<!-- -->  
