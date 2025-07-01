@@ -52,16 +52,16 @@ dyads <- timbre_paper %>% dplyr::rowwise() %>% dplyr::mutate(
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
 params = list(
-  list(h=10,o=2.0,t='Harmonic'),
+  list(h=1, o=2.0,t='Pure'),
   list(h=5, o=2.0,t='5Partials'),
   list(h=5, o=2.0,t='5PartialsNo3'),
-  list(h=4, o=2.0,t='Bonang'),
-  list(h=1, o=2.0,t='Pure'),
-  list(h=10,o=2.1,t='Stretched'),
-  list(h=10,o=1.9,t='Compressed'),
+  list(h=10,o=2.0,t='Harmonic'),
   list(h=10,o=2.0,t='M3'),
   list(h=10,o=2.0,t='M6'),
-  list(h=10,o=2.0,t='P8')
+  list(h=10,o=2.0,t='P8'),
+  list(h=10,o=2.1,t='Stretched'),
+  list(h=10,o=1.9,t='Compressed'),
+  list(h=4, o=2.0,t='Bonang')
 )
 
 BEHAVIOURAL_SMOOTH_BROAD  <- 0.2
@@ -168,20 +168,31 @@ p = params %>% purrr::map(\(p) {
   }
   cat("  \n#####", title, '\n')
 
-  print(plot_semitone_codi(chords, 'Consonance',
+  print(plot_semitone_codi(chords, 'Consonance-Dissonance: Periodicity + Roughness',
                            goal=experiment,sigma=sigma,include_points=T,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_periodicity_space_time(chords, 'Periodicity',
+  print(plot_semitone_periodicity_roughness(chords, 'Consonance: Periodicity & Roughness',
+                                 goal=experiment,sigma=sigma,include_points=F,
+                                 black_vlines=black_vlines,gray_vlines=gray_vlines))
+  cat("  \n")
+  
+  print(plot_semitone_periodicity_space_time(chords, 'Periodicity: Space & Time',
                                  goal=experiment,sigma=sigma,include_points=T,
                                  black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_roughness_space_time(chords,title = "Roughness",
+  
+  print(plot_semitone_roughness_space_time(chords,title = "Roughness: Space & Time",
                                          goal=experiment,sigma=sigma,include_points=T,include_line=T,
                                          black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
+  cat("  \n")
+  
+  print(plot_semitone_mami_vert(chords, 'Major-Minor: Time Consonance - Space Consonance',
+                           goal=experiment,sigma=sigma,include_points=T,
+                           black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
 })
