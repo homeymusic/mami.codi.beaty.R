@@ -229,15 +229,15 @@ lcm_integers <- function(x) {
 #' @export
 compute_harmony_perception <- function(x) {
 
-  periodicity_roughness_balance = 0.25
+  roughness_coeff = 10.0
 
   x %>% dplyr::mutate(
 
-    space_periodicity = periodicity_roughness_balance * log2(.data$space_cycle_length),  # spatial extent
-    time_periodicity  = periodicity_roughness_balance * log2(.data$time_cycle_length),   # temporal extent
+    space_periodicity = log2(.data$space_cycle_length),  # spatial extent
+    time_periodicity  = log2(.data$time_cycle_length),   # temporal extent
 
-    space_roughness   = (1.0 - periodicity_roughness_balance) * log2(.data$space_depth), # spatial  energy density
-    time_roughness    = (1.0 - periodicity_roughness_balance) * log2(.data$time_depth),  # temporal energy density
+    space_roughness   = roughness_coeff * log2(.data$space_depth), # spatial  energy density
+    time_roughness    = roughness_coeff * log2(.data$time_depth),  # temporal energy density
 
     space_dissonance  = .data$space_periodicity + .data$space_roughness, # spatial  energy
     time_dissonance   = .data$time_periodicity  + .data$time_roughness,  # temporal energy

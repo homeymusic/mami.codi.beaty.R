@@ -893,25 +893,25 @@ plot_semitone_periodicity_roughness <- function(chords, title='', include_line=T
                                                  include_linear_regression = F, goal=NULL,
                                                  black_vlines=c(),gray_vlines=c(),
                                                  xlab='Semitone',
-                                                 ylab='Periodicity & Roughness (Z-Score)') {
+                                                 ylab='Periodicity & Roughness') {
 
   linetype_for_minor = if (dashed_minor) {'dashed'} else {'solid'}
 
   whole_semitones = integer_semitones(chords$semitone)
 
   chords$smoothed.time_periodicity  = smoothed(chords$semitone,
-                                               chords$time_periodicity_z,
+                                               chords$time_periodicity,
                                                sigma)
   chords$smoothed.space_periodicity = smoothed(chords$semitone,
-                                               chords$space_periodicity_z,
+                                               chords$space_periodicity,
                                                sigma)
 
   chords$smoothed_time_roughness = smoothed(chords$semitone,
-                                            chords$time_roughness_z,
+                                            chords$time_roughness,
                                             sigma)
 
   chords$smoothed_space_roughness = smoothed(chords$semitone,
-                                             chords$space_roughness_z,
+                                             chords$space_roughness,
                                              sigma)
 
   mean_theoretical = mean(c(chords$smoothed.time_periodicity,
