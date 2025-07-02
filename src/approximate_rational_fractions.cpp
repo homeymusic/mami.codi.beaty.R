@@ -289,12 +289,9 @@ inline double round_to_precision(double value, int precision = 15) {
        // compute difference and apply tolerance + critical-band gate
        double diff = f_high - f_low;
        double tol  = std::max(ABS_TOL, eps * f_high);
-       if (!(diff > tol && diff < minFreq)) continue;
-
-       // cubic distortion product: 2*f_low - f_high
        double dp     = 2.0 * f_low - f_high;
+       if (!(dp > tol && diff < minFreq)) continue;
        double ampVal = Aj * 0.5;
-
        outFreqs[count] = dp;
        outAmps [count] = ampVal;
        ++count;
