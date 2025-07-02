@@ -670,7 +670,7 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
                                          sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
-                                       y = .data$majorness)) +
+                                       y = .data$majorness_z)) +
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
     { if (include_points)
