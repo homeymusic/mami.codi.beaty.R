@@ -197,7 +197,7 @@ compute_cycle_length <- function(x, ref, dimension) {
     thomae = sum(fractions$thomae),
     minkowski = sum(fractions$minkowski),
     entropy = sum(fractions$entropy),
-    depth = sum(fractions$depth),
+    depth = sum(fractions$depth)^2,
     error_sum = sum(abs(fractions$error)),
     fractions = list(fractions)
   ) %>% dplyr::rename_with(~ paste0(dimension, '_' , .))
@@ -229,15 +229,13 @@ lcm_integers <- function(x) {
 #' @export
 compute_harmony_perception <- function(x) {
 
-  roughness_coeff = 10.0
-
   x %>% dplyr::mutate(
 
     space_periodicity = log2(.data$space_cycle_length),  # spatial extent
     time_periodicity  = log2(.data$time_cycle_length),   # temporal extent
 
-    space_roughness   = roughness_coeff * log2(.data$space_depth), # spatial  energy density
-    time_roughness    = roughness_coeff * log2(.data$time_depth),  # temporal energy density
+    space_roughness   = log2(.data$space_depth), # spatial  energy density
+    time_roughness    = log2(.data$time_depth),  # temporal energy density
 
     space_dissonance  = .data$space_periodicity + .data$space_roughness, # spatial  energy
     time_dissonance   = .data$time_periodicity  + .data$time_roughness,  # temporal energy
