@@ -71,7 +71,7 @@ perioidicity_roughness_colors <- function() {
     'periodicity'=colors_homey$fundamental,
     'behavioral'=colors_homey$neutral,
     'roughness'=colors_homey$green
-    )
+  )
 }
 
 theme_homey <- function(aspect.ratio=NULL){
@@ -343,11 +343,11 @@ plot_semitone_codi <- function(chords, title='', include_line=T, sigma=0.2,
 }
 
 plot_semitone_error_sum <- function(chords, title='', include_line=T, sigma=0.2,
-                               include_points=T,
-                               include_linear_regression = F, goal=NULL,
-                               black_vlines=c(),gray_vlines=c(),
-                               xlab='Semitone',
-                               ylab='Relative Uncertainty') {
+                                    include_points=T,
+                                    include_linear_regression = F, goal=NULL,
+                                    black_vlines=c(),gray_vlines=c(),
+                                    xlab='Semitone',
+                                    ylab='Relative Uncertainty') {
 
   whole_semitones = integer_semitones(chords$semitone)
 
@@ -356,8 +356,8 @@ plot_semitone_error_sum <- function(chords, title='', include_line=T, sigma=0.2,
   }
 
   chords$smoothed_error_sum_z = smoothed(chords$semitone,
-                                          chords$error_sum_z,
-                                          sigma)
+                                         chords$error_sum_z,
+                                         sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
                                        y = .data$error_sum_z)) +
@@ -392,11 +392,11 @@ plot_semitone_error_sum <- function(chords, title='', include_line=T, sigma=0.2,
 
 
 plot_semitone_thomaes_function <- function(chords, title='', include_line=T, sigma=0.2,
-                                             include_points=T,
-                                             goal=NULL,
-                                             black_vlines=c(),gray_vlines=c(),
-                                             xlab='Semitone',
-                                             ylab='Consonance (Z-Score)') {
+                                           include_points=T,
+                                           goal=NULL,
+                                           black_vlines=c(),gray_vlines=c(),
+                                           xlab='Semitone',
+                                           ylab='Consonance (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
 
@@ -405,8 +405,8 @@ plot_semitone_thomaes_function <- function(chords, title='', include_line=T, sig
   }
 
   chords$smoothed_thomaes_function_z = smoothed(chords$semitone,
-                                                  chords$thomaes_function_z,
-                                                  sigma)
+                                                chords$thomaes_function_z,
+                                                sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
                                        y = .data$thomaes_function_z)) +
@@ -440,11 +440,11 @@ plot_semitone_thomaes_function <- function(chords, title='', include_line=T, sig
 }
 
 plot_semitone_roughness_space_time <- function(chords, title='', include_line=T, sigma=0.2,
-                                                        include_points=T,
-                                                        goal=NULL,
-                                                        black_vlines=c(),gray_vlines=c(),
-                                                        xlab='Semitone',
-                                                        ylab='Negative Stern Brocot Depth  (Z-Score)') {
+                                               include_points=T,
+                                               goal=NULL,
+                                               black_vlines=c(),gray_vlines=c(),
+                                               xlab='Semitone',
+                                               ylab='Log2 of Total Stern Brocot Depth (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
 
@@ -453,12 +453,12 @@ plot_semitone_roughness_space_time <- function(chords, title='', include_line=T,
   }
 
   chords$smoothed_time_roughness = smoothed(chords$semitone,
-                                                     chords$time_roughness_z,
-                                                     sigma)
+                                            chords$time_roughness_z,
+                                            sigma)
 
   chords$smoothed_space_roughness = smoothed(chords$semitone,
-                                                  chords$space_roughness_z,
-                                                  sigma)
+                                             chords$space_roughness_z,
+                                             sigma)
 
   mean_theoretical = mean(c(chords$smoothed_time_roughness,
                             chords$smoothed_space_roughness))
@@ -471,14 +471,14 @@ plot_semitone_roughness_space_time <- function(chords, title='', include_line=T,
                           shape=21, stroke=NA, size=1,
                           fill=colors_homey$major,
                           alpha    = 0.4
-                          )
+      )
     } +
     { if (include_points)
       ggplot2::geom_point(ggplot2::aes(y = .data$space_roughness_z),
                           shape=21, stroke=NA, size=1,
                           fill=colors_homey$minor,
                           alpha    = 0.4
-                          )
+      )
     } +
 
     { if (include_line)
@@ -518,11 +518,11 @@ plot_semitone_roughness_space_time <- function(chords, title='', include_line=T,
 }
 
 plot_semitone_stern_brocot_depth <- function(chords, title='', include_line=T, sigma=0.2,
-                                                 include_points=T,
-                                                 goal=NULL,
-                                                 black_vlines=c(),gray_vlines=c(),
-                                                 xlab='Semitone',
-                                                 ylab='Negative Stern Brocot Depth  (Z-Score)') {
+                                             include_points=T,
+                                             goal=NULL,
+                                             black_vlines=c(),gray_vlines=c(),
+                                             xlab='Semitone',
+                                             ylab='Negative Stern Brocot Depth  (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
 
@@ -531,8 +531,8 @@ plot_semitone_stern_brocot_depth <- function(chords, title='', include_line=T, s
   }
 
   chords$smoothed_stern_brocot_depth_z = smoothed(chords$semitone,
-                                                      chords$stern_brocot_depth_z,
-                                                      sigma)
+                                                  chords$stern_brocot_depth_z,
+                                                  sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone)) +
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
@@ -564,11 +564,11 @@ plot_semitone_stern_brocot_depth <- function(chords, title='', include_line=T, s
 
 
 plot_semitone_stern_brocot_depth_diff <- function(chords, title='', include_line=T, sigma=0.2,
-                                             include_points=T,
-                                             goal=NULL,
-                                             black_vlines=c(),gray_vlines=c(),
-                                             xlab='Semitone',
-                                             ylab='Stern Brocot Depth Diff (Z-Score)') {
+                                                  include_points=T,
+                                                  goal=NULL,
+                                                  black_vlines=c(),gray_vlines=c(),
+                                                  xlab='Semitone',
+                                                  ylab='Stern Brocot Depth Diff (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
 
@@ -577,8 +577,8 @@ plot_semitone_stern_brocot_depth_diff <- function(chords, title='', include_line
   }
 
   chords$smoothed_stern_brocot_depth_diff_z = smoothed(chords$semitone,
-                                                  chords$stern_brocot_depth_diff_z,
-                                                  sigma)
+                                                       chords$stern_brocot_depth_diff_z,
+                                                       sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
                                        y = .data$stern_brocot_depth_diff_z)) +
@@ -609,11 +609,11 @@ plot_semitone_stern_brocot_depth_diff <- function(chords, title='', include_line
     theme_homey()
 }
 plot_semitone_euclids_orchard_height <- function(chords, title='', include_line=T, sigma=0.2,
-                               include_points=T,
-                               goal=NULL,
-                               black_vlines=c(),gray_vlines=c(),
-                               xlab='Semitone',
-                               ylab='Consonance (Z-Score)') {
+                                                 include_points=T,
+                                                 goal=NULL,
+                                                 black_vlines=c(),gray_vlines=c(),
+                                                 xlab='Semitone',
+                                                 ylab='Consonance (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
 
@@ -622,8 +622,8 @@ plot_semitone_euclids_orchard_height <- function(chords, title='', include_line=
   }
 
   chords$smoothed_euclids_orchard_height_z = smoothed(chords$semitone,
-                                          chords$euclids_orchard_height_z,
-                                          sigma)
+                                                      chords$euclids_orchard_height_z,
+                                                      sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
                                        y = .data$euclids_orchard_height_z)) +
@@ -666,8 +666,8 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
   whole_semitones = integer_semitones(chords$semitone)
 
   chords$smoothed.majorness_z = smoothed(chords$semitone,
-                                       chords$majorness_z,
-                                       sigma)
+                                         chords$majorness_z,
+                                         sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
                                        y = .data$majorness)) +
@@ -703,11 +703,11 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
 
 
 plot_semitone_mami_vert <- function(chords, title='', include_line=T, sigma=0.2,
-                               include_points=T,
-                               goal=NULL,
-                               black_vlines=c(),gray_vlines=c(),
-                               ylab='Semitone',
-                               xlab='Major-Minor (Z-Score)') {
+                                    include_points=T,
+                                    goal=NULL,
+                                    black_vlines=c(),gray_vlines=c(),
+                                    ylab='Semitone',
+                                    xlab='Major-Minor (Z-Score)') {
 
   chords$smoothed.majorness_z = smoothed(chords$semitone,
                                          chords$majorness_z,
@@ -732,7 +732,7 @@ plot_semitone_mami_vert <- function(chords, title='', include_line=T, sigma=0.2,
                           ggplot2::aes(
                             x = .data$majorness,
                             fill=color_factor_homey(chords,'majorness')
-                            ))
+                          ))
     } +
     { if (include_line)
       ggplot2::geom_path(
@@ -765,20 +765,20 @@ plot_semitone_mami_vert <- function(chords, title='', include_line=T, sigma=0.2,
 }
 
 plot_semitone_error_sum_space_time  <- function(chords, title='', include_line=T, sigma=0.2,
-                                                           dashed_minor = F, include_points=T,
-                                                           include_linear_regression = F, goal=NULL,
-                                                           black_vlines=c(),gray_vlines=c(),
-                                                           xlab='Semitone',
-                                                           ylab='Relative Uncertainty') {
+                                                dashed_minor = F, include_points=T,
+                                                include_linear_regression = F, goal=NULL,
+                                                black_vlines=c(),gray_vlines=c(),
+                                                xlab='Semitone',
+                                                ylab='Relative Uncertainty') {
 
   whole_semitones = integer_semitones(chords$semitone)
 
   chords$smoothed.time_error_sum  = smoothed(chords$semitone,
-                                              chords$time_error_sum,
-                                              sigma)
+                                             chords$time_error_sum,
+                                             sigma)
   chords$smoothed.space_error_sum = smoothed(chords$semitone,
-                                              chords$space_error_sum,
-                                              sigma)
+                                             chords$space_error_sum,
+                                             sigma)
 
   mean_theoretical = mean(c(chords$smoothed.time_error_sum,
                             chords$smoothed.space_error_sum))
@@ -826,22 +826,22 @@ plot_semitone_error_sum_space_time  <- function(chords, title='', include_line=T
 }
 
 plot_semitone_periodicity_space_time <- function(chords, title='', include_line=T, sigma=0.2,
-                                     dashed_minor = F, include_points=T,
-                                     include_linear_regression = F, goal=NULL,
-                                     black_vlines=c(),gray_vlines=c(),
-                                     xlab='Semitone',
-                                     ylab='Log2 Cycle Length') {
+                                                 dashed_minor = F, include_points=T,
+                                                 include_linear_regression = F, goal=NULL,
+                                                 black_vlines=c(),gray_vlines=c(),
+                                                 xlab='Semitone',
+                                                 ylab='Log2 of Cycle Length (Z-Score)') {
 
   linetype_for_minor = if (dashed_minor) {'dashed'} else {'solid'}
 
   whole_semitones = integer_semitones(chords$semitone)
 
   chords$smoothed.time_periodicity  = smoothed(chords$semitone,
-                                             chords$time_periodicity_z,
-                                             sigma)
+                                               chords$time_periodicity_z,
+                                               sigma)
   chords$smoothed.space_periodicity = smoothed(chords$semitone,
-                                              chords$space_periodicity_z,
-                                              sigma)
+                                               chords$space_periodicity_z,
+                                               sigma)
 
   mean_theoretical = mean(c(chords$smoothed.time_periodicity,
                             chords$smoothed.space_periodicity))
@@ -889,11 +889,11 @@ plot_semitone_periodicity_space_time <- function(chords, title='', include_line=
 }
 
 plot_semitone_periodicity_roughness <- function(chords, title='', include_line=T, sigma=0.2,
-                                                 dashed_minor = F, include_points=T,
-                                                 include_linear_regression = F, goal=NULL,
-                                                 black_vlines=c(),gray_vlines=c(),
-                                                 xlab='Semitone',
-                                                 ylab='Log2 Cycle Length') {
+                                                dashed_minor = F, include_points=T,
+                                                include_linear_regression = F, goal=NULL,
+                                                black_vlines=c(),gray_vlines=c(),
+                                                xlab='Semitone',
+                                                ylab='Periodicity & Roughness (Z-Score)') {
 
   linetype_for_minor = if (dashed_minor) {'dashed'} else {'solid'}
 
@@ -923,9 +923,9 @@ plot_semitone_periodicity_roughness <- function(chords, title='', include_line=T
     ggplot2::geom_line(ggplot2::aes(
       y = .data$smoothed.space_periodicity + .data$smoothed.time_periodicity - mean_theoretical,
       color = 'periodicity'
-      ),
-      linewidth = 1,
-      linetype = linetype_for_minor) +
+    ),
+    linewidth = 1,
+    linetype = linetype_for_minor) +
     ggplot2::geom_line(
       ggplot2::aes(
         y     = .data$smoothed_space_roughness + .data$smoothed_time_roughness - mean_theoretical,
@@ -951,11 +951,11 @@ plot_semitone_periodicity_roughness <- function(chords, title='', include_line=T
 }
 
 plot_semitone_space_time_beats <- function(chords, title='', include_line=T, sigma=0.2,
-                                     dashed_minor = F,include_points=T,
-                                     include_linear_regression = F, goal=NULL,
-                                     black_vlines=c(),gray_vlines=c(),
-                                     xlab='Semitone',
-                                     ylab='Consonance') {
+                                           dashed_minor = F,include_points=T,
+                                           include_linear_regression = F, goal=NULL,
+                                           black_vlines=c(),gray_vlines=c(),
+                                           xlab='Semitone',
+                                           ylab='Consonance') {
 
   whole_semitones = integer_semitones(chords$semitone)
 
@@ -967,11 +967,11 @@ plot_semitone_space_time_beats <- function(chords, title='', include_line=T, sig
                                               sigma)
 
   chords$smoothed.time_beats_consonance  = smoothed(chords$semitone,
-                                              chords$time_beats_consonance,
-                                              sigma)
+                                                    chords$time_beats_consonance,
+                                                    sigma)
   chords$smoothed.space_beats_consonance = smoothed(chords$semitone,
-                                              chords$space_beats_consonance,
-                                              sigma)
+                                                    chords$space_beats_consonance,
+                                                    sigma)
 
   mean_theoretical = mean(c(chords$smoothed.time_consonance,
                             chords$smoothed.space_consonance,
@@ -1659,8 +1659,8 @@ plot_semitone_time_wrap_amp <- function(theory,
 }
 
 plot_semitone_energy_per_cycle <- function(chords, title = '', goal=NULL, include_line = F, sigma = 0.2,
-                                  include_points = TRUE,
-                                  black_vlines = c(), gray_vlines = c()) {
+                                           include_points = TRUE,
+                                           black_vlines = c(), gray_vlines = c()) {
 
   # Smooth the beating metric
   chords$smoothed.energy_per_cycle_z <- smoothed(chords$semitone, chords$energy_per_cycle_z, sigma)
@@ -1780,9 +1780,9 @@ plot_semitone_space_time_wrap <- function(theory,
 }
 
 plot_semitone_codi_cochlear_amplifier_num_harmonics_wrap <- function(theory, experiment,
-                                    black_vlines = c(), gray_vlines = c(),
-                                    title, ncols = 12,
-                                    include_points = TRUE) {
+                                                                     black_vlines = c(), gray_vlines = c(),
+                                                                     title, ncols = 12,
+                                                                     include_points = TRUE) {
 
   per_plot_labels = tidyr::expand_grid(
     cochlear_amplifier_num_harmonics = theory$cochlear_amplifier_num_harmonics %>% unique
@@ -1824,8 +1824,8 @@ plot_semitone_codi_cochlear_amplifier_num_harmonics_wrap <- function(theory, exp
 }
 
 plot_semitone_space_time_cochlear_amplifier_num_harmonics_wrap <- function(theory,
-                                          black_vlines=c(), gray_vlines=c(),
-                                          title,ncols=1) {
+                                                                           black_vlines=c(), gray_vlines=c(),
+                                                                           title,ncols=1) {
   per_plot_labels = tidyr::expand_grid(
     cochlear_amplifier_num_harmonics  = theory$cochlear_amplifier_num_harmonics  %>% unique
   )
@@ -1864,8 +1864,8 @@ plot_semitone_space_time_cochlear_amplifier_num_harmonics_wrap <- function(theor
 }
 
 plot_semitone_low_beating_cochlear_amplifier_num_harmonics_wrap <- function(theory,
-                                                              black_vlines=c(), gray_vlines=c(),
-                                                              title,ncols=1) {
+                                                                            black_vlines=c(), gray_vlines=c(),
+                                                                            title,ncols=1) {
   per_plot_labels = tidyr::expand_grid(
     cochlear_amplifier_num_harmonics  = theory$cochlear_amplifier_num_harmonics  %>% unique
   )
@@ -1891,8 +1891,8 @@ plot_semitone_low_beating_cochlear_amplifier_num_harmonics_wrap <- function(theo
 }
 
 plot_semitone_high_beating_cochlear_amplifier_num_harmonics_wrap <- function(theory,
-                                                               black_vlines=c(), gray_vlines=c(),
-                                                               title,ncols=1) {
+                                                                             black_vlines=c(), gray_vlines=c(),
+                                                                             title,ncols=1) {
   per_plot_labels = tidyr::expand_grid(
     cochlear_amplifier_num_harmonics  = theory$cochlear_amplifier_num_harmonics  %>% unique
   )
