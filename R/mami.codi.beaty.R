@@ -229,18 +229,19 @@ lcm_integers <- function(x) {
 #' @export
 compute_harmony_perception <- function(x) {
 
-  roughness_coeff = 10.0
-
+  roughness_periodicity_balance = 0.875 # % roughness
+  # last time was 090% the 5no3 was lost the M6 but harmoics had tiny swell at m6
+  # last time was 85% the 5no3 was good but harmoics had just a tiny swell at m6
   x %>% dplyr::mutate(
 
-    space_periodicity = log2(.data$space_cycle_length),  # spatial extent
-    time_periodicity  = log2(.data$time_cycle_length),   # temporal extent
+    space_roughness   = log2(.data$space_depth) * roughness_periodicity_balance, # spatial  energy density
+    time_roughness    = log2(.data$time_depth)  * roughness_periodicity_balance,  # temporal energy density
 
-    space_roughness   = roughness_coeff * log2(.data$space_depth), # spatial  energy density
-    time_roughness    = roughness_coeff * log2(.data$time_depth),  # temporal energy density
+    space_periodicity = log2(.data$space_cycle_length) * (1.0 - roughness_periodicity_balance),  # spatial extent
+    time_periodicity  = log2(.data$time_cycle_length)  * (1.0 - roughness_periodicity_balance),   # temporal extent
 
-    space_dissonance  = .data$space_periodicity + .data$space_roughness, # spatial  energy
-    time_dissonance   = .data$time_periodicity  + .data$time_roughness,  # temporal energy
+    space_dissonance  = .data$space_roughness + .data$space_periodicity, # spatial  energy
+    time_dissonance   = .data$time_roughness  + .data$time_periodicity,  # temporal energy
 
     dissonance        = .data$space_dissonance + .data$time_dissonance,
     majorness         = .data$space_dissonance - .data$time_dissonance
