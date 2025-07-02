@@ -665,8 +665,8 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
 
   whole_semitones = integer_semitones(chords$semitone)
 
-  chords$smoothed.majorness_z = smoothed(chords$semitone,
-                                       chords$majorness_z,
+  chords$smoothed.majorness = smoothed(chords$semitone,
+                                       chords$majorness,
                                        sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
@@ -681,8 +681,8 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
     { if (include_line)
       ggplot2::geom_line(data=chords,
                          ggplot2::aes(x = semitone,
-                                      y = smoothed.majorness_z,
-                                      color=simple_color_factor_homey(chords$smoothed.majorness_z),
+                                      y = smoothed.majorness,
+                                      color=simple_color_factor_homey(chords$smoothed.majorness),
                                       group=1), linewidth = 1)} +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
