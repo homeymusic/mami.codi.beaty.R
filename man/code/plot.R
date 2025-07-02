@@ -444,7 +444,7 @@ plot_semitone_roughness_space_time <- function(chords, title='', include_line=T,
                                                         goal=NULL,
                                                         black_vlines=c(),gray_vlines=c(),
                                                         xlab='Semitone',
-                                                        ylab='Negative Stern Brocot Depth  (Z-Score)') {
+                                                        ylab='Log2 of Total Stern Brocot Depth (Z-Score)') {
 
   whole_semitones = integer_semitones(chords$semitone)
 
@@ -830,7 +830,7 @@ plot_semitone_periodicity_space_time <- function(chords, title='', include_line=
                                      include_linear_regression = F, goal=NULL,
                                      black_vlines=c(),gray_vlines=c(),
                                      xlab='Semitone',
-                                     ylab='Log2 Cycle Length') {
+                                     ylab='Log2 of Cycle Length (Z-Score)') {
 
   linetype_for_minor = if (dashed_minor) {'dashed'} else {'solid'}
 
@@ -893,7 +893,7 @@ plot_semitone_periodicity_roughness <- function(chords, title='', include_line=T
                                                  include_linear_regression = F, goal=NULL,
                                                  black_vlines=c(),gray_vlines=c(),
                                                  xlab='Semitone',
-                                                 ylab='Log2 Cycle Length') {
+                                                 ylab='Periodicity & Roughness (Z-Score)') {
 
   linetype_for_minor = if (dashed_minor) {'dashed'} else {'solid'}
 
