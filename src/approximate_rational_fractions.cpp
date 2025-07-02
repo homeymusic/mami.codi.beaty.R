@@ -269,7 +269,7 @@ inline double round_to_precision(double value, int precision = 15) {
    }
 
    double minFreq    = Rcpp::min(frequency);
-   int    maxPairs   = n * (n - 1) / 2;
+   int    maxPairs   = 2*(n * (n - 1) / 2);
    NumericVector outFreqs(maxPairs), outAmps(maxPairs);
    int count = 0;
 
@@ -287,15 +287,25 @@ inline double round_to_precision(double value, int precision = 15) {
        double f_high = std::max(fi, fj);
 
        // compute difference and apply tolerance + critical-band gate
-       double diff = f_high - f_low;
        double tol  = std::max(ABS_TOL, eps * f_high);
-       double dp     = 2.0 * f_low - f_high;
-       if (!(dp > tol && diff < minFreq)) continue;
-       double ampVal = Aj * 0.5;
-       outFreqs[count] = dp;
-       outAmps [count] = ampVal;
-       ++count;
-     }
+       double lower_cubic   = 2.0 * f_low - f_high;
+       double quad = f_high - f_low;
+
+       if (lower_cubic > tol && quad < minFreq) {
+
+         double lower_cubicA = Aj * 0.5;
+         outFreqs[count] = lower_cubic;
+         outAmps [count] = lower_cubicA;
+         ++count;
+
+         double quadA   = lower_cubicA * 0.5;
+         outFreqs[count] = quad;
+         outAmps [count] = quadA;
+         ++count;
+
+       }
+
+      }
    }
 
    // trim to actual size
