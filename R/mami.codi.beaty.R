@@ -235,18 +235,19 @@ compute_harmony_perception <- function(x) {
 
   x %>% dplyr::mutate(
 
-    space_roughness   = log2(1 + .data$space_depth), # spatial  energy density
-    time_roughness    = log2(1 + .data$time_depth),  # temporal energy density
-    roughness         = .data$space_roughness + .data$time_roughness,
+    space_roughness   = .data$space_depth, # spatial  energy density
+    time_roughness    = .data$time_depth,  # temporal energy density
+    roughness         = log2(.data$space_roughness + .data$time_roughness),
 
-    space_periodicity = log2(.data$space_cycle_length),  # spatial extent
-    time_periodicity  = log2(.data$time_cycle_length),   # temporal extent
-    periodicity       = .data$space_periodicity + .data$time_periodicity,
+    space_periodicity = .data$space_cycle_length,  # spatial extent
+    time_periodicity  = .data$time_cycle_length,   # temporal extent
+    periodicity       = log2(.data$space_periodicity + .data$time_periodicity),
 
-    space_dissonance  = .data$space_roughness + .data$space_periodicity, # spatial  energy
-    time_dissonance   = .data$time_roughness  + .data$time_periodicity,  # temporal energy
+    space_dissonance  = log2(.data$space_roughness + .data$space_periodicity), # spatial  energy
+    time_dissonance   = log2(.data$time_roughness  + .data$time_periodicity),  # temporal energy
 
-    dissonance        = .data$space_dissonance + .data$time_dissonance,
+    dissonance        =
+      log2(.data$space_depth+.data$time_depth+.data$space_cycle_length+.data$time_cycle_length),
     majorness         = .data$space_dissonance - .data$time_dissonance
 
   )
