@@ -167,32 +167,27 @@ p = params %>% purrr::map(\(p) {
     cat('  \n#### Dyads spanning 1 quarter tone\n')
   }
   cat("  \n#####", title, '\n')
-
+  
   print(plot_semitone_codi(chords, 'Consonance-Dissonance: Periodicity + Roughness',
-                           goal=experiment,sigma=sigma,include_points=T,
+                           goal=experiment,sigma=sigma,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
   print(plot_semitone_periodicity_roughness(chords, 'Consonance: Periodicity & Roughness',
-                                 goal=experiment,sigma=sigma,include_points=F,
-                                 black_vlines=black_vlines,gray_vlines=gray_vlines))
+                                            goal=experiment,sigma=sigma,
+                                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
   print(plot_semitone_periodicity_space_time(chords, 'Periodicity: Space & Time',
-                                 goal=experiment,sigma=sigma,include_points=T,
-                                 black_vlines=black_vlines,gray_vlines=gray_vlines))
+                                             goal=experiment,sigma=sigma,
+                                             black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
   
   print(plot_semitone_roughness_space_time(chords,title = "Roughness: Space & Time",
-                                         goal=experiment,sigma=sigma,include_points=T,include_line=T,
-                                         black_vlines = black_vlines,gray_vlines  = gray_vlines)
+                                           goal=experiment,sigma=sigma,
+                                           black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
-  cat("  \n")
-  
-  print(plot_semitone_mami(chords, 'Major-Minor: Time Consonance - Space Consonance',
-                           goal=experiment,sigma=sigma,include_points=T,
-                           black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
 })
