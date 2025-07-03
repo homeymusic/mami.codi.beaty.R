@@ -133,6 +133,8 @@ compute_space_cycles <- function(
     ),
 
     # Store the values
+    fundamental_wavelength = l_min * .data$space_cycle_length,
+    fundamental_wavenumber = 1 / .data$fundamental_wavelength,
     wavelength_spectrum    = list(wavelength_spectrum),
     wavelengths            = list(l)
   )
@@ -171,6 +173,8 @@ compute_time_cycles <- function(
     ),
 
     # Store the values
+    fundamental_frequency  = f_min / .data$time_cycle_length,
+    fundamental_period     = 1 / .data$fundamental_frequency,
     frequency_spectrum     = list(frequency_spectrum),
     frequencies            = list(f)
 

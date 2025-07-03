@@ -189,13 +189,19 @@ $$
 
 ### Stern-Brocot Example
 
-Let’s find the rational approximation of two example frequencies (that
-form the Major 7th interval): $$
+Let’s find the rational approximation of two example frequencies that
+form a Major 7th interval:
+
+$$
 f = 493.8833\ \text{(B4)}, 
 \quad
 f_{\mathrm{ref}} = 261.6256\ \text{(C4)}
-$$ we traverse the Stern–Brocot tree to a depth of **7** levels along
-the path **RRLRRRR** landing us on the fraction $\frac{11}{6}$.
+$$
+
+![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
+
+we traverse the Stern–Brocot tree to a depth of **7** levels along the
+path **RRLRRRR** landing us on the fraction $\frac{11}{6}$.
 
 $$
 \bigl| \tfrac{493.8833}{261.6256} - \tfrac{11}{6}\bigr| = 
@@ -205,7 +211,7 @@ $$
 0.0796
 $$
 
-![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->
 
 ### Stern–Brocot: Rational Fractions Lowest Terms
 
@@ -219,10 +225,22 @@ $$
 f_0 = f_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad f_{ref} = \mathrm{min}(f_1, f_2, \dots, f_N), \quad a_i \perp b_i
 $$
 
+### Rational Approximation Signal versus Idealized Signal
+
+![](man/figures/README-unnamed-chunk-8-1.png)<!-- -->
+
+![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->
+
+## Fundamental Wavenumber of a N-Tone Chord
+
+$$
+k_0 = k_{ref} \frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad k_{ref} = \mathrm{max}(k_1, k_2, \dots, k_N), \quad a_i \perp b_i
+$$
+
 ## Fundamental Wavelength of a N-Tone Chord
 
 $$
-\lambda_0 = \lambda_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad \lambda_{ref} = \mathrm{min}(\lambda_1, \lambda_2, \dots, \lambda_N), \quad a_i \perp b_i
+\lambda_0 = \lambda_{ref} \frac{\mathrm{lcm}(b_1, b_2, \dots, b_N)}{\mathrm{gcd}(a_1, a_2, \dots, a_N)}, \quad \lambda_{ref} = \mathrm{min}(\lambda_1, \lambda_2, \dots, \lambda_N), \quad a_i \perp b_i
 $$
 
 ## Stolzenburg Periodicity Perception
@@ -380,8 +398,8 @@ $$
 
 ## Gabor Wavelets from Rational Approximations
 
-![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-7-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-10-2.png)<!-- -->
 
 ### Daugman’s Gabor Wavelet in Computer Vision
 

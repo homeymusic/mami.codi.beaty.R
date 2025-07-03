@@ -308,12 +308,23 @@ $$
   sb = rational_fractions(B4, C4, UNCERTAINTY_LIMIT)
 ```
 
-Let's find the rational approximation of two example frequencies (that form the Major 7th interval):
+Let's find the rational approximation of two example frequencies that form a Major 7th interval:
+
 $$
 f = `r B4`\ \text{(B4)}, 
 \quad
 f_{\mathrm{ref}} = `r C4`\ \text{(C4)}
 $$
+
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+  M7 <- hrep::pi_chord(c(60, 71))
+
+  plot(hrep::sparse_fr_spectrum(M7, num_harmonics=1),
+       xlim = c(0, 1000))
+  title("Pure Tone Major 7th of C4 and B4")
+  cat("  \n")
+```
+
 we traverse the Stern–Brocot tree to a depth of **`r  sb$depth`** levels along the path **`r sb$path`** 
 landing us on the fraction $\frac{`r sb$num`}{`r sb$den`}$.
 
@@ -344,10 +355,59 @@ $$
 f_0 = f_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad f_{ref} = \mathrm{min}(f_1, f_2, \dots, f_N), \quad a_i \perp b_i
 $$
 
+### Rational Approximation Signal versus Idealized Signal
+
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+
+M7 <- hrep::sparse_fr_spectrum( hrep::pi_chord(c(60, 71)), num_harmonics=1)
+M7_mami_codi = mami.codi.beaty(M7, verbose=T)
+number_of_periods_to_plot = 7
+plot_period = number_of_periods_to_plot * M7_mami_codi$fundamental_period
+C4 = hrep::midi_to_freq(60)
+B4_rational = C4 * sb$approximation
+M7_rational = hrep::sparse_fr_spectrum(list(frequency=c(C4,B4_rational), amplitude=c(1,1)), num_harmonics=1)
+
+plot(hrep::wave(M7_rational, length_sec = plot_period))
+abline(
+  v   = seq(0, plot_period, by = M7_mami_codi$fundamental_period),
+  col = "black",
+  lty = "dashed"
+)
+title(
+  paste(
+    "Rationalized Signal of Pure Tone M7 f0:", 
+    round(M7_mami_codi$fundamental_frequency, 2), 
+    "T0:", 
+    round(M7_mami_codi$fundamental_period, 2),
+    "plotted over",
+    number_of_periods_to_plot,
+    "periods"
+    ))
+cat("  \n")
+```
+
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+
+plot(hrep::wave(M7, length_sec = plot_period))
+abline(
+  v   = seq(0, plot_period, by = M7_mami_codi$fundamental_period),
+  col = "black",
+  lty = "dashed"
+)
+title("Idealized Signal")
+cat("  \n")
+```
+
+## Fundamental Wavenumber of a N-Tone Chord
+
+$$
+k_0 = k_{ref} \frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad k_{ref} = \mathrm{max}(k_1, k_2, \dots, k_N), \quad a_i \perp b_i
+$$
+
 ## Fundamental Wavelength of a N-Tone Chord
 
 $$
-\lambda_0 = \lambda_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad \lambda_{ref} = \mathrm{min}(\lambda_1, \lambda_2, \dots, \lambda_N), \quad a_i \perp b_i
+\lambda_0 = \lambda_{ref} \frac{\mathrm{lcm}(b_1, b_2, \dots, b_N)}{\mathrm{gcd}(a_1, a_2, \dots, a_N)}, \quad \lambda_{ref} = \mathrm{min}(\lambda_1, \lambda_2, \dots, \lambda_N), \quad a_i \perp b_i
 $$
 
 ## Stolzenburg Periodicity Perception
