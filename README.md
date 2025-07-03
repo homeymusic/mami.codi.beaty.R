@@ -79,7 +79,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-39.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-40.png)<!-- -->
 
-# Theory
+# Fourier Spectrum Quantization via a Rational-Fraction Uncertainty Principle
 
 ## Heisenberg Uncertainty
 
@@ -189,26 +189,23 @@ $$
 
 ### Stern-Brocot Example
 
-To find the rational approximation of two example frequencies
-$f = 850.28, \quad f_{ref} = 260.0$, we traverse the Stern–Brocot tree
-six levels down along the path *RRRRLL* landing us on the fraction
-$\frac{10}{3}$.
+Let’s find the rational approximation of two example frequencies (that
+form the Major 7th interval): $$
+f = 493.8833\ \text{(B4)}, 
+\quad
+f_{\mathrm{ref}} = 261.6256\ \text{(C4)}
+$$ we traverse the Stern–Brocot tree to a depth of **7** levels along
+the path **RRLRRRR** landing us on the fraction $\frac{11}{6}$.
 
 $$
-\bigl| \tfrac{850.28}{260.0} - \tfrac{10}{3}\bigr| = 
-\bigl| 3.270308 - 3.333333 \bigr| =
-0.063025 < 
+\bigl| \tfrac{493.8833}{261.6256} - \tfrac{11}{6}\bigr| = 
+\bigl| 1.8877  - 1.8333 \bigr| =
+0.0544 < 
 \frac{1}{4 \pi} =
-0.079577
+0.0796
 $$
 
-![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
-
-### Stern–Brocot: Total Traversal Depth for All Tones in a N-Tone Chord
-
-$$
-D  =  \sum_{i=1}^{N} d_{i}
-$$
+![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
 
 ### Stern–Brocot: Rational Fractions Lowest Terms
 
@@ -245,6 +242,14 @@ P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L
 $$
 
 ### Roughness: Stern-Brocot Traversal Depth
+
+#### Stern–Brocot: Total Traversal Depth for All Tones in a N-Tone Chord
+
+$$
+D  =  \sum_{i=1}^{N} d_{i}
+$$
+
+#### Stern–Brocot: Psychophysical Measure of Roughness
 
 $$
 R_f  = \log_2 \bigl(D_f\bigr) \quad \text{and} \quad R_\lambda  = \log_2 \bigl(D_\lambda\bigr)
@@ -375,8 +380,8 @@ $$
 
 ## Gabor Wavelets from Rational Approximations
 
-![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-6-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-7-2.png)<!-- -->
 
 ### Daugman’s Gabor Wavelet in Computer Vision
 

@@ -111,17 +111,16 @@ inline double round_to_precision(double value, int precision = 15) {
      double ideal = round_to_precision(x[i] / x_ref);
      std::vector<char> path;
      // Initialize Stern–Brocot endpoints
-     int left_num = 0, left_den = 1;
+     int left_num = -1, left_den = 0;
+     int approximation_num = 0, approximation_den = 1;
      int right_num = 1, right_den = 0;
 
      // First approximation
-     int approximation_num = left_num + right_num;
-     int approximation_den = left_den + right_den;
      double approximation = round_to_precision(
        static_cast<double>(approximation_num) / approximation_den
      );
 
-     int iter = 1;
+     int iter = 0;
 
      // continue while |x/x_ref - num/den| >= uncertainty
      while ((

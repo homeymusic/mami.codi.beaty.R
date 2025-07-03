@@ -193,7 +193,7 @@ p = params %>% purrr::map(\(p) {
 })
 ```
 
-# Theory 
+# Fourier Spectrum Quantization via a Rational-Fraction Uncertainty Principle
 
 ## Heisenberg Uncertainty
 
@@ -302,31 +302,35 @@ $$
 
 ### Stern-Brocot Example
 
-To find the rational approximation of two example frequencies 
-$f = 850.28, \quad f_{ref} = 260.0$,
-we traverse the Stern–Brocot tree six levels down along the path *RRRRLL* 
-landing us on the fraction $\frac{10}{3}$.
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F, include=F}
+  C4 = round(hrep::midi_to_freq(60),4)
+  B4 = round(hrep::midi_to_freq(71),4)
+  sb = rational_fractions(B4, C4, UNCERTAINTY_LIMIT)
+```
+
+Let's find the rational approximation of two example frequencies (that form the Major 7th interval):
+$$
+f = `r B4`\ \text{(B4)}, 
+\quad
+f_{\mathrm{ref}} = `r C4`\ \text{(C4)}
+$$
+we traverse the Stern–Brocot tree to a depth of **`r  sb$depth`** levels along the path **`r sb$path`** 
+landing us on the fraction $\frac{`r sb$num`}{`r sb$den`}$.
 
 $$
-\bigl| \tfrac{850.28}{260.0} - \tfrac{10}{3}\bigr| = 
-\bigl| 3.270308 - 3.333333 \bigr| =
-0.063025 < 
+\bigl| \tfrac{`r B4`}{`r C4`} - \tfrac{`r sb$num`}{`r sb$den`}\bigr| = 
+\bigl| `r round(B4/C4,4)`  - `r round(sb$num/sb$den,4)` \bigr| =
+`r round(abs(B4/C4 - sb$num/sb$den),4)` < 
 \frac{1}{4 \pi} =
-0.079577
+`r round(UNCERTAINTY_LIMIT, 4)`
 $$
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
 
-  coprimer::plot_stern_brocot_tree(6, "RRRRLL")
+  coprimer::plot_stern_brocot_tree(sb$depth, sb$path)
   cat("  \n")
   
 ```
-
-### Stern–Brocot: Total Traversal Depth for All Tones in a N-Tone Chord
-
-$$
-D  =  \sum_{i=1}^{N} d_{i}
-$$
 
 ### Stern–Brocot: Rational Fractions Lowest Terms
 
@@ -363,6 +367,14 @@ P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L
 $$
 
 ### Roughness: Stern-Brocot Traversal Depth
+
+#### Stern–Brocot: Total Traversal Depth for All Tones in a N-Tone Chord
+
+$$
+D  =  \sum_{i=1}^{N} d_{i}
+$$
+
+#### Stern–Brocot: Psychophysical Measure of Roughness
 
 $$
 R_f  = \log_2 \bigl(D_f\bigr) \quad \text{and} \quad R_\lambda  = \log_2 \bigl(D_\lambda\bigr)
