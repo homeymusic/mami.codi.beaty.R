@@ -259,6 +259,8 @@ $$
 P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L_\lambda\bigr) \quad \text{[Proposed Units: Sz]}
 $$
 
+#### Bonang: MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018
+
 ![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->
 
 ### Roughness: Stern-Brocot Traversal Depth
@@ -274,6 +276,10 @@ $$
 $$
 R_f  = \log_2 \bigl(D_f\bigr) \quad \text{and} \quad R_\lambda  = \log_2 \bigl(D_\lambda\bigr)
 $$
+
+#### Bonang: MaMi.CoDi.Beaty Roughness with Hutchinson & Knopoff 1978
+
+![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
 
 ### Overall Frequency Dissonance
 
@@ -400,8 +406,8 @@ $$
 
 ## Gabor Wavelets from Rational Approximations
 
-![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-11-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-12-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-12-2.png)<!-- -->
 
 ### Daugman’s Gabor Wavelet in Computer Vision
 

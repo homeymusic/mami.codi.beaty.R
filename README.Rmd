@@ -126,12 +126,16 @@ p = params %>% purrr::map(\(p) {
   
   chords$space_periodicity_z = z_scores(chords$space_periodicity)
   chords$time_periodicity_z = z_scores(chords$time_periodicity)
+  
+  chords$periodicity_z = z_scores(-chords$periodicity)
 
   chords$time_roughness = -chords$time_roughness
   chords$time_roughness_z = z_scores(chords$time_roughness)
   
   chords$space_roughness = -chords$space_roughness
   chords$space_roughness_z = z_scores(chords$space_roughness)
+  
+  chords$roughness_z = z_scores(-chords$roughness)
   
   experiment.rds = paste0('./man/data/input/',
                           p$t,
@@ -416,12 +420,12 @@ $$
 P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L_\lambda\bigr) \quad \text{[Proposed Units: Sz]}
 $$
 
+#### Bonang: MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
-  chords <- dyads %>% dplyr::filter(timbre == 'Harmonic')
+  chords <- dyads %>% dplyr::filter(timbre == 'Bonang')
   chords$periodicity_z = z_scores(-chords$periodicity)
-  chords$roughness_z = z_scores(-chords$roughness)
-  
+
   HarrisonPearce2018.rds = paste0('./man/data/output/HarrisonPearce2018.rds')
   HarrisonPearce2018_all = readRDS(HarrisonPearce2018.rds)
   HarrisonPearce2018 = HarrisonPearce2018_all$summary %>% dplyr::rename(semitone=interval)
@@ -429,12 +433,14 @@ $$
     consonance_z=z_scores(output)
   )
   
-  print(plot_semitone_periodicity_model_compare(chords, 'MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018',
-                                             goal=HarrisonPearce2018,
+  print(plot_semitone_periodicity_model_compare(chords, 'Bonang: MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018',
+                                             goal=HarrisonPearce2018,model_name='HarrisonPearce2018',
+                                             model_type='Periodicity',
                                              black_vlines=c(),gray_vlines=c()))
   cat("  \n")
   
 ```
+
 
 ### Roughness: Stern-Brocot Traversal Depth
 
@@ -449,6 +455,28 @@ $$
 $$
 R_f  = \log_2 \bigl(D_f\bigr) \quad \text{and} \quad R_\lambda  = \log_2 \bigl(D_\lambda\bigr)
 $$
+
+#### Bonang: MaMi.CoDi.Beaty Roughness with Hutchinson & Knopoff 1978
+
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+  chords <- dyads %>% dplyr::filter(timbre == 'Bonang')
+  chords$roughness_z = z_scores(-chords$roughness)
+  
+
+  HutchinsonKnopoff1978Revised.rds = paste0('./man/data/output/HutchinsonKnopoff1978Revised.rds')
+  HutchinsonKnopoff1978Revised_all = readRDS(HutchinsonKnopoff1978Revised.rds)
+  HutchinsonKnopoff1978Revised = HutchinsonKnopoff1978Revised_all$summary %>% dplyr::rename(semitone=interval)
+  HutchinsonKnopoff1978Revised <- HutchinsonKnopoff1978Revised %>% dplyr::mutate(
+    consonance_z=z_scores(output)
+  )
+  
+  print(plot_semitone_roughness_model_compare(chords, 'Bonang: MaMi.CoDi.Beaty Roughness with Hutchinson & Knopoff 1978',
+                                             goal=HutchinsonKnopoff1978Revised,model_name='HutchinsonKnopoff1978Revised',
+                                             model_type='Roughness',
+                                             black_vlines=c(),gray_vlines=c()))
+  cat("  \n")
+```
+
 
 ### Overall Frequency Dissonance
 

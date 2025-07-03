@@ -65,10 +65,11 @@ space_time_colors <- function() {
 }
 periodicity_roughness_colors <- function() {
   c(
-    'periodicity'=colors_homey$fundamental,
-    'behavioral'=colors_homey$neutral,
-    'roughness'=colors_homey$green,
-    'HarrisonPearce2018'=colors_homey$light_neutral
+    'Periodicity'=colors_homey$fundamental,
+    'Behavioral'=colors_homey$neutral,
+    'Roughness'=colors_homey$green,
+    'HarrisonPearce2018'=colors_homey$light_neutral,
+    'HutchinsonKnopoff1978Revised'=colors_homey$light_neutral
   )
 }
 theme_homey <- function(aspect.ratio=NULL){
@@ -830,31 +831,23 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
                                                 xlab='Semitone',
                                                 ylab='Periodicity & Roughness (Z-Score)') {
 
-  chords$smoothed_time_periodicity  = smoothed(chords$semitone,
-                                               chords$time_periodicity_z,
+  chords$smoothed_periodicity  = smoothed(chords$semitone,
+                                               chords$periodicity_z,
                                                sigma)
 
-  chords$smoothed_space_periodicity = smoothed(chords$semitone,
-                                               chords$space_periodicity_z,
-                                               sigma)
-
-  chords$smoothed_time_roughness = smoothed(chords$semitone,
-                                            chords$time_roughness_z,
+  chords$smoothed_roughness = smoothed(chords$semitone,
+                                            chords$roughness_z,
                                             sigma)
-
-  chords$smoothed_space_roughness = smoothed(chords$semitone,
-                                             chords$space_roughness_z,
-                                             sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone)) +
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
 
-    ggplot2::geom_point(ggplot2::aes(y = .data$time_periodicity_z + .data$space_periodicity_z, fill = 'periodicity'), shape=21, stroke=NA, size=1, alpha = 0.4) +
-    ggplot2::geom_point(ggplot2::aes(y = .data$time_roughness_z + .data$space_roughness_z, fill = "roughness"), shape=21, stroke=NA, size=1, alpha = 0.4) +
+    ggplot2::geom_point(ggplot2::aes(y = .data$periodicity_z, fill = 'Periodicity'), shape=21, stroke=NA, size=1, alpha = 0.4) +
+    ggplot2::geom_point(ggplot2::aes(y = .data$roughness_z, fill = "Roughness"), shape=21, stroke=NA, size=1, alpha = 0.4) +
 
-    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_space_periodicity + .data$smoothed_time_periodicity, color = 'periodicity'), linewidth = 1) +
-    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_space_roughness + .data$smoothed_time_roughness, color = "roughness"), linewidth = 1) +
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity, color = 'Periodicity'), linewidth = 1) +
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness, color = "Roughness"), linewidth = 1) +
 
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -869,13 +862,13 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
       values=periodicity_roughness_colors(),
-      breaks=c('periodicity', 'behavioral', 'roughness')) +
+      breaks=c('Periodicity', 'Behavioral', 'Roughness')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
 
 plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
-                                                goal=NULL,
+                                                goal=NULL,model_name='',model_type='',
                                                 black_vlines=c(),gray_vlines=c(),
                                                 xlab='Semitone',
                                                 ylab='Periodicity (Z-Score)') {
@@ -888,13 +881,13 @@ plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
 
-    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity_z, color = 'periodicity'), linewidth = 1) +
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity_z, color = model_type), linewidth = 1) +
 
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
                          ggplot2::aes(x = semitone,
                                       y = consonance_z,
-                                      color = 'HarrisonPearce2018',
+                                      color = model_name,
                                       group=1), linewidth = 0.5)} +
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
@@ -903,11 +896,44 @@ plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
       values=periodicity_roughness_colors(),
-      breaks=c('periodicity', 'behavioral', 'roughness', 'HarrisonPearce2018')) +
+      breaks=c('Periodicity', 'Behavioral', 'Roughness', model_name)) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
 
+plot_semitone_roughness_model_compare <- function(chords, title='', sigma=0.2,
+                                                    goal=NULL,model_name='',model_type='',
+                                                    black_vlines=c(),gray_vlines=c(),
+                                                    xlab='Semitone',
+                                                    ylab='Roughness (Z-Score)') {
+
+  chords$smoothed_roughness_z = smoothed(chords$semitone,
+                                           chords$roughness_z,
+                                           sigma)
+
+  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone)) +
+    ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
+    ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
+
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness_z, color = model_type), linewidth = 1) +
+
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance_z,
+                                      color = model_name,
+                                      group=1), linewidth = 0.5)} +
+    ggplot2::ggtitle(title) +
+    ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
+    ggplot2::guides(col = ggplot2::guide_legend()) +
+    ggplot2::ylab(ylab) +
+    ggplot2::xlab(xlab) +
+    ggplot2::scale_color_manual(
+      values=periodicity_roughness_colors(),
+      breaks=c('Periodicity', 'Behavioral', 'Roughness', model_name)) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+}
 
 plot_semitone_space_time_beats <- function(chords, title='', include_line=T, sigma=0.2,
                                            dashed_minor = F,include_points=T,
