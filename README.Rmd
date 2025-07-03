@@ -620,24 +620,9 @@ We choose $\Lambda_0=1$ to anchor the zero‐point of perception at a single cyc
 
 ### Bits of Periodicity as Shannon Information
 
-Because 
+The Stern-Brocot Tree traversals give us many binary encodings:
 
-$$\psi = \log_2(\Lambda)$$
+**`r sb$path`**
 
-is literally a count of doublings (bits), we can interpret $\psi$ as the **information content** of the chord’s periodic structure.  Each Sz is one bit of periodic pattern: doubling $\Lambda$ adds exactly one bit.
+Seems like this could be fertile ground for exploration.
 
-### Spectral Entropy
-
-To capture the *uncertainty* or *complexity* of the harmonic spectrum itself, define a probability distribution over your $N$ partials (e.g.\ normalized amplitudes $p_i$).  Then Shannon entropy
-
-$$H = -\sum_{i=1}^N p_i \log_2(p_i)$$
-
-measures how “spread out” or unpredictable the spectral content is—linking timbral complexity directly to information theory.
-
-### Channel-Capacity Analogy
-
-If the listener’s auditory system is viewed as a communication channel with an effective **bandwidth** $B$ (in Sz) and a signal-to-noise ratio $\mathrm{SNR}$ tied to your Weber threshold, then Shannon’s channel capacity
-
-$$C = B  \log_2 \bigl(1 + \mathrm{SNR}\bigr)$$
-
-gives an upper bound on how many bits per second of periodicity can be resolved.  
