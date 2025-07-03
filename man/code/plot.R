@@ -67,10 +67,10 @@ periodicity_roughness_colors <- function() {
   c(
     'periodicity'=colors_homey$fundamental,
     'behavioral'=colors_homey$neutral,
-    'roughness'=colors_homey$green
+    'roughness'=colors_homey$green,
+    'HarrisonPearce2018'=colors_homey$light_neutral
   )
 }
-
 theme_homey <- function(aspect.ratio=NULL){
   font <- "Helvetica"   #assign font family up front
 
@@ -807,9 +807,9 @@ plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
       color = 'space'),
       linewidth = 1) +
     {if (!is.null(goal))
-      ggplot2::geom_line(data=goal,
-                         ggplot2::aes(x = semitone,
-                                      y = consonance,
+      ggplot2::geom_line(
+                         ggplot2::aes(x = goal$semitone,
+                                      y = goal$consonance,
                                       color = 'behavioral',
                                       group=1), linewidth = 0.5)} +
     ggplot2::ggtitle(title) +
@@ -873,6 +873,41 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
+
+plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
+                                                goal=NULL,
+                                                black_vlines=c(),gray_vlines=c(),
+                                                xlab='Semitone',
+                                                ylab='Periodicity (Z-Score)') {
+
+  chords$smoothed_periodicity_z = smoothed(chords$semitone,
+                                           chords$periodicity_z,
+                                           sigma)
+
+  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone)) +
+    ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
+    ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
+
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity_z, color = 'periodicity'), linewidth = 1) +
+
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance_z,
+                                      color = 'HarrisonPearce2018',
+                                      group=1), linewidth = 0.5)} +
+    ggplot2::ggtitle(title) +
+    ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
+    ggplot2::guides(col = ggplot2::guide_legend()) +
+    ggplot2::ylab(ylab) +
+    ggplot2::xlab(xlab) +
+    ggplot2::scale_color_manual(
+      values=periodicity_roughness_colors(),
+      breaks=c('periodicity', 'behavioral', 'roughness', 'HarrisonPearce2018')) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+}
+
 
 plot_semitone_space_time_beats <- function(chords, title='', include_line=T, sigma=0.2,
                                            dashed_minor = F,include_points=T,

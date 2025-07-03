@@ -259,6 +259,8 @@ $$
 P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L_\lambda\bigr) \quad \text{[Proposed Units: Sz]}
 $$
 
+![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->
+
 ### Roughness: Stern-Brocot Traversal Depth
 
 #### Stern–Brocot: Total Traversal Depth for All Tones in a N-Tone Chord
@@ -398,8 +400,8 @@ $$
 
 ## Gabor Wavelets from Rational Approximations
 
-![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-10-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-11-2.png)<!-- -->
 
 ### Daugman’s Gabor Wavelet in Computer Vision
 

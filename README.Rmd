@@ -16,16 +16,6 @@ knitr::opts_chunk$set(
   message = FALSE,
   fig.crop= T
 )
-plot_fundamental_wavelength <- function(midi) {
-  freq = hrep::midi_to_freq(midi)
-  wavelength = SPEED_OF_SOUND / freq
-  wavenumber = (2 * pi) / wavelength
-  tibble::tibble(
-    meters=seq(0, wavelength ,0.001),
-    amplitude=sin(wavenumber * meters)
-  ) %>% ggplot2::ggplot(ggplot2::aes(meters, amplitude)) +
-    ggplot2::geom_line()
-}
 ```
 
 # Behavioral
@@ -425,6 +415,26 @@ $$
 $$
 P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L_\lambda\bigr) \quad \text{[Proposed Units: Sz]}
 $$
+
+
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+  chords <- dyads %>% dplyr::filter(timbre == 'Harmonic')
+  chords$periodicity_z = z_scores(-chords$periodicity)
+  chords$roughness_z = z_scores(-chords$roughness)
+  
+  HarrisonPearce2018.rds = paste0('./man/data/output/HarrisonPearce2018.rds')
+  HarrisonPearce2018_all = readRDS(HarrisonPearce2018.rds)
+  HarrisonPearce2018 = HarrisonPearce2018_all$summary %>% dplyr::rename(semitone=interval)
+  HarrisonPearce2018 <- HarrisonPearce2018 %>% dplyr::mutate(
+    consonance_z=z_scores(output)
+  )
+  
+  print(plot_semitone_periodicity_model_compare(chords, 'MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018',
+                                             goal=HarrisonPearce2018,
+                                             black_vlines=c(),gray_vlines=c()))
+  cat("  \n")
+  
+```
 
 ### Roughness: Stern-Brocot Traversal Depth
 
