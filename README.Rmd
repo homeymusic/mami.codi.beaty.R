@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Behavioral
+# The Behavioral Data
 
 ## Manipulating Harmonic Frequencies
 

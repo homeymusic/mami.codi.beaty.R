@@ -1,7 +1,7 @@
 MaMi.CoDi.Beaty: A Model of Harmony Perception
 ================
 
-# Behavioral
+# The Behavioral Data
 
 ## Manipulating Harmonic Frequencies
 
