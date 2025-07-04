@@ -17,61 +17,33 @@ smoothed <- function(x,val,sigma=0.2) {
   )
 }
 colors_homey <- list(
+  'minor'             = '#8AC5FF',
+  'neutral'           = '#FF5500',
+  'major'             = '#FFB000',
+  'periodicity'       = '#AF7AC5',
+  'roughness'         = '#74DE7E',
+  'behavioral'        = '#AAAAAA',
+  'other_models'      = '#DDDDDD',
   'background'        = '#000000',
   'foreground'        = '#333333',
-  'neutral'           = '#AAAAAA',
   'highlight'         = '#BBBBBB',
   'gray'              = '#C0C0C0',
-  'light_neutral'     = '#DDDDDD',
-  'subtle_foreground' = '#7F745A',
-  'minor'             = '#8AC5FF',
-  'minor_dark'        = '#6894BF',
-  'major'             = '#FFB000',
-  'major_dark'        = '#BF8400',
-  'fundamental'       = '#FF5500',
-  'green'             = '#74DE7E',
-  'green_lighter'     = '#9EE8A5'
+  'subtle_foreground' = '#7F745A'
 )
+colors_homey$time = colors_homey$major
+colors_homey$mami.codi.beaty = colors_homey$neutral
+colors_homey$space = colors_homey$minor
+colors_homey$HarrisonPearce2018=colors_homey$other_models
+colors_homey$HutchinsonKnopoff1978Revised=colors_homey$other_models
 
-saturation_colors_homey <- list(
-  major = list(
-    hi = '#FF9700',
-    lo = '#FFE0B2'
-  ),
-  neutral = list(
-    hi = '#FF5500',
-    lo = '#FFCCB2'
-  ),
-  minor = list(
-    hi = '#0084EC',
-    lo = '#A5CDEC'
-  )
-)
-
-color_factor_homey <- function(x,column_name) {
+color_factor_mami <- function(x,column_name) {
   cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
 }
-color_values_homey <- function() {
-  c("minor"=colors_homey$minor,
-    "neutral"=colors_homey$fundamental,
-    "major"=colors_homey$major,
-    'behavioral'=colors_homey$neutral,
-    'sb_depth'=colors_homey$green_lighter)
+
+color_factor_ropey <- function(x,column_name) {
+  cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("periodicity","neutral","roughness"))
 }
-space_time_colors <- function() {
-  c('space'=colors_homey$minor,
-    'time'=colors_homey$major,
-    'behavioral'=colors_homey$neutral)
-}
-periodicity_roughness_colors <- function() {
-  c(
-    'Periodicity'=colors_homey$fundamental,
-    'Behavioral'=colors_homey$neutral,
-    'Roughness'=colors_homey$green,
-    'HarrisonPearce2018'=colors_homey$light_neutral,
-    'HutchinsonKnopoff1978Revised'=colors_homey$light_neutral
-  )
-}
+
 theme_homey <- function(aspect.ratio=NULL){
   font <- "Helvetica"   #assign font family up front
 
@@ -84,7 +56,7 @@ theme_homey <- function(aspect.ratio=NULL){
     axis.title = ggplot2::element_text(color=colors_homey$foreground),
     axis.text = ggplot2::element_text(color=colors_homey$foreground),
     axis.ticks = ggplot2::element_blank(),
-    plot.background = ggplot2::element_rect(fill = colors_homey$neutral),
+    plot.background = ggplot2::element_rect(fill = colors_homey$highlight),
     panel.background = ggplot2::element_rect(fill = colors_homey$background),
     panel.grid.major = ggplot2::element_line(color = colors_homey$foreground, linewidth=0.2),
     panel.grid.minor = ggplot2::element_line(color = colors_homey$foreground, linewidth=0.1, linetype ="dashed"),
@@ -127,12 +99,12 @@ plot_mami.codi <- function(chords, title='', chords_to_label=NULL,include_labels
                                        y = .data$consonance)) +
     ggplot2::geom_vline(xintercept = 0, color = colors_homey$neutral) +
     ggplot2::geom_point(shape=21, stroke=NA, size=1,
-                        ggplot2::aes(fill=color_factor_homey(chords,'majorness'))) +
+                        ggplot2::aes(fill=color_factor_mami(chords,'majorness'))) +
     ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
     {if (include_path) {
       ggplot2::geom_path(
         ggplot2::aes(group=1,
-                     color=color_factor_homey(chords,'majorness')),
+                     color=color_factor_mami(chords,'majorness')),
         arrow = grid::arrow(length = grid::unit(0.1, "inches"),
                             ends = "last", type = "closed")
       )
@@ -140,7 +112,7 @@ plot_mami.codi <- function(chords, title='', chords_to_label=NULL,include_labels
     {  if (include_labels) {
       ggrepel::geom_text_repel(data=chords_to_label,
                                ggplot2::aes(label=label,
-                                            color=color_factor_homey(
+                                            color=color_factor_mami(
                                               chords_to_label,'majorness')),
                                segment.color = colors_homey$subtle_foreground,
                                max.overlaps = Inf,
@@ -171,19 +143,19 @@ plot_smoothed_mami.codi <- function(chords, title='', chords_to_label=NULL,
                                        y = smoothed_consonance)) +
     ggplot2::geom_vline(xintercept = 0, color = colors_homey$neutral) +
     ggplot2::geom_point(shape=21, stroke=NA, size=1,
-                        ggplot2::aes(fill=color_factor_homey(chords,'majorness'))) +
+                        ggplot2::aes(fill=color_factor_mami(chords,'majorness'))) +
     ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
     {if (include_path) {
       ggplot2::geom_path(
         ggplot2::aes(group=1,
-                     color=color_factor_homey(chords,'majorness')),
+                     color=color_factor_mami(chords,'majorness')),
         arrow = grid::arrow(length = grid::unit(0.1, "inches"),
                             ends = "last", type = "closed")
       )
     }} +
     ggrepel::geom_text_repel(data=chords_to_label,
                              ggplot2::aes(label=label,
-                                          color=color_factor_homey(
+                                          color=color_factor_mami(
                                             chords_to_label,'majorness')),
                              segment.color = colors_homey$subtle_foreground,
                              max.overlaps = Inf) +
@@ -292,12 +264,10 @@ integer_semitones <- function(semitones) {
 }
 
 plot_semitone_codi <- function(chords, title='', sigma=0.2,
-                               goal=NULL,
-                               black_vlines=c(),gray_vlines=c(),
-                               xlab='Semitone',
-                               ylab='Consonance (Z-Score)') {
-
-  whole_semitones = integer_semitones(chords$semitone)
+                                         goal=NULL,
+                                         black_vlines=c(),gray_vlines=c(),
+                                         xlab='Semitone',
+                                         ylab='Consonance (Z-Score)') {
 
   chords$smoothed_consonance_z = smoothed(chords$semitone,
                                           chords$consonance_z,
@@ -309,11 +279,10 @@ plot_semitone_codi <- function(chords, title='', sigma=0.2,
     ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
     ggplot2::geom_point(shape=21, stroke=NA, size=1,
                         alpha    = 0.4,
-                        ggplot2::aes(fill=color_factor_homey(chords,'majorness'))) +
+                        fill=colors_homey$neutral) +
     ggplot2::geom_line(data=chords,
-                       ggplot2::aes(x = semitone,
-                                    y = smoothed_consonance_z,
-                                    color=color_factor_homey(chords,'majorness'),
+                       ggplot2::aes(y = smoothed_consonance_z,
+                                    color='mami.codi.beaty',
                                     group=1), linewidth = 1) +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -321,8 +290,84 @@ plot_semitone_codi <- function(chords, title='', sigma=0.2,
                                       y = consonance,
                                       color = 'behavioral'
                          ), linewidth = 0.5)} +
-    ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
-    ggplot2::scale_color_manual(values=color_values_homey()) +
+    ggplot2::scale_fill_manual(values=unlist(colors_homey), guide="none") +
+    ggplot2::scale_color_manual(values=unlist(colors_homey)) +
+    ggplot2::ggtitle(title) +
+    ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
+    ggplot2::ylab(ylab) +
+    ggplot2::xlab(xlab) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+}
+
+plot_semitone_codi_with_mami <- function(chords, title='', sigma=0.2,
+                               goal=NULL,
+                               black_vlines=c(),gray_vlines=c(),
+                               xlab='Semitone',
+                               ylab='Consonance (Z-Score)') {
+
+  chords$smoothed_consonance_z = smoothed(chords$semitone,
+                                          chords$consonance_z,
+                                          sigma)
+
+  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
+                                       y = .data$consonance_z)) +
+    ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
+    ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
+    ggplot2::geom_point(shape=21, stroke=NA, size=1,
+                        alpha    = 0.4,
+                        ggplot2::aes(fill=color_factor_mami(chords,'majorness'))) +
+    ggplot2::geom_line(data=chords,
+                       ggplot2::aes(x = semitone,
+                                    y = smoothed_consonance_z,
+                                    color=color_factor_mami(chords,'majorness'),
+                                    group=1), linewidth = 1) +
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance,
+                                      color = 'behavioral'
+                         ), linewidth = 0.5)} +
+    ggplot2::scale_fill_manual(values=unlist(colors_homey), guide="none") +
+    ggplot2::scale_color_manual(values=unlist(colors_homey)) +
+    ggplot2::ggtitle(title) +
+    ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
+    ggplot2::ylab(ylab) +
+    ggplot2::xlab(xlab) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+}
+
+plot_semitone_codi_with_rope <- function(chords, title='', sigma=0.2,
+                                         goal=NULL,
+                                         black_vlines=c(),gray_vlines=c(),
+                                         xlab='Semitone',
+                                         ylab='Consonance (Z-Score)') {
+
+  chords$smoothed_consonance_z = smoothed(chords$semitone,
+                                          chords$consonance_z,
+                                          sigma)
+
+  ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
+                                       y = .data$consonance_z)) +
+    ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
+    ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
+    ggplot2::geom_point(shape=21, stroke=NA, size=1,
+                        alpha    = 0.4,
+                        ggplot2::aes(fill=color_factor_ropey(chords,'ropey'))) +
+    ggplot2::geom_line(data=chords,
+                       ggplot2::aes(x = semitone,
+                                    y = smoothed_consonance_z,
+                                    color=color_factor_ropey(chords,'ropey'),
+                                    group=1), linewidth = 1) +
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance,
+                                      color = 'behavioral'
+                         ), linewidth = 0.5)} +
+    ggplot2::scale_fill_manual(values=unlist(colors_homey), guide="none") +
+    ggplot2::scale_color_manual(values=unlist(colors_homey)) +
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::ylab(ylab) +
@@ -350,14 +395,14 @@ plot_semitone_error_sum <- function(chords, title='', include_line=T, sigma=0.2,
     ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
     { if (include_points)
       ggplot2::geom_point(shape=21, stroke=NA, size=1,
-                          ggplot2::aes(fill=color_factor_homey(chords,'majorness')))
+                          ggplot2::aes(fill=color_factor_mami(chords,'majorness')))
     } +
     { if (include_linear_regression) ggplot2::stat_smooth(method=lm)} +
     { if (include_line)
       ggplot2::geom_line(data=chords,
                          ggplot2::aes(x = semitone,
                                       y = smoothed_error_sum_z,
-                                      color=color_factor_homey(chords,'majorness'),
+                                      color=color_factor_mami(chords,'majorness'),
                                       group=1), linewidth = 1)} +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -395,13 +440,13 @@ plot_semitone_thomaes_function <- function(chords, title='', include_line=T, sig
     ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
     { if (include_points)
       ggplot2::geom_point(shape=21, stroke=NA, size=1,
-                          ggplot2::aes(fill=color_factor_homey(chords,'majorness')))
+                          ggplot2::aes(fill=color_factor_mami(chords,'majorness')))
     } +
     { if (include_line)
       ggplot2::geom_line(data=chords,
                          ggplot2::aes(x = semitone,
                                       y = smoothed_thomaes_function_z,
-                                      color=color_factor_homey(chords,'majorness'),
+                                      color=color_factor_mami(chords,'majorness'),
                                       group=1), linewidth = 1)} +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -421,10 +466,13 @@ plot_semitone_thomaes_function <- function(chords, title='', include_line=T, sig
 }
 
 plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
-                                               goal=NULL,
                                                black_vlines=c(),gray_vlines=c(),
                                                xlab='Semitone',
                                                ylab='Log2 of Total Stern Brocot Depth (Z-Score)') {
+
+  chords$smoothed_roughness = smoothed(chords$semitone,
+                                            chords$roughness_z,
+                                            sigma)
 
   chords$smoothed_time_roughness = smoothed(chords$semitone,
                                             chords$time_roughness_z,
@@ -439,12 +487,12 @@ plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
     ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
       ggplot2::geom_point(ggplot2::aes(y = .data$time_roughness_z),
                           shape=21, stroke=NA, size=1,
-                          fill=colors_homey$major,
+                          fill=colors_homey$time,
                           alpha    = 0.4
       ) +
       ggplot2::geom_point(ggplot2::aes(y = .data$space_roughness_z),
                           shape=21, stroke=NA, size=1,
-                          fill=colors_homey$minor,
+                          fill=colors_homey$space,
                           alpha    = 0.4
       ) +
       ggplot2::geom_line(
@@ -461,20 +509,17 @@ plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
         ),
         linewidth = 1
       ) +
-    {if (!is.null(goal))
-      ggplot2::geom_line(data=goal,
-                         ggplot2::aes(x = semitone,
-                                      y = consonance,
-                                      color = 'behavioral'
-                         ), linewidth = 0.5)} +
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness,
+                                    color = 'roughness'
+                       ), linewidth = 0.5) +
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::guides(col = ggplot2::guide_legend()) +
     ggplot2::ylab(ylab) +
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
-      values=space_time_colors(),
-      breaks=c('space', 'time', 'behavioral')) +
+      values=unlist(colors_homey),
+      breaks=c('space', 'time', 'roughness')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
@@ -581,13 +626,13 @@ plot_semitone_euclids_orchard_height <- function(chords, title='', include_line=
     ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
     { if (include_points)
       ggplot2::geom_point(shape=21, stroke=NA, size=1,
-                          ggplot2::aes(fill=color_factor_homey(chords,'majorness')))
+                          ggplot2::aes(fill=color_factor_mami(chords,'majorness')))
     } +
     { if (include_line)
       ggplot2::geom_line(data=chords,
                          ggplot2::aes(x = semitone,
                                       y = smoothed_euclids_orchard_height_z,
-                                      color=color_factor_homey(chords,'majorness'),
+                                      color=color_factor_mami(chords,'majorness'),
                                       group=1), linewidth = 1)} +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -625,14 +670,14 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
     ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
     { if (include_points)
       ggplot2::geom_point(shape=21, stroke=NA, size=1,
-                          ggplot2::aes(fill=color_factor_homey(chords,'majorness')))
+                          ggplot2::aes(fill=color_factor_mami(chords,'majorness')))
     } +
     { if (include_linear_regression) ggplot2::stat_smooth(method=lm)} +
     { if (include_line)
       ggplot2::geom_line(data=chords,
                          ggplot2::aes(x = semitone,
                                       y = smoothed_majorness_z,
-                                      color=color_factor_homey(chords,'majorness'),
+                                      color=color_factor_mami(chords,'majorness'),
                                       group=1), linewidth = 1)} +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -681,14 +726,14 @@ plot_semitone_mami_vert <- function(chords, title='', include_line=T, sigma=0.2,
       ggplot2::geom_point(shape=21, stroke=NA, size=1,
                           ggplot2::aes(
                             x = .data$majorness,
-                            fill=color_factor_homey(chords,'majorness')
+                            fill=color_factor_mami(chords,'majorness')
                           ))
     } +
     { if (include_line)
       ggplot2::geom_path(
         data=goal,
         ggplot2::aes(x = chords$smoothed_majorness_z,
-                     color=color_factor_homey(chords,'majorness'),
+                     color=color_factor_mami(chords,'majorness'),
                      group=1), linewidth = 1)} +
     {if (!is.null(goal))
       ggplot2::geom_path(data=goal,
@@ -776,11 +821,13 @@ plot_semitone_error_sum_space_time  <- function(chords, title='', include_line=T
 }
 
 plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
-                                                 goal=NULL,
                                                  black_vlines=c(),gray_vlines=c(),
                                                  xlab='Semitone',
                                                  ylab='Log2 of Cycle Length (Z-Score)') {
 
+  chords$smoothed_periodicity  = smoothed(chords$semitone,
+                                          chords$periodicity_z,
+                                          sigma)
   chords$smoothed_time_periodicity  = smoothed(chords$semitone,
                                                chords$time_periodicity_z,
                                                sigma)
@@ -794,11 +841,11 @@ plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
     ggplot2::geom_point(ggplot2::aes(y = .data$time_periodicity_z),
                         shape=21, stroke=NA, size=1,
                         alpha    = 0.4,
-                        fill=colors_homey$major) +
+                        fill=colors_homey$time) +
     ggplot2::geom_point(ggplot2::aes(y = .data$space_periodicity_z),
                         shape=21, stroke=NA, size=1,
                         alpha    = 0.4,
-                        fill=colors_homey$minor) +
+                        fill=colors_homey$space) +
     ggplot2::geom_line(ggplot2::aes(
       y = .data$smoothed_time_periodicity,
       color = 'time'),
@@ -807,20 +854,18 @@ plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
       y = .data$smoothed_space_periodicity,
       color = 'space'),
       linewidth = 1) +
-    {if (!is.null(goal))
-      ggplot2::geom_line(
-                         ggplot2::aes(x = goal$semitone,
-                                      y = goal$consonance,
-                                      color = 'behavioral',
-                                      group=1), linewidth = 0.5)} +
+    ggplot2::geom_line(
+      ggplot2::aes(y = .data$smoothed_periodicity,
+                   color = 'periodicity',
+                   group=1), linewidth = 0.5) +
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::guides(col = ggplot2::guide_legend()) +
     ggplot2::ylab(ylab) +
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
-      values=space_time_colors(),
-      breaks=c('space', 'time', 'behavioral')) +
+      values=unlist(colors_homey),
+      breaks=c('space', 'time', 'behavioral', 'periodicity')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
@@ -843,11 +888,11 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
 
-    ggplot2::geom_point(ggplot2::aes(y = .data$periodicity_z, fill = 'Periodicity'), shape=21, stroke=NA, size=1, alpha = 0.4) +
-    ggplot2::geom_point(ggplot2::aes(y = .data$roughness_z, fill = "Roughness"), shape=21, stroke=NA, size=1, alpha = 0.4) +
+    ggplot2::geom_point(ggplot2::aes(y = .data$periodicity_z), shape=21, stroke=NA, size=1, alpha = 0.4, fill = colors_homey$periodicity) +
+    ggplot2::geom_point(ggplot2::aes(y = .data$roughness_z), shape=21, stroke=NA, size=1, alpha = 0.4, fill = colors_homey$roughness) +
 
-    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity, color = 'Periodicity'), linewidth = 1) +
-    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness, color = "Roughness"), linewidth = 1) +
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity, color = 'periodicity'), linewidth = 1) +
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness, color = "roughness"), linewidth = 1) +
 
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -860,15 +905,18 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
     ggplot2::guides(col = ggplot2::guide_legend()) +
     ggplot2::ylab(ylab) +
     ggplot2::xlab(xlab) +
+    ggplot2::scale_fill_manual(
+      values=unlist(colors_homey),
+      breaks=c('periodicity', 'behavioral', 'roughness')) +
     ggplot2::scale_color_manual(
-      values=periodicity_roughness_colors(),
-      breaks=c('Periodicity', 'Behavioral', 'Roughness')) +
+      values=unlist(colors_homey),
+      breaks=c('periodicity', 'behavioral', 'roughness')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
 
 plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
-                                                goal=NULL,model_name='',model_type='',
+                                                goal=NULL,model_name='',
                                                 black_vlines=c(),gray_vlines=c(),
                                                 xlab='Semitone',
                                                 ylab='Periodicity (Z-Score)') {
@@ -881,7 +929,7 @@ plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
 
-    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity_z, color = model_type), linewidth = 1) +
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity_z, color = 'periodicity'), linewidth = 1) +
 
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -895,14 +943,14 @@ plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
     ggplot2::ylab(ylab) +
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
-      values=periodicity_roughness_colors(),
-      breaks=c('Periodicity', 'Behavioral', 'Roughness', model_name)) +
+      values=unlist(colors_homey),
+      breaks=c('periodicity',  model_name)) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
 
 plot_semitone_roughness_model_compare <- function(chords, title='', sigma=0.2,
-                                                    goal=NULL,model_name='',model_type='',
+                                                    goal=NULL,model_name='',
                                                     black_vlines=c(),gray_vlines=c(),
                                                     xlab='Semitone',
                                                     ylab='Roughness (Z-Score)') {
@@ -915,7 +963,7 @@ plot_semitone_roughness_model_compare <- function(chords, title='', sigma=0.2,
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
 
-    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness_z, color = model_type), linewidth = 1) +
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness_z, color = 'roughness'), linewidth = 1) +
 
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -929,8 +977,8 @@ plot_semitone_roughness_model_compare <- function(chords, title='', sigma=0.2,
     ggplot2::ylab(ylab) +
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
-      values=periodicity_roughness_colors(),
-      breaks=c('Periodicity', 'Behavioral', 'Roughness', model_name)) +
+      values=unlist(colors_homey),
+      breaks=c('roughness', model_name)) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
@@ -1195,10 +1243,10 @@ plot_semitone_codi_grid <- function(theory, experiment,
       data=theory,
       ggplot2::aes(x = semitone, y = smooth,
                    group=1,
-                   color=color_factor_homey(theory,'majorness'))) +
+                   color=color_factor_mami(theory,'majorness'))) +
     { if (include_points)
       ggplot2::geom_point(shape=21, stroke=NA, size=1,
-                          ggplot2::aes(fill=color_factor_homey(theory,'majorness')))
+                          ggplot2::aes(fill=color_factor_mami(theory,'majorness')))
     } +
     ggplot2::scale_color_manual(values=color_values_homey(), guide='none') +
     ggplot2::geom_text(data=per_plot_labels, ggplot2::aes(x=-Inf,y=-Inf,label=label,
@@ -1228,7 +1276,7 @@ plot_semitone_polar_codi_wrap <- function(theory, experiment,
     {if (include_points)
       ggplot2::geom_point(data=theory, shape=21, stroke=NA, size=1,
                           ggplot2::aes(x = semitone, y = z_score,
-                                       fill=color_factor_homey(theory,'polar_majorness')))} +
+                                       fill=color_factor_mami(theory,'polar_majorness')))} +
     ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
     {if (!is.null(experiment)) {
       ggplot2::geom_line(
@@ -1239,7 +1287,7 @@ plot_semitone_polar_codi_wrap <- function(theory, experiment,
       data=theory,
       ggplot2::aes(x = semitone, y = smooth,
                    group=1,
-                   color=color_factor_homey(theory,'polar_majorness'))) +
+                   color=color_factor_mami(theory,'polar_majorness'))) +
     ggplot2::scale_color_manual(values=color_values_homey(), guide='none') +
     ggplot2::geom_text(data=per_plot_labels, color=colors_homey$neutral,
                        ggplot2::aes(x=-Inf,y=-Inf,label=label,
@@ -1330,7 +1378,7 @@ plot_semitone_mami_wrap <- function(theory, experiment,
     ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
     ggplot2::geom_point(data=theory, shape=21, stroke=NA, size=1,
                         ggplot2::aes(x = semitone, y = majorness,
-                                     fill=color_factor_homey(theory,'majorness'))) +
+                                     fill=color_factor_mami(theory,'majorness'))) +
     ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
     ggplot2::scale_color_manual(values=color_values_homey(), guide='none') +
     ggplot2::geom_text(data=per_plot_labels, color=colors_homey$neutral,
@@ -1398,11 +1446,11 @@ plot_semitone_codi_raw <- function(theory_raw,
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
     ggplot2::geom_point(shape=21, stroke=NA, size=1,
-                        ggplot2::aes(fill=color_factor_homey(theory_raw,'majorness'))) +
+                        ggplot2::aes(fill=color_factor_mami(theory_raw,'majorness'))) +
     ggplot2::geom_line(data=theory_raw,
                        ggplot2::aes(x = semitone,
                                     y = smoothed_consonance,
-                                    color=color_factor_homey(theory_raw,'majorness'),
+                                    color=color_factor_mami(theory_raw,'majorness'),
                                     group=1), linewidth = 0.65) +
     ggplot2::geom_line(data=experiment_raw,
                        color=colors_homey$neutral,
@@ -1436,14 +1484,14 @@ plot_semitone_codi_smooth <- function(chords, title='', include_line=T,
     ggplot2::geom_vline(xintercept = gray_vlines,color=colors_homey$highlight,linetype = 'dotted') +
     { if (include_points)
       ggplot2::geom_point(shape=21, stroke=NA, size=1,
-                          ggplot2::aes(fill=color_factor_homey(chords,'majorness')))
+                          ggplot2::aes(fill=color_factor_mami(chords,'majorness')))
     } +
     { if (include_linear_regression) ggplot2::stat_smooth(method=lm)} +
     { if (include_line)
       ggplot2::geom_line(data=chords,
                          ggplot2::aes(x = semitone,
                                       y = smoothed_consonance,
-                                      color=color_factor_homey(chords,'majorness'),
+                                      color=color_factor_mami(chords,'majorness'),
                                       group=1), linewidth = 1)} +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -1558,7 +1606,7 @@ plot_semitone_codi_wrap_amp <- function(theory, experiment,
     {if (include_points)
       ggplot2::geom_point(data=theory, shape=21, stroke=NA, size=1,
                           ggplot2::aes(x = semitone, y = z_score,
-                                       fill=color_factor_homey(theory,'majorness')))} +
+                                       fill=color_factor_mami(theory,'majorness')))} +
     ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
     ggplot2::geom_line(
       data=experiment,
@@ -1568,7 +1616,7 @@ plot_semitone_codi_wrap_amp <- function(theory, experiment,
       data=theory,
       ggplot2::aes(x = semitone, y = smooth,
                    group=1,
-                   color=color_factor_homey(theory,'majorness'))) +
+                   color=color_factor_mami(theory,'majorness'))) +
     ggplot2::scale_color_manual(values=color_values_homey(), guide='none') +
     ggplot2::geom_text(data=per_plot_labels, color=colors_homey$neutral,
                        ggplot2::aes(x=-Inf,y=-Inf,label=label,
@@ -1699,7 +1747,7 @@ plot_semitone_codi_wrap <- function(theory, experiment,
     {if (include_points)
       ggplot2::geom_point(data = theory, shape = 21, stroke = NA, size = 1,
                           ggplot2::aes(x = semitone, y = z_score,
-                                       fill = color_factor_homey(theory, 'majorness')))} +
+                                       fill = color_factor_mami(theory, 'majorness')))} +
     ggplot2::scale_fill_manual(values = color_values_homey(), guide = "none") +
     {if (!is.null(experiment)) {
       ggplot2::geom_line(
@@ -1711,7 +1759,7 @@ plot_semitone_codi_wrap <- function(theory, experiment,
       data = theory,
       ggplot2::aes(x = semitone, y = smooth,
                    group = 1,
-                   color = color_factor_homey(theory, 'majorness'))) +
+                   color = color_factor_mami(theory, 'majorness'))) +
     ggplot2::scale_color_manual(values = color_values_homey(), guide = 'none') +
     ggplot2::geom_text(data = per_plot_labels, color = colors_homey$neutral,
                        ggplot2::aes(x = -Inf, y = -Inf, label = label,
@@ -1783,7 +1831,7 @@ plot_semitone_codi_cochlear_amplifier_num_harmonics_wrap <- function(theory, exp
     {if (include_points)
       ggplot2::geom_point(data = theory, shape = 21, stroke = NA, size = 1,
                           ggplot2::aes(x = semitone, y = z_score,
-                                       fill = color_factor_homey(theory, 'majorness')))} +
+                                       fill = color_factor_mami(theory, 'majorness')))} +
     ggplot2::scale_fill_manual(values = color_values_homey(), guide = "none") +
     {if (!is.null(experiment)) {
       ggplot2::geom_line(
@@ -1795,7 +1843,7 @@ plot_semitone_codi_cochlear_amplifier_num_harmonics_wrap <- function(theory, exp
       data = theory,
       ggplot2::aes(x = semitone, y = smooth,
                    group = 1,
-                   color = color_factor_homey(theory, 'majorness'))) +
+                   color = color_factor_mami(theory, 'majorness'))) +
     ggplot2::scale_color_manual(values = color_values_homey(), guide = 'none') +
     ggplot2::geom_text(data = per_plot_labels, color = colors_homey$neutral,
                        ggplot2::aes(x = -Inf, y = -Inf, label = label,

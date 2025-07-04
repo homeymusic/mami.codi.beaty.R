@@ -137,6 +137,8 @@ p = params %>% purrr::map(\(p) {
   
   chords$roughness_z = z_scores(-chords$roughness)
   
+  chords$ropey = chords$roughness - chords$periodicity
+  
   experiment.rds = paste0('./man/data/input/',
                           p$t,
                           '.rds')
@@ -173,13 +175,13 @@ p = params %>% purrr::map(\(p) {
   cat("  \n")
   
   print(plot_semitone_periodicity_space_time(chords, 'Periodicity: Space & Time',
-                                             goal=experiment,sigma=sigma,
+                                             sigma=sigma,
                                              black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
   
   print(plot_semitone_roughness_space_time(chords,title = "Roughness: Space & Time",
-                                           goal=experiment,sigma=sigma,
+                                           sigma=sigma,
                                            black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
   cat("  \n")
@@ -435,7 +437,6 @@ $$
   
   print(plot_semitone_periodicity_model_compare(chords, 'Bonang: MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018',
                                              goal=HarrisonPearce2018,model_name='HarrisonPearce2018',
-                                             model_type='Periodicity',
                                              black_vlines=c(),gray_vlines=c()))
   cat("  \n")
   
@@ -472,7 +473,6 @@ $$
   
   print(plot_semitone_roughness_model_compare(chords, 'Bonang: MaMi.CoDi.Beaty Roughness with Hutchinson & Knopoff 1978',
                                              goal=HutchinsonKnopoff1978Revised,model_name='HutchinsonKnopoff1978Revised',
-                                             model_type='Roughness',
                                              black_vlines=c(),gray_vlines=c()))
   cat("  \n")
 ```
