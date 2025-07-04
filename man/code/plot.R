@@ -509,9 +509,6 @@ plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
         ),
         linewidth = 1
       ) +
-    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness,
-                                    color = 'roughness'
-                       ), linewidth = 0.5) +
 
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -527,7 +524,7 @@ plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
       values=unlist(colors_homey),
-      breaks=c('space', 'time', 'roughness', 'behavioral')) +
+      breaks=c('space', 'time', 'behavioral')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
@@ -862,10 +859,6 @@ plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
       y = .data$smoothed_space_periodicity,
       color = 'space'),
       linewidth = 1) +
-    ggplot2::geom_line(
-      ggplot2::aes(y = .data$smoothed_periodicity,
-                   color = 'periodicity',
-                   group=1), linewidth = 0.5) +
 
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -881,7 +874,7 @@ plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
       values=unlist(colors_homey),
-      breaks=c('space', 'time', 'behavioral', 'periodicity')) +
+      breaks=c('space', 'time', 'behavioral')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
@@ -915,9 +908,6 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
     ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity, color = 'periodicity'), linewidth = 1) +
     ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness, color = "roughness"), linewidth = 1) +
 
-    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_consonance,
-                                    color = 'mami.codi.beaty',
-                                    group=1), linewidth = 0.5) +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
                          ggplot2::aes(x = semitone,
@@ -932,10 +922,10 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
     ggplot2::xlab(xlab) +
     ggplot2::scale_fill_manual(
       values=unlist(colors_homey),
-      breaks=c('periodicity', 'roughness', 'mami.codi.beaty', 'behavioral')) +
+      breaks=c('periodicity', 'roughness', 'behavioral')) +
     ggplot2::scale_color_manual(
       values=unlist(colors_homey),
-      breaks=c('periodicity', 'roughness', 'mami.codi.beaty', 'behavioral')) +
+      breaks=c('periodicity', 'roughness', 'behavioral')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
