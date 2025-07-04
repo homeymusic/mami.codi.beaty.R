@@ -79,7 +79,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-39.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-40.png)<!-- -->
 
-# Fourier Spectrum Quantization via a Rational-Fraction Uncertainty Principle
+# Fourier uncertainty principle in number‑theoretic form matches musical consonance perception
 
 ## Heisenberg Uncertainty
 

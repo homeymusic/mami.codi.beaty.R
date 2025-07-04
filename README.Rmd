@@ -189,7 +189,7 @@ p = params %>% purrr::map(\(p) {
 })
 ```
 
-# Fourier Spectrum Quantization via a Rational-Fraction Uncertainty Principle
+# Fourier uncertainty principle in number‑theoretic form matches musical consonance perception
 
 ## Heisenberg Uncertainty
 
