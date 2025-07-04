@@ -175,13 +175,13 @@ p = params %>% purrr::map(\(p) {
   cat("  \n")
   
   print(plot_semitone_periodicity_space_time(chords, 'Periodicity: Space & Time',
-                                             sigma=sigma,
+                                             goal=experiment,sigma=sigma,
                                              black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
   
   print(plot_semitone_roughness_space_time(chords,title = "Roughness: Space & Time",
-                                           sigma=sigma,
+                                          goal=experiment, sigma=sigma,
                                            black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
   cat("  \n")
@@ -514,52 +514,52 @@ $$
 }
 $$
 
-## Pseudo-Octaves: Perception of Stretching and Compressing
+## Pseudo-Octaves: Stretching and Compressing Harmonics
 
-### Relative Octave Uncertainty
-
-$$
-\frac{\Delta O}{O_{ref}} \ge \frac{1}{4\pi n}
-$$
+### Relative Harmonics Uncertainty
 
 $$
-\frac{|\tilde O - O|}{O_{ref}} \ge \frac{1}{4\pi n}
+\frac{\Delta h}{h} =
+\frac{\bigl| \tilde h - h \bigr|}{h} = 
+\boxed{\frac{\bigl| \frac{f_j}{f_i} - \mathrm{round} \bigl( \frac{f_j}{f_i} \bigr) \bigr|}{\mathrm{round} \bigl( \frac{f_j}{f_i} \bigr)} \ge 
+\frac{1}{4\pi n}}
 $$
 
-$$
-|\log_{2} \tilde O - \log_{2} O| = \log_{2}\Bigl(1 + \frac{| \tilde O - O|}{O_{ref}}\Bigr)
-$$
+### Psuedo Octave from Harmonics
 
 $$
-\log_{2}\Bigl(1 + \frac{|\tilde O - O|}{O_{ref}}\Bigr) \ge \log_{2}\Bigl(1 + \frac{1}{4\pi n}\Bigr)
+\tilde O =2^{\log_{h}\tilde h}
 $$
 
+### Log form of Uncertainty Limit
+
 $$
-\boxed{\frac{|\log_{2}( \tilde O) - \log_{2}( O)|} {\log_{2}(O_{ref})} \ge \log_{2}\Bigl(1 + \frac{1}{4\pi n}\Bigr)}
+\log_2 \bigl( 1 + \frac{1}{4 \pi} \bigr) \approx 0.11
 $$
 
-### Heuristic to Find Pseudo Octave of a N-Tone Chord
+Aligns with Sethares experiments with octave stretching and compressing $2.0 \pm 0.1$.
+
+### Heuristic to Find Pseudo Octave of a N-Tone Chord from Harmonic Spacing within Uncertainty Limit
 
 $$
 \begin{aligned}
-&\mathbf{FOR} i\gets 1 \mathbf{TO} N \mathbf{DO}\\
-&\quad \mathbf{FOR} j\gets i+1 \mathbf{TO} N \mathbf{DO}\\
-&\quad\quad approximation \gets \dfrac{r_{j}}{r_{i}}\\
-&\quad\quad ideal \gets \mathrm{round}(approximation)\\
-&\quad\quad \mathbf{UNLESS}
-\boxed{\dfrac{ \bigl\lvert \log_{2}(ideal) - \log_{2}(approximation) \bigr \rvert }{ \log_{2}(2.0) } \ge \log_{2}\bigl(1+\tfrac{1}{4\pi n}\bigr) }
-\mathbf{THEN}\\
-&\quad\quad\quad octave_{\mathrm{pseudo}}\gets  
-2.0^{\frac{\log_{2}(approximation)}{\log_{2}(ideal)}}\\
-&\quad\quad\quad candidates\gets candidates\cup\{octave_{\mathrm{pseudo}}\}\\
-&\quad\quad \mathbf{END\_UNLESS}\\
-&\quad \mathbf{END\_FOR}\\
+&\mathbf{FOR}\ i\gets 1\ \mathbf{TO}\ N\ \mathbf{DO}\\
+&\quad\mathbf{FOR}\ j\gets i+1\ \mathbf{TO}\ N\ \mathbf{DO}\\
+&\quad\quad\quad \mathbf{UNLESS}\ \boxed{\frac{\lvert  \frac{r_{j}}{r_{i}} - \mathrm{round}( \frac{r_{j}}{r_{i}})\rvert}{\mathrm{round}( \frac{r_{j}}{r_{i}})} \ge \frac{1}{4\pi n}}\ \mathbf{THEN}\\
+&\quad\quad\quad\quad candidate\_pseudo\_octave \gets \exp_{2}\!\bigl(\frac{\log(\tilde h)}{\log(h)}\bigr)\\
+&\quad\quad\quad\quad candidates \gets candidates \cup \{pseudo\_octave\}\\
+&\quad\quad\mathbf{END\_UNLESS}\\
+&\quad\mathbf{END\_FOR}\\
 &\mathbf{END\_FOR}\\
-&\mathbf{RETURN} most\_frequent(candidates)
+&\mathbf{RETURN}\ \mathbf{most\_frequent}(candidates)
 \end{aligned}
 $$
 
-
+$$
+\frac{f}{f_{\mathrm{ref}}}
+\quad\mapsto\quad
+\exp_{2}\biggl(\frac{\log_{2}\bigl(f/f_{\mathrm{ref}}\bigr)}{\log_{2}(\tilde O)}\biggr)
+$$
 
 # Appendix A: Relative Wavelength Uncertainty
 

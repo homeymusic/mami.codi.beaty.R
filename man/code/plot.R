@@ -18,7 +18,7 @@ smoothed <- function(x,val,sigma=0.2) {
 }
 colors_homey <- list(
   'minor'             = '#8AC5FF',
-  'neutral'           = '#FF5500',
+  'neutral'           = '#FFFFFF',
   'major'             = '#FFB000',
   'periodicity'       = '#AF7AC5',
   'roughness'         = '#74DE7E',
@@ -466,7 +466,7 @@ plot_semitone_thomaes_function <- function(chords, title='', include_line=T, sig
 }
 
 plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
-                                               black_vlines=c(),gray_vlines=c(),
+                                               black_vlines=c(),gray_vlines=c(),goal=NULL,
                                                xlab='Semitone',
                                                ylab='Log2 of Total Stern Brocot Depth (Z-Score)') {
 
@@ -512,6 +512,14 @@ plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
     ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness,
                                     color = 'roughness'
                        ), linewidth = 0.5) +
+
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance,
+                                      color = 'behavioral'
+                         ), linewidth = 0.5)} +
+
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::guides(col = ggplot2::guide_legend()) +
@@ -519,7 +527,7 @@ plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
       values=unlist(colors_homey),
-      breaks=c('space', 'time', 'roughness')) +
+      breaks=c('space', 'time', 'roughness', 'behavioral')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
@@ -821,7 +829,7 @@ plot_semitone_error_sum_space_time  <- function(chords, title='', include_line=T
 }
 
 plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
-                                                 black_vlines=c(),gray_vlines=c(),
+                                                 black_vlines=c(),gray_vlines=c(),goal=NULL,
                                                  xlab='Semitone',
                                                  ylab='Log2 of Cycle Length (Z-Score)') {
 
@@ -858,6 +866,14 @@ plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
       ggplot2::aes(y = .data$smoothed_periodicity,
                    color = 'periodicity',
                    group=1), linewidth = 0.5) +
+
+    {if (!is.null(goal))
+      ggplot2::geom_line(data=goal,
+                         ggplot2::aes(x = semitone,
+                                      y = consonance,
+                                      color = 'behavioral'
+                         ), linewidth = 0.5)} +
+
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::guides(col = ggplot2::guide_legend()) +
@@ -884,6 +900,11 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
                                             chords$roughness_z,
                                             sigma)
 
+  chords$smoothed_consonance = smoothed(chords$semitone,
+                                          chords$consonance_z,
+                                          sigma)
+
+
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone)) +
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
@@ -894,12 +915,16 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
     ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity, color = 'periodicity'), linewidth = 1) +
     ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness, color = "roughness"), linewidth = 1) +
 
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_consonance,
+                                    color = 'mami.codi.beaty',
+                                    group=1), linewidth = 0.5) +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
                          ggplot2::aes(x = semitone,
                                       y = consonance,
-                                      color = 'behavioral',
-                                      group=1), linewidth = 0.5)} +
+                                      color = 'behavioral'
+                         ), linewidth = 0.5)} +
+
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::guides(col = ggplot2::guide_legend()) +
@@ -907,10 +932,10 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
     ggplot2::xlab(xlab) +
     ggplot2::scale_fill_manual(
       values=unlist(colors_homey),
-      breaks=c('periodicity', 'behavioral', 'roughness')) +
+      breaks=c('periodicity', 'roughness', 'mami.codi.beaty', 'behavioral')) +
     ggplot2::scale_color_manual(
       values=unlist(colors_homey),
-      breaks=c('periodicity', 'behavioral', 'roughness')) +
+      breaks=c('periodicity', 'roughness', 'mami.codi.beaty', 'behavioral')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }

@@ -5,35 +5,33 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-double approximate_pseudo_octave(Rcpp::NumericVector unsorted_ratios,
+double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
                                  const double uncertainty) {
 
-  const double reference_psuedo_octave = 2.0;
-
-  int n = unsorted_ratios.size();
-  if (n <= 2) return reference_psuedo_octave;
+  int n = unsorted_x.size();
+  if (n <= 2) return 2.0;
 
   // Copy into our working 'ratios' and sort
-  std::vector<double> ratios(unsorted_ratios.begin(), unsorted_ratios.end());
-  std::sort(ratios.begin(), ratios.end());
+  std::vector<double> x(unsorted_x.begin(), unsorted_x.end());
+  std::sort(x.begin(), x.end());
 
   std::vector<double> candidates;
   candidates.reserve(n * (n - 1) / 2);
 
   for (int i = 0; i < n; ++i) {
     for (int j = i + 1; j < n; ++j) {
-      double ratio_of_ratios = ratios[j] / ratios[i];
-      int    ideal          = int(std::round(ratio_of_ratios));
+      double pseudo_harmonic = x[j] / x[i];
+      int    ideal_harmonic  = int(std::round(pseudo_harmonic));
+      if     (ideal_harmonic < 2) continue; // skip the unisons
 
-      if (ideal >= reference_psuedo_octave &&
-          std::abs(ideal - ratio_of_ratios) / ideal < uncertainty) {
-        double oct = std::exp2(std::log2(ratio_of_ratios) / std::log2((double)ideal));
-        candidates.push_back(oct);
+      if (std::abs(pseudo_harmonic - ideal_harmonic) / ideal_harmonic < uncertainty) {
+        double candidate_pseudo_octave = std::exp2( std::log2(pseudo_harmonic)/ std::log2(ideal_harmonic) );
+        candidates.push_back(candidate_pseudo_octave);
       }
     }
   }
 
-  if (candidates.empty()) return reference_psuedo_octave;
+  if (candidates.empty()) return 2.0;
 
   Rcpp::NumericVector qualifiedCandidates(candidates.begin(), candidates.end());
   Rcpp::IntegerVector counts = Rcpp::table(qualifiedCandidates);
@@ -210,21 +208,19 @@ inline double round_to_precision(double value, int precision = 15) {
      return DataFrame::create();
    }
 
+   // find the pseudo-octave in ratio-space
+   double pseudo_octave = approximate_pseudo_octave(x, uncertainty);
+
    // compute ratios relative to x_ref
    NumericVector ratios(n);
    for (int i = 0; i < n; ++i) {
      ratios[i] = x[i] / x_ref;
    }
 
-   // find the pseudo-octave in ratio-space
-   double pseudo_octave = approximate_pseudo_octave(ratios, uncertainty);
-
    // build the transformed vector for coprime search
    NumericVector pseudo_x(n), uncertainties(n, uncertainty);
    for (int i = 0; i < n; ++i) {
-     pseudo_x[i] = x_ref * std::pow(2.0,
-                            std::log(ratios[i]) /
-                              std::log(pseudo_octave));
+     pseudo_x[i] = x_ref * std::exp2( std::log2(ratios[i]) / std::log2(pseudo_octave));
    }
 
    DataFrame df = rational_fractions(
