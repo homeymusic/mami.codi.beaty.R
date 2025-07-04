@@ -7,8 +7,11 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 double approximate_pseudo_octave(Rcpp::NumericVector unsorted_ratios,
                                  const double uncertainty) {
+
+  const double reference_psuedo_octave = 2.0;
+
   int n = unsorted_ratios.size();
-  if (n <= 2) return 2.0;
+  if (n <= 2) return reference_psuedo_octave;
 
   // Copy into our working 'ratios' and sort
   std::vector<double> ratios(unsorted_ratios.begin(), unsorted_ratios.end());
@@ -31,7 +34,7 @@ double approximate_pseudo_octave(Rcpp::NumericVector unsorted_ratios,
       double approximation = std::exp2(log_diff);
       int    ideal         = int(std::round(approximation));
 
-      if (ideal >= 2 &&
+      if (ideal >= reference_psuedo_octave &&
           std::abs(ideal - approximation) / ideal < log2_uncertainty) {
         double oct = std::exp2(log_diff / std::log2((double)ideal));
         candidates.push_back(oct);
@@ -39,7 +42,7 @@ double approximate_pseudo_octave(Rcpp::NumericVector unsorted_ratios,
     }
   }
 
-  if (candidates.empty()) return 2.0;
+  if (candidates.empty()) return reference_psuedo_octave;
 
   Rcpp::NumericVector qualifiedCandidates(candidates.begin(), candidates.end());
   Rcpp::IntegerVector counts = Rcpp::table(qualifiedCandidates);
