@@ -17,26 +17,17 @@ double approximate_pseudo_octave(Rcpp::NumericVector unsorted_ratios,
   std::vector<double> ratios(unsorted_ratios.begin(), unsorted_ratios.end());
   std::sort(ratios.begin(), ratios.end());
 
-  // Precompute log2 of each ratio
-  std::vector<double> log2_ratios(n);
-  for (int i = 0; i < n; ++i) {
-    log2_ratios[i] = std::log2(ratios[i]);
-  }
-
-  double log2_uncertainty = std::log2(1.0 + uncertainty);
-
   std::vector<double> candidates;
   candidates.reserve(n * (n - 1) / 2);
 
   for (int i = 0; i < n; ++i) {
     for (int j = i + 1; j < n; ++j) {
-      double log_diff      = log2_ratios[j] - log2_ratios[i];
-      double approximation = std::exp2(log_diff);
-      int    ideal         = int(std::round(approximation));
+      double ratio_of_ratios = ratios[j] / ratios[i];
+      int    ideal          = int(std::round(ratio_of_ratios));
 
       if (ideal >= reference_psuedo_octave &&
-          std::abs(ideal - approximation) / ideal < log2_uncertainty) {
-        double oct = std::exp2(log_diff / std::log2((double)ideal));
+          std::abs(ideal - ratio_of_ratios) / ideal < uncertainty) {
+        double oct = std::exp2(std::log2(ratio_of_ratios) / std::log2((double)ideal));
         candidates.push_back(oct);
       }
     }
