@@ -573,7 +573,7 @@ $$
 For all combinations of $f$ partials, we added the cubic distortion products to the stimuli.
 
 $$
-2 f_{low} - f_{high}, \quad |f_{low} - f_{high}| < f_{min}
+2 f_{low} - f_{high}, \quad \text{where} \quad (f_{high} - f_{low}) < f_{min}
 $$
 
 
