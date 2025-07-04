@@ -331,17 +331,23 @@ $$
 ### Psuedo Octave from Harmonics
 
 $$
-\tilde O =2^{\log_{h}\tilde h}
+\tilde \Omega =2^{\log_{h}\tilde h}
 $$
 
-### Log form of Uncertainty Limit
+### Log Base 2 Uncertainty Limit
+
+What is the uncertainty limit for perceiving an octave?
 
 $$
 \log_2 \bigl( 1 + \frac{1}{4 \pi} \bigr) \approx 0.11
 $$
 
+$$
+\tilde \Omega = \Omega \pm \log_2 \bigl( 1 + \frac{1}{4 \pi} \bigr) = \Omega \pm 0.11
+$$
+
 Aligns with Sethares experiments with octave stretching and compressing
-$2.0 \pm 0.1$.
+from $1.9$ to $2.1$.
 
 ### Heuristic to Find Pseudo Octave of a N-Tone Chord from Harmonic Spacing within Uncertainty Limit
 
@@ -363,7 +369,16 @@ $$
 $$
 \frac{f}{f_{\mathrm{ref}}}
 \quad\mapsto\quad
-\exp_{2}\biggl(\frac{\log_{2}\bigl(f/f_{\mathrm{ref}}\bigr)}{\log_{2}(\tilde O)}\biggr)
+\exp_{2}\biggl(\frac{\log_{2}\bigl(f/f_{\mathrm{ref}}\bigr)}{\log_{2}(\tilde \Omega)}\biggr)
+$$
+
+## Cubic Distortion Products
+
+For all combinations of $f$ partials, we added the cubic distortion
+products to the stimuli.
+
+$$
+2 f_{low} - f_{high}, \quad |f_{low} - f_{high}| < f_{min}
 $$
 
 # Appendix A: Relative Wavelength Uncertainty
