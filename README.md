@@ -186,9 +186,9 @@ Let’s find the rational approximation of two example frequencies that
 form a Major 7th interval:
 
 $$
-f = 493.8833\ \text{(B4)}, 
+f_{\mathrm{ref}} = 261.6256\ \text{(C4)},
 \quad
-f_{\mathrm{ref}} = 261.6256\ \text{(C4)}
+f = 493.8833\ \text{(B4)}
 $$
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
@@ -222,17 +222,21 @@ $$
 
 Idealized Frequencies:
 
-$$f = \{261.63, 493.88\}$$
+$$\mathbf{f} = ( 261.63, 493.88 )$$
 
 Equation for Rational Fraction Frequencies:
 
 $$
-\mathbf{f} = f_{ref} \bigl( \frac{a_i}{b_i},\frac{a_i}{b_i},\dots,\frac{a_N}{b_N} \bigr)
+\mathbf{f} = f_{ref} \cdot \bigl( \frac{a_i}{b_i},\frac{a_i}{b_i},\dots,\frac{a_N}{b_N} \bigr)
+$$
+
+$$
+\mathbf{f} = 261.63  \cdot \bigl( \frac{1}{1},\frac{11}{6} \bigr)
 $$
 
 Rational Fraction Frequencies:
 
-$$f = \{261.63, 479.65\}$$
+$$\mathbf{f} = ( 261.63, 479.65 )$$
 
 ![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->
 
@@ -245,10 +249,9 @@ linear frequency sensor.
 
 Our auditory system amplifies signals in a way that creates new tones.
 Those tones give us more information that allows us to hear changes and
-still over the uncertainty principle.
+still obey the uncertainty principle.
 
-TODO: show this example again but with the cochlear distoration
-products.
+TODO: show this example again but with the cochlear distortion products.
 
 ## Fundamental Wavelength of a N-Tone Chord
 
