@@ -211,12 +211,8 @@ $$
 \Delta t = n T = n \frac{2 \pi }{\omega_{ref}}, \quad n \enspace \text{periods}
 $$
 
-::: note
-NOTE: For our consonance modeling we use $n=1$ for all computations, but we leave $n$ throughout this text for completeness.
-:::
-
 $$
-\Delta t \Delta \omega = n T \Delta \omega = n \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
+n \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
 $$
 
 ### Relative Frequency Uncertainty
@@ -258,10 +254,10 @@ $$
 ### Rational Approximation Uncertainty
 
 $$
-\Delta f = \bigl| \widetilde f - f \bigr|
-= \bigl| f_{ref}  \frac{a}{b} - f\bigr|
-= \frac{f_{ref}}{f_{ref}} \bigl| f_{ref} \frac{a}{b} - f \bigr|
-= f_{ref} \bigl| \tfrac{a}{b} - \tfrac{f}{f_{ref}}\bigr|
+\Delta f = 
+\bigl| f_{ref}  \frac{a}{b} - f\bigr| = 
+\frac{f_{ref}}{f_{ref}} \bigl| f_{ref} \frac{a}{b} - f \bigr| = 
+f_{ref} \bigl| \tfrac{a}{b} - \tfrac{f}{f_{ref}}\bigr|
 $$
 
 $$
@@ -316,12 +312,12 @@ $$
   M7 <- hrep::pi_chord(c(60, 71))
 
   plot(hrep::sparse_fr_spectrum(M7, num_harmonics=1),
-       xlim = c(0, 1000))
+       xlim = c(0, 1500))
   title("Pure Tone Major 7th of C4 and B4")
   cat("  \n")
 ```
 
-we traverse the Stern–Brocot tree to a depth of **`r  sb$depth`** levels along the path **`r sb$path`** 
+We traverse the Stern–Brocot tree to a depth of **`r  sb$depth`** levels along the path **`r sb$path`** 
 landing us on the fraction $\frac{`r sb$num`}{`r sb$den`}$.
 
 $$
@@ -394,12 +390,6 @@ title("Idealized Signal")
 cat("  \n")
 ```
 
-## Fundamental Wavenumber of a N-Tone Chord
-
-$$
-k_0 = k_{ref} \frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad k_{ref} = \mathrm{max}(k_1, k_2, \dots, k_N), \quad a_i \perp b_i
-$$
-
 ## Fundamental Wavelength of a N-Tone Chord
 
 $$
@@ -423,6 +413,23 @@ P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L
 $$
 
 #### Bonang: MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018
+
+We use a simulated Bonang spectrum. Here is an example unison P1 pitch at C4.
+
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+bonang_harmonics = c(1.0, 1.52, 3.46, 3.92)
+bonang_spectrum = hrep::sparse_fr_spectrum(list(frequency=hrep::midi_to_freq(60) * bonang_harmonics, amplitude=rep(1, length(bonang_harmonics))))
+vals <- sprintf("%.2f", bonang_spectrum$x)
+f_list <- paste(vals, collapse = ", ")
+cat(sprintf("  \n$$f = \\{%s\\}$$  \n", f_list))
+```
+
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+plot(bonang_spectrum,
+     xlim = c(0, 1500))
+title("Simulated Bonang Spectrum P1 Unison")
+cat("  \n")
+```
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
   chords <- dyads %>% dplyr::filter(timbre == 'Bonang')

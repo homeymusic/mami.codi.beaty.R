@@ -101,15 +101,8 @@ $$
 \Delta t = n T = n \frac{2 \pi }{\omega_{ref}}, \quad n \enspace \text{periods}
 $$
 
-<div class="note">
-
-NOTE: For our consonance modeling we use $n=1$ for all computations, but
-we leave $n$ throughout this text for completeness.
-
-</div>
-
 $$
-\Delta t \Delta \omega = n T \Delta \omega = n \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
+n \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
 $$
 
 ### Relative Frequency Uncertainty
@@ -149,10 +142,10 @@ $$
 ### Rational Approximation Uncertainty
 
 $$
-\Delta f = \bigl| \widetilde f - f \bigr|
-= \bigl| f_{ref}  \frac{a}{b} - f\bigr|
-= \frac{f_{ref}}{f_{ref}} \bigl| f_{ref} \frac{a}{b} - f \bigr|
-= f_{ref} \bigl| \tfrac{a}{b} - \tfrac{f}{f_{ref}}\bigr|
+\Delta f = 
+\bigl| f_{ref}  \frac{a}{b} - f\bigr| = 
+\frac{f_{ref}}{f_{ref}} \bigl| f_{ref} \frac{a}{b} - f \bigr| = 
+f_{ref} \bigl| \tfrac{a}{b} - \tfrac{f}{f_{ref}}\bigr|
 $$
 
 $$
@@ -200,7 +193,7 @@ $$
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
 
-we traverse the Stern–Brocot tree to a depth of **7** levels along the
+We traverse the Stern–Brocot tree to a depth of **7** levels along the
 path **RRLRRRR** landing us on the fraction $\frac{11}{6}$.
 
 $$
@@ -231,12 +224,6 @@ $$
 
 ![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->
 
-## Fundamental Wavenumber of a N-Tone Chord
-
-$$
-k_0 = k_{ref} \frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad k_{ref} = \mathrm{max}(k_1, k_2, \dots, k_N), \quad a_i \perp b_i
-$$
-
 ## Fundamental Wavelength of a N-Tone Chord
 
 $$
@@ -261,7 +248,14 @@ $$
 
 #### Bonang: MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018
 
-![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->
+We use a simulated Bonang spectrum. Here is an example unison P1 pitch
+at C4.
+
+$$f = \{261.63, 397.67, 905.22, 1025.57\}$$
+
+![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
+
+![](man/figures/README-unnamed-chunk-12-1.png)<!-- -->
 
 ### Roughness: Stern-Brocot Traversal Depth
 
@@ -279,7 +273,7 @@ $$
 
 #### Bonang: MaMi.CoDi.Beaty Roughness with Hutchinson & Knopoff 1978
 
-![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-13-1.png)<!-- -->
 
 ### Overall Frequency Dissonance
 
@@ -425,8 +419,8 @@ $$
 
 ## Gabor Wavelets from Rational Approximations
 
-![](man/figures/README-unnamed-chunk-12-1.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-12-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-14-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-14-2.png)<!-- -->
 
 ### Daugman’s Gabor Wavelet in Computer Vision
 
