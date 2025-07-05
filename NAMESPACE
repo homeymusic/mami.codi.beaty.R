@@ -3,7 +3,6 @@
 S3method(parse_input,default)
 S3method(parse_input,sparse_fr_spectrum)
 export(compute_cycle_length)
-export(compute_energy_per_cycle)
 export(compute_harmony_perception)
 export(compute_space_cycles)
 export(compute_time_cycles)

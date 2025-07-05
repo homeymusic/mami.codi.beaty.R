@@ -34,7 +34,6 @@ mami.codi.beaty <- function(
     # Frequency Domain
     compute_space_cycles() %>%
     compute_time_cycles() %>%
-    compute_energy_per_cycle() %>%
     # Psychophysical Domain
     compute_harmony_perception() %>%
     # App Domain
@@ -253,43 +252,6 @@ compute_harmony_perception <- function(x) {
 
 }
 
-#' Compute energy per cycle
-#'
-#' Calculates energy per cycle.
-#'
-#' @param x The spectrum of stimulus and side bands.
-#'
-#' @return Physics measure of energy per cycle.
-#'
-#' @rdname compute_energy_per_cycle
-#' @export
-compute_energy_per_cycle <- function(x) {
-
-  x %>% dplyr::mutate(
-    energy_per_cycle = energy_per_cycle(x$wavelength_spectrum[[1]])
-  )
-
-}
-
-#' this is a made up metric that felt right to me
-#' over one spatial cycle we are spatially
-#' displacing material by amplitude A.
-#'
-#' if we were to multiply it by bulk modulus
-#' we would have units of energy
-#'
-#' https://en.wikipedia.org/wiki/Bulk_modulus
-#'
-energy_per_cycle <- function(
-    x
-) {
-  if (nrow(x) > 0) {
-    sum( x$amplitude^2 * x$wavelength, na.rm = TRUE)
-  } else {
-    0
-  }
-}
-
 # Constants
 
 UNCERTAINTY_LIMIT = 1 / (4 * pi)
@@ -322,6 +284,3 @@ MAX_FREQUENCY    <- 4000
 # Place-coding (BM) range
 MAX_WAVELENGTH   <- SPEED_OF_SOUND / 20
 MIN_WAVELENGTH   <- SPEED_OF_SOUND / 20000
-
-GOLDEN_RATIO     <- (1+sqrt(5)) / 2
-OCTAVE_RATIO     <- 2
