@@ -55,18 +55,40 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
                                       const IntegerVector &depths,
                                       const CharacterVector &paths,
                                       const NumericVector &uncertainty) {
-  return DataFrame::create(_["num"] = nums,
-                           _["den"] = dens,
-                           _["approximation"] = approximations,
-                           _["x"] = x,
-                           _["error"] = errors,
-                           _["minkowski"] = minkowski,
-                           _["entropy"] = entropy,
-                           _["thomae"] = thomae,
-                           _["euclids_orchard_height"] = euclids_orchard_height,
-                           _["depth"] = depths,
-                           _["path"] = paths,
-                           _["uncertainty"] = uncertainty);
+  auto check_finite = [&](const NumericVector &v, const char *name) {
+    for (int i = 0; i < v.size(); ++i) {
+      double val = v[i];
+      if (!std::isfinite(val)) {
+        Rcpp::stop("`%s` contains non‐finite at row %d: %g", name, i+1, val);
+      }
+    }
+  };
+
+  // check every numeric column
+  check_finite(approximations, "approximation");
+  check_finite(x,              "x");
+  check_finite(errors,         "error");
+  check_finite(minkowski,      "minkowski");
+  check_finite(entropy,        "entropy");
+  check_finite(thomae,         "thomae");
+  check_finite(euclids_orchard_height, "euclids_orchard_height");
+  check_finite(uncertainty,    "uncertainty");
+
+  // if we get here, everything is good
+  return DataFrame::create(
+    _["num"]                   = nums,
+    _["den"]                   = dens,
+    _["approximation"]         = approximations,
+    _["x"]                     = x,
+    _["error"]                 = errors,
+    _["minkowski"]             = minkowski,
+    _["entropy"]               = entropy,
+    _["thomae"]                = thomae,
+    _["euclids_orchard_height"]= euclids_orchard_height,
+    _["depth"]                 = depths,
+    _["path"]                  = paths,
+    _["uncertainty"]           = uncertainty
+  );
 }
 
 // forward declaration of round_to_precision
