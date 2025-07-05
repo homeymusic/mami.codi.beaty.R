@@ -4,45 +4,6 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
-// [[Rcpp::export]]
-double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
-                                 const double uncertainty) {
-
-  int n = unsorted_x.size();
-  if (n <= 2) return 2.0;
-
-  // Copy into our working 'ratios' and sort
-  std::vector<double> x(unsorted_x.begin(), unsorted_x.end());
-  std::sort(x.begin(), x.end());
-
-  std::vector<double> candidates;
-  candidates.reserve(n * (n - 1) / 2);
-
-  for (int i = 0; i < n; ++i) {
-    for (int j = i + 1; j < n; ++j) {
-      double pseudo_harmonic = x[j] / x[i];
-      int    ideal_harmonic  = int(std::round(pseudo_harmonic));
-      if     (ideal_harmonic < 2) continue; // skip the unisons
-
-      if (std::abs(pseudo_harmonic - ideal_harmonic) / ideal_harmonic < uncertainty) {
-        double candidate_pseudo_octave = std::exp2( std::log2(pseudo_harmonic)/ std::log2(ideal_harmonic) );
-        candidates.push_back(candidate_pseudo_octave);
-      }
-    }
-  }
-
-  if (candidates.empty()) return 2.0;
-
-  Rcpp::NumericVector qualifiedCandidates(candidates.begin(), candidates.end());
-  Rcpp::IntegerVector counts = Rcpp::table(qualifiedCandidates);
-  Rcpp::CharacterVector candidateBins = counts.names();
-  Rcpp::IntegerVector idx = Rcpp::seq_along(counts) - 1;
-  std::sort(idx.begin(), idx.end(),
-            [&](int a, int b){ return counts[a] > counts[b]; });
-
-  return std::stod(Rcpp::as<std::string>(candidateBins[idx[0]]));
-}
-
 DataFrame rational_fraction_dataframe(const IntegerVector &nums,
                                       const IntegerVector &dens,
                                       const NumericVector &approximations,
@@ -187,6 +148,19 @@ inline double round_to_precision(double value, int precision = 15) {
    );
  }
 
+// [[Rcpp::export]]
+double approximate_pseudo_octave(const double harmonic_ratio,
+                                 const double uncertainty) {
+
+  int ideal = int(std::round(harmonic_ratio));
+  if (ideal >= 2 &&
+      std::abs(harmonic_ratio - ideal)/ideal < uncertainty) {
+    return std::exp2(std::log2(harmonic_ratio) / std::log2(ideal));
+  } else {
+    return 2.0;
+  }
+}
+
  //' approximate_rational_fractions
  //'
  //' Approximates floating-point numbers to arbitrary uncertainty.
@@ -209,18 +183,12 @@ inline double round_to_precision(double value, int precision = 15) {
    }
 
    // find the pseudo-octave in ratio-space
-   double pseudo_octave = approximate_pseudo_octave(x, uncertainty);
-
-   // compute ratios relative to x_ref
-   NumericVector ratios(n);
+   NumericVector ratios(n), pseudo_octaves(n), pseudo_x(n), uncertainties(n, uncertainty);
    for (int i = 0; i < n; ++i) {
-     ratios[i] = x[i] / x_ref;
-   }
-
-   // build the transformed vector for coprime search
-   NumericVector pseudo_x(n), uncertainties(n, uncertainty);
-   for (int i = 0; i < n; ++i) {
-     pseudo_x[i] = x_ref * std::exp2( std::log2(ratios[i]) / std::log2(pseudo_octave));
+     double ratio = x[i] / x_ref;
+     double pseudo_octave = approximate_pseudo_octave(ratio, uncertainty);
+     pseudo_octaves[i]    = pseudo_octave;
+     pseudo_x[i]          = x_ref * std::exp2(std::log2(ratio) / std::log2(pseudo_octave));
    }
 
    DataFrame df = rational_fractions(
@@ -229,8 +197,8 @@ inline double round_to_precision(double value, int precision = 15) {
      uncertainty
    );
 
-   df["pseudo_x"]    = pseudo_x;
-   df["pseudo_octave"] = NumericVector(n, pseudo_octave);
+   df["pseudo_x"]      = pseudo_x;
+   df["pseudo_octave"] = pseudo_octaves;
 
    return df;
  }
@@ -257,7 +225,7 @@ inline double round_to_precision(double value, int precision = 15) {
      );
    }
 
-   double minFreq    = Rcpp::min(frequency);
+   // double minFreq    = Rcpp::min(frequency);
    int    maxPairs   = n * (n - 1) / 2;
    NumericVector outFreqs(maxPairs), outAmps(maxPairs);
    int count = 0;
@@ -276,16 +244,16 @@ inline double round_to_precision(double value, int precision = 15) {
        double f_high = std::max(fi, fj);
 
        // compute difference and apply tolerance + critical-band gate
-       double diff = f_high - f_low;
+       // double diff = f_high - f_low;
        double tol  = std::max(ABS_TOL, eps * f_high);
-       if (diff < minFreq) {
+       // if (diff < minFreq) {
          double lower_cubic = 2.0 * f_low - f_high;
          if (lower_cubic > tol) {
            outFreqs[count] = lower_cubic;
            outAmps [count] = Aj * 0.1;
            ++count;
          }
-       }
+       // }
      }
    }
 
