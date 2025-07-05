@@ -148,17 +148,28 @@ inline double round_to_precision(double value, int precision = 15) {
    );
  }
 
+// -------------------------------------------------------------------------
+// Helper: approximate a single real ratio by a coprime fraction via SB
+// -------------------------------------------------------------------------
+inline double approximate_fraction(const double ratio,
+                                   const double uncertainty) {
+  // 1-element vector [ratio], reference = 1.0
+  NumericVector v = NumericVector::create(ratio);
+  DataFrame df   = rational_fractions(v, 1.0, uncertainty);
+  // pull out the one approximation
+  return as<NumericVector>(df["approximation"])[0];
+}
+
+// -------------------------------------------------------------------------
+// pure SB-based pseudo-octave
+// -------------------------------------------------------------------------
 // [[Rcpp::export]]
 double approximate_pseudo_octave(const double harmonic_ratio,
                                  const double uncertainty) {
 
-  int ideal = int(std::round(harmonic_ratio));
-  if (ideal >= 2 &&
-      std::abs(harmonic_ratio - ideal)/ideal < uncertainty) {
-    return std::exp2(std::log2(harmonic_ratio) / std::log2(ideal));
-  } else {
-    return 2.0;
-  }
+  double frac = approximate_fraction(harmonic_ratio, uncertainty);
+  if (std::abs(frac - 1.0) < 1e-15) { return 2.0;  }
+  return std::exp2(std::log2(harmonic_ratio) / std::log2(frac));
 }
 
  //' approximate_rational_fractions
@@ -187,8 +198,17 @@ double approximate_pseudo_octave(const double harmonic_ratio,
    for (int i = 0; i < n; ++i) {
      double ratio = x[i] / x_ref;
      double pseudo_octave = approximate_pseudo_octave(ratio, uncertainty);
-     pseudo_octaves[i]    = pseudo_octave;
-     pseudo_x[i]          = x_ref * std::exp2(std::log2(ratio) / std::log2(pseudo_octave));
+     if (std::isnan(pseudo_octave)) {
+       Rcpp::stop("pseudo_octave is NaN at index %d (ratio = %g)", i+1, ratio);
+     }
+     pseudo_octaves[i] = pseudo_octave;
+
+     double this_pseudo_x = x_ref * std::exp2(std::log2(ratio) / std::log2(pseudo_octave));
+     if (std::isnan(this_pseudo_x)) {
+       Rcpp::stop("pseudo_x is NaN at index %d (ratio = %g, pseudo_octave = %g)",
+                  i+1, ratio, pseudo_octave);
+     }
+     pseudo_x[i] = this_pseudo_x;
    }
 
    DataFrame df = rational_fractions(
