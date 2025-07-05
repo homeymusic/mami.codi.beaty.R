@@ -183,7 +183,7 @@ double approximate_pseudo_octave(const double harmonic_ratio,
    }
 
    // find the pseudo-octave in ratio-space
-   NumericVector ratios(n), pseudo_octaves(n), pseudo_x(n), uncertainties(n, uncertainty);
+   NumericVector ratios(n), pseudo_octaves(n), pseudo_x(n);
    for (int i = 0; i < n; ++i) {
      double ratio = x[i] / x_ref;
      double pseudo_octave = approximate_pseudo_octave(ratio, uncertainty);
