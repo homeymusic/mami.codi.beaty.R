@@ -173,8 +173,7 @@ double approximate_pseudo_octave(const double harmonic_ratio,
     return 2.0;
   }
 
-  // double frac = approximate_fraction(harmonic_ratio, uncertainty);
-  return std::exp2(std::log2(harmonic_ratio) / std::log2(harmonic_ratio));
+  return std::exp2(std::log2(harmonic_ratio) / std::log2(ideal_harmonic));
 
 }
 
@@ -251,7 +250,6 @@ double approximate_pseudo_octave(const double harmonic_ratio,
      );
    }
 
-   double minFreq    = Rcpp::min(frequency);
    int    maxPairs   = n * (n - 1) / 2;
    NumericVector outFreqs(maxPairs), outAmps(maxPairs);
    int count = 0;
@@ -269,16 +267,12 @@ double approximate_pseudo_octave(const double harmonic_ratio,
        double f_low  = std::min(fi, fj);
        double f_high = std::max(fi, fj);
 
-       // compute difference and apply tolerance + critical-band gate
-       double diff = f_high - f_low;
        double tol  = std::max(ABS_TOL, eps * f_high);
-       if (diff < minFreq) {
-         double lower_cubic = 2.0 * f_low - f_high;
-         if (lower_cubic > tol) {
-           outFreqs[count] = lower_cubic;
-           outAmps [count] = Aj * 0.1;
-           ++count;
-         }
+       double lower_cubic = 2.0 * f_low - f_high;
+       if (lower_cubic > tol) {
+         outFreqs[count] = lower_cubic;
+         outAmps [count] = Aj * 0.1;
+         ++count;
        }
      }
    }
