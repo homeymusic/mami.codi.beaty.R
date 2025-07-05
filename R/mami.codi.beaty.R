@@ -201,7 +201,7 @@ compute_cycle_length <- function(x, ref, dimension) {
     thomae = sum(fractions$thomae),
     minkowski = sum(fractions$minkowski),
     entropy = sum(fractions$entropy),
-    depth = sum(fractions$depth),
+    depth = lcm_integers(fractions$depth),
     error_sum = sum(abs(fractions$error)),
     fractions = list(fractions)
   ) %>% dplyr::rename_with(~ paste0(dimension, '_' , .))
