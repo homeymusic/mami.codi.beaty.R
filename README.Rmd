@@ -349,16 +349,37 @@ $$
 
 ### Rational Approximation Signal versus Idealized Signal
 
-```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+Idealized Frequencies:
 
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
 M7 <- hrep::sparse_fr_spectrum( hrep::pi_chord(c(60, 71)), num_harmonics=1)
+
+vals <- sprintf("%.2f", M7$x)
+f_list <- paste(vals, collapse = ", ")
+cat(sprintf("  \n$$f = \\{%s\\}$$  \n", f_list))
+```
+
+Equation for Rational Fraction Frequencies:
+
+$$
+\mathbf{f} = f_{ref} \bigl( \frac{a_i}{b_i},\frac{a_i}{b_i},\dots,\frac{a_N}{b_N} \bigr)
+$$
+
+Rational Fraction Frequencies:
+
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
 M7_mami_codi = mami.codi.beaty(M7, verbose=T)
 number_of_periods_to_plot = 7
 plot_period = number_of_periods_to_plot * M7_mami_codi$fundamental_period
 C4 = hrep::midi_to_freq(60)
 B4_rational = C4 * sb$approximation
 M7_rational = hrep::sparse_fr_spectrum(list(frequency=c(C4,B4_rational), amplitude=c(1,1)), num_harmonics=1)
+vals <- sprintf("%.2f", M7_rational$x)
+f_list <- paste(vals, collapse = ", ")
+cat(sprintf("  \n$$f = \\{%s\\}$$  \n", f_list))
+```
 
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
 plot(hrep::wave(M7_rational, length_sec = plot_period))
 abline(
   v   = seq(0, plot_period, by = M7_mami_codi$fundamental_period),
@@ -389,6 +410,16 @@ abline(
 title("Idealized Signal")
 cat("  \n")
 ```
+
+## But wait! I can hear that difference!
+
+Yes, you can! Luckily for us, our auditory system is not a simple, linear frequency sensor.
+
+Our auditory system amplifies signals in a way that creates new tones. 
+Those tones give us more information that allows us to hear changes and still
+over the uncertainty principle.
+
+TODO: show this example again but with the cochlear distoration products.
 
 ## Fundamental Wavelength of a N-Tone Chord
 

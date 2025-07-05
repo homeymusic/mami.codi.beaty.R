@@ -220,9 +220,35 @@ $$
 
 ### Rational Approximation Signal versus Idealized Signal
 
-![](man/figures/README-unnamed-chunk-8-1.png)<!-- -->
+Idealized Frequencies:
 
-![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->
+$$f = \{261.63, 493.88\}$$
+
+Equation for Rational Fraction Frequencies:
+
+$$
+\mathbf{f} = f_{ref} \bigl( \frac{a_i}{b_i},\frac{a_i}{b_i},\dots,\frac{a_N}{b_N} \bigr)
+$$
+
+Rational Fraction Frequencies:
+
+$$f = \{261.63, 479.65\}$$
+
+![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->
+
+![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
+
+## But wait! I can hear that difference!
+
+Yes, you can! Luckily for us, our auditory system is not a simple,
+linear frequency sensor.
+
+Our auditory system amplifies signals in a way that creates new tones.
+Those tones give us more information that allows us to hear changes and
+still over the uncertainty principle.
+
+TODO: show this example again but with the cochlear distoration
+products.
 
 ## Fundamental Wavelength of a N-Tone Chord
 
@@ -253,9 +279,9 @@ at C4.
 
 $$f = \{261.63, 397.67, 905.22, 1025.57\}$$
 
-![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-13-1.png)<!-- -->
 
-![](man/figures/README-unnamed-chunk-12-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-14-1.png)<!-- -->
 
 ### Roughness: Stern-Brocot Traversal Depth
 
@@ -273,7 +299,7 @@ $$
 
 #### Bonang: MaMi.CoDi.Beaty Roughness with Hutchinson & Knopoff 1978
 
-![](man/figures/README-unnamed-chunk-13-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-15-1.png)<!-- -->
 
 ### Overall Frequency Dissonance
 
@@ -419,8 +445,8 @@ $$
 
 ## Gabor Wavelets from Rational Approximations
 
-![](man/figures/README-unnamed-chunk-14-1.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-14-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-16-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-16-2.png)<!-- -->
 
 ### Daugman’s Gabor Wavelet in Computer Vision
 
