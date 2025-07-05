@@ -9,7 +9,7 @@ double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
                                  const double uncertainty) {
 
   int n = unsorted_x.size();
-  if (n <= 1) return 2.0;
+  if (n <= 2) return 2.0;
 
   // Copy into our working 'ratios' and sort
   std::vector<double> x(unsorted_x.begin(), unsorted_x.end());
