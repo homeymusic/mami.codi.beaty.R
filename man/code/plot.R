@@ -657,16 +657,14 @@ plot_semitone_euclids_orchard_height <- function(chords, title='', include_line=
 }
 
 plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
-                               include_points=T,
-                               include_linear_regression = F, goal=NULL,
+                               include_points=F,
+                               goal=NULL,
                                black_vlines=c(),gray_vlines=c(),
                                xlab='Semitone',
                                ylab='Major-Minor (Z-Score)') {
 
-  whole_semitones = integer_semitones(chords$semitone)
-
   chords$smoothed_majorness_z = smoothed(chords$semitone,
-                                         chords$majorness_z,
+                                         chords$time_consonance_z - chords$space_consonance_z,
                                          sigma)
 
   ggplot2::ggplot(chords, ggplot2::aes(x = .data$semitone,
@@ -677,12 +675,11 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
       ggplot2::geom_point(shape=21, stroke=NA, size=1,
                           ggplot2::aes(fill=color_factor_mami(chords,'majorness')))
     } +
-    { if (include_linear_regression) ggplot2::stat_smooth(method=lm)} +
     { if (include_line)
       ggplot2::geom_line(data=chords,
                          ggplot2::aes(x = semitone,
                                       y = smoothed_majorness_z,
-                                      color=color_factor_mami(chords,'majorness'),
+                                      color=color_factor_mami(chords,'smoothed_majorness_z'),
                                       group=1), linewidth = 1)} +
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -690,8 +687,8 @@ plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
                                       y = consonance,
                                       color = 'behavioral'
                          ), linewidth = 0.5)} +
-    ggplot2::scale_fill_manual(values=color_values_homey(), guide="none") +
-    ggplot2::scale_color_manual(values=color_values_homey()) +
+    ggplot2::scale_fill_manual(values=unlist(colors_homey), guide="none") +
+    ggplot2::scale_color_manual(values=unlist(colors_homey)) +
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::ylab(ylab) +
