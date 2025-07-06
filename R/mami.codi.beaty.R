@@ -308,7 +308,7 @@ uncertainty <- function() {
   UNCERTAINTY_LIMIT / NUMBER_OF_OBSERVATION_PERIODS
 }
 
-SPEED_OF_SOUND = hrep::midi_to_freq(65)
+SPEED_OF_SOUND = 343.0
 
 DIMENSION <- list(
   SPACE = 'space',
