@@ -468,7 +468,7 @@ plot_semitone_thomaes_function <- function(chords, title='', include_line=T, sig
 plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
                                                black_vlines=c(),gray_vlines=c(),goal=NULL,
                                                xlab='Semitone',
-                                               ylab='Log2 of Total Stern Brocot Depth (Z-Score)') {
+                                               ylab='Smoothness (Z-Score)') {
 
   chords$smoothed_roughness = smoothed(chords$semitone,
                                             chords$roughness_z,
@@ -654,6 +654,134 @@ plot_semitone_euclids_orchard_height <- function(chords, title='', include_line=
     ggplot2::xlab(xlab) +
     ggplot2::labs(color = NULL) +
     theme_homey()
+}
+
+plot_mami_codi <- function(chords, title = '', sigma = 0.2,
+                           xlab = 'Major-Minor (Z-Score)',
+                           ylab = 'Consonance-Dissonance (Z-Score)') {
+
+
+  chords <- chords[chords$semitone >= 0.0 & chords$semitone <= 12.0, ]
+
+  # 1) smooth once
+  chords$smoothed_consonance_z <- smoothed(chords$semitone,
+                                           chords$consonance_z,
+                                           sigma)
+  chords$smoothed_majorness_z <- smoothed(chords$semitone,
+                                          chords$time_consonance_z - chords$space_consonance_z,
+                                          sigma)
+
+  # 2) build base line plot
+  base_plot <- ggplot2::ggplot(chords,
+                               ggplot2::aes(x = smoothed_majorness_z,
+                                            y = smoothed_consonance_z)) +
+    ggplot2::geom_path(ggplot2::aes(
+      color = color_factor_mami(chords, 'smoothed_majorness_z'),
+      group = 1
+    ), linewidth = 1) +
+    ggplot2::scale_color_manual(values = unlist(colors_homey)) +
+    ggplot2::ggtitle(title) +
+    ggplot2::xlab(xlab) +
+    ggplot2::ylab(ylab) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+
+  # 3) integer semitone range
+  semitone_minimum  <- floor(min(chords$semitone))
+  semitone_maximum  <- ceiling(max(chords$semitone))
+  integer_semitones <- semitone_minimum:semitone_maximum
+
+  # 4) find nearest row for each integer semitone
+  nearest_indices <- sapply(integer_semitones, function(s) {
+    which.min(abs(chords$semitone - s))
+  })
+
+  # 5) reorder so that largest semitones draw first, smallest last (on top)
+  index               <- order(integer_semitones, decreasing = TRUE)
+  nearest_indices   <- nearest_indices[index]
+  integer_semitones <- integer_semitones[index]
+
+  # 6) extract the pre-smoothed X/Y and labels once, in draw order
+  annotate_x     <- chords$smoothed_majorness_z[nearest_indices]
+  annotate_y     <- chords$smoothed_consonance_z[nearest_indices]
+  annotate_label <- integer_semitones
+
+  # 7) vectorized annotate layer
+  base_plot +
+    ggplot2::annotate(
+      geom  = 'label',
+      x     = annotate_x,
+      y     = annotate_y,
+      label = annotate_label,
+      vjust = -0.5,
+      fill  = colors_homey$neutral,
+      color = colors_homey$background
+    )
+}
+
+plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
+                                       xlab = 'Periodicity (Z-Score)',
+                                       ylab = 'Smoothness (Z-Score)') {
+
+  chords <- chords[chords$semitone >= 0.0 & chords$semitone <= 12.0, ]
+
+  # 1) smooth once
+  chords$smoothed_periodicity_z <- smoothed(chords$semitone,
+                                            chords$periodicity_z,
+                                            sigma)
+  chords$smoothed_roughness_z <- smoothed(chords$semitone,
+                                          chords$roughness_z,
+                                          sigma)
+  chords$smoothed_majorness_z <- smoothed(chords$semitone,
+                                          chords$time_consonance_z - chords$space_consonance_z,
+                                          sigma)
+
+  # 2) build base line plot
+  base_plot <- ggplot2::ggplot(chords,
+                               ggplot2::aes(x = smoothed_periodicity_z,
+                                            y = smoothed_roughness_z)) +
+    ggplot2::geom_path(ggplot2::aes(
+      color = color_factor_mami(chords, 'smoothed_majorness_z'),
+      group = 1
+    ), linewidth = 1) +
+    ggplot2::scale_color_manual(values = unlist(colors_homey)) +
+    ggplot2::ggtitle(title) +
+    ggplot2::xlab(xlab) +
+    ggplot2::ylab(ylab) +
+    ggplot2::labs(color = NULL) +
+    theme_homey()
+
+  # 3) integer semitone range
+  semitone_minimum  <- floor(min(chords$semitone))
+  semitone_maximum  <- ceiling(max(chords$semitone))
+  integer_semitones <- semitone_minimum:semitone_maximum
+
+  # 4) for each integer semitone, pick nearest row index
+  nearest_indices <- sapply(integer_semitones, function(s) {
+    which.min(abs(chords$semitone - s))
+  })
+
+  # 5) reorder so that largest semitones draw first, smallest last (on top)
+  index             <- order(integer_semitones, decreasing = TRUE)
+  nearest_indices   <- nearest_indices[index]
+  integer_semitones <- integer_semitones[index]
+
+  # 6) extract the pre-smoothed X/Y and labels once, in draw order
+  annotate_x     <- chords$smoothed_periodicity_z[nearest_indices]
+  annotate_y     <- chords$smoothed_roughness_z[nearest_indices]
+  annotate_label <- integer_semitones
+
+  # 7) vectorized annotate layer
+  base_plot +
+    ggplot2::annotate(
+      geom  = 'label',
+      x     = annotate_x,
+      y     = annotate_y,
+      label = annotate_label,
+      vjust = -0.5,
+      fill  = colors_homey$neutral,
+      color = colors_homey$background
+    )
 }
 
 plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,
@@ -880,7 +1008,7 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
                                                 goal=NULL,
                                                 black_vlines=c(),gray_vlines=c(),
                                                 xlab='Semitone',
-                                                ylab='Periodicity & Roughness (Z-Score)') {
+                                                ylab='Periodicity & Smoothness (Z-Score)') {
 
   chords$smoothed_periodicity  = smoothed(chords$semitone,
                                                chords$periodicity_z,

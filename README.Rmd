@@ -167,35 +167,40 @@ p = params %>% purrr::map(\(p) {
   }
   cat("  \n#####", title, '\n')
   
-  print(plot_semitone_codi(chords, 'Consonance-Dissonance: Periodicity + Roughness',
+  print(plot_semitone_codi(chords, paste0(p$t, ': Consonance-Dissonance: Periodicity + Smoothness'),
                            goal=experiment,sigma=sigma,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_periodicity_roughness(chords, 'Consonance: Periodicity & Roughness',
+  print(plot_semitone_periodicity_roughness(chords, paste0(p$t, ': Consonance: Periodicity & Smoothness'),
                                             goal=experiment,sigma=sigma,
                                             black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_periodicity_space_time(chords, 'Periodicity: Space & Time',
+  print(plot_semitone_periodicity_space_time(chords, paste0(p$t, ': Periodicity: Space & Time'),
                                              goal=experiment,sigma=sigma,
                                              black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
   
-  print(plot_semitone_roughness_space_time(chords,title = "Roughness: Space & Time",
+  print(plot_semitone_roughness_space_time(chords,title = paste0(p$t, ': Smoothness: Space & Time'),
                                           goal=experiment, sigma=sigma,
                                            black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
   cat("  \n")
   
-  print(plot_semitone_mami(chords, 'Major-Minor: Periodicity + Roughness',
+  print(plot_semitone_mami(chords, paste0(p$t, ': Major-Minor: Time Consonance minus Space Consonance'),
                            goal=experiment,sigma=sigma,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-
+  print(plot_mami_codi(chords, paste0(p$t, ': Consonance-Dissonance versus Major-Minor'), sigma=sigma))
+  cat("  \n")
   
+  print(plot_roughness_periodicity(chords, paste0(p$t, ': Smoothness versus Periodicity'), sigma=sigma))
+  cat("  \n")
+  
+
 })
 ```
 
