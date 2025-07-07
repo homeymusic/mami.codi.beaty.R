@@ -658,10 +658,11 @@ plot_semitone_euclids_orchard_height <- function(chords, title='', include_line=
 
 plot_mami_codi <- function(chords, title = '', sigma = 0.2,
                            xlab = 'Major-Minor (Z-Score)',
-                           ylab = 'Consonance-Dissonance (Z-Score)') {
+                           ylab = 'Consonance-Dissonance (Z-Score)',
+                           min_semitone=0, max_semitone=12) {
 
 
-  chords <- chords[chords$semitone >= 0.0 & chords$semitone <= 12.0, ]
+  chords <- chords[chords$semitone >= min_semitone & chords$semitone <= max_semitone, ]
 
   # 1) smooth once
   chords$smoothed_consonance_z <- smoothed(chords$semitone,
@@ -741,9 +742,10 @@ plot_mami_codi <- function(chords, title = '', sigma = 0.2,
 
 plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
                                        xlab = 'Periodicity (Z-Score)',
-                                       ylab = 'Smoothness (Z-Score)') {
+                                       ylab = 'Smoothness (Z-Score)',
+                                       min_semitone=0,max_semitone=12) {
 
-  chords <- chords[chords$semitone >= 0.0 & chords$semitone <= 12.0, ]
+  chords <- chords[chords$semitone >= min_semitone & chords$semitone < max_semitone, ]
 
   # 1) smooth once
   chords$smoothed_periodicity_z <- smoothed(chords$semitone,

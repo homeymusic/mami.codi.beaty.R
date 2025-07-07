@@ -56,6 +56,9 @@ params = list(
 
 BEHAVIOURAL_SMOOTH_BROAD  <- 0.2
 BEHAVIOURAL_SMOOTH_NARROW <- 0.035
+min_semitone=0
+max_semitone=12
+
 
 p = params %>% purrr::map(\(p) {
   if (p$o==2 & p$h==10 & p$t == 'Harmonic') {
@@ -108,6 +111,7 @@ p = params %>% purrr::map(\(p) {
     black_vlines  = c(11.94, 12.08)
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
+    max_semitone=13
   }
   
   title = paste(
@@ -194,10 +198,12 @@ p = params %>% purrr::map(\(p) {
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_mami_codi(chords, paste0(p$t, ': Consonance-Dissonance versus Major-Minor'), sigma=sigma))
+  print(plot_mami_codi(chords, paste0(p$t, ': Consonance-Dissonance versus Major-Minor'), sigma=sigma,
+                       min_semitone=min_semitone,max_semitone=max_semitone))
   cat("  \n")
   
-  print(plot_roughness_periodicity(chords, paste0(p$t, ': Smoothness versus Periodicity'), sigma=sigma))
+  print(plot_roughness_periodicity(chords, paste0(p$t, ': Smoothness versus Periodicity'), sigma=sigma,
+                                   min_semitone=min_semitone,max_semitone=max_semitone))
   cat("  \n")
   
 
