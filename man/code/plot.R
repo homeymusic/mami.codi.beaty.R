@@ -671,21 +671,6 @@ plot_mami_codi <- function(chords, title = '', sigma = 0.2,
                                           chords$time_consonance_z - chords$space_consonance_z,
                                           sigma)
 
-  # 2) build base line plot
-  base_plot <- ggplot2::ggplot(chords,
-                               ggplot2::aes(x = smoothed_majorness_z,
-                                            y = smoothed_consonance_z)) +
-    ggplot2::geom_path(ggplot2::aes(
-      color = color_factor_mami(chords, 'smoothed_majorness_z'),
-      group = 1
-    ), linewidth = 1) +
-    ggplot2::scale_color_manual(values = unlist(colors_homey)) +
-    ggplot2::ggtitle(title) +
-    ggplot2::xlab(xlab) +
-    ggplot2::ylab(ylab) +
-    ggplot2::labs(color = NULL) +
-    theme_homey()
-
   # 3) integer semitone range
   semitone_minimum  <- floor(min(chords$semitone))
   semitone_maximum  <- ceiling(max(chords$semitone))
@@ -698,15 +683,50 @@ plot_mami_codi <- function(chords, title = '', sigma = 0.2,
 
   # 5) reorder so that largest semitones draw first, smallest last (on top)
   index               <- order(integer_semitones, decreasing = TRUE)
-  nearest_indices   <- nearest_indices[index]
-  integer_semitones <- integer_semitones[index]
+  nearest_indices     <- nearest_indices[index]
+  integer_semitones   <- integer_semitones[index]
 
   # 6) extract the pre-smoothed X/Y and labels once, in draw order
   annotate_x     <- chords$smoothed_majorness_z[nearest_indices]
   annotate_y     <- chords$smoothed_consonance_z[nearest_indices]
   annotate_label <- integer_semitones
 
-  # 7) vectorized annotate layer
+  # 6b) get the majorness factor for each spot
+  annotate_majorness <- color_factor_mami(chords, 'smoothed_majorness_z')[nearest_indices]
+
+  # 6c) assemble a tiny data.frame for the points
+  pts <- data.frame(
+    x         = annotate_x,
+    y         = annotate_y,
+    majorness = annotate_majorness
+  )
+
+  # 2) build base plot + semitone‐dots
+  base_plot <- ggplot2::ggplot(chords,
+                               ggplot2::aes(x = smoothed_majorness_z,
+                                            y = smoothed_consonance_z)) +
+    # 2a) the main path
+    ggplot2::geom_path(ggplot2::aes(
+      color = color_factor_mami(chords, 'smoothed_majorness_z'),
+      group = 1
+    ), linewidth = 1) +
+    # 2b) semitone‐dots filled by majorness
+    ggplot2::geom_point(
+      data = pts,
+      ggplot2::aes(x = x, y = y, fill = majorness),
+      shape = 21,
+      size  = 3
+    ) +
+    # pick up the same three colors
+    ggplot2::scale_fill_manual(values = colors_homey[c("minor", "neutral", "major")]) +
+    ggplot2::scale_color_manual(values = unlist(colors_homey)) +
+    ggplot2::ggtitle(title) +
+    ggplot2::xlab(xlab) +
+    ggplot2::ylab(ylab) +
+    ggplot2::labs(color = NULL, fill = NULL) +
+    theme_homey()
+
+  # 7) overlay integer labels
   base_plot +
     ggplot2::annotate(
       geom  = 'label',
@@ -736,21 +756,6 @@ plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
                                           chords$time_consonance_z - chords$space_consonance_z,
                                           sigma)
 
-  # 2) build base line plot
-  base_plot <- ggplot2::ggplot(chords,
-                               ggplot2::aes(x = smoothed_periodicity_z,
-                                            y = smoothed_roughness_z)) +
-    ggplot2::geom_path(ggplot2::aes(
-      color = color_factor_mami(chords, 'smoothed_majorness_z'),
-      group = 1
-    ), linewidth = 1) +
-    ggplot2::scale_color_manual(values = unlist(colors_homey)) +
-    ggplot2::ggtitle(title) +
-    ggplot2::xlab(xlab) +
-    ggplot2::ylab(ylab) +
-    ggplot2::labs(color = NULL) +
-    theme_homey()
-
   # 3) integer semitone range
   semitone_minimum  <- floor(min(chords$semitone))
   semitone_maximum  <- ceiling(max(chords$semitone))
@@ -771,7 +776,42 @@ plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
   annotate_y     <- chords$smoothed_roughness_z[nearest_indices]
   annotate_label <- integer_semitones
 
-  # 7) vectorized annotate layer
+  # 6b) compute majorness factor for each spot
+  annotate_majorness <- color_factor_mami(chords, 'smoothed_majorness_z')[nearest_indices]
+
+  # 6c) build tiny data.frame for the points
+  pts <- data.frame(
+    x         = annotate_x,
+    y         = annotate_y,
+    majorness = annotate_majorness
+  )
+
+  # 2) build base line plot + semitone-dots
+  base_plot <- ggplot2::ggplot(chords,
+                               ggplot2::aes(x = smoothed_periodicity_z,
+                                            y = smoothed_roughness_z)) +
+    # path
+    ggplot2::geom_path(ggplot2::aes(
+      color = color_factor_mami(chords, 'smoothed_majorness_z'),
+      group = 1
+    ), linewidth = 1) +
+    # dots filled by majorness
+    ggplot2::geom_point(
+      data = pts,
+      ggplot2::aes(x = x, y = y, fill = majorness),
+      shape = 21,
+      size  = 3
+    ) +
+    # ensure the same three majorness colors
+    ggplot2::scale_fill_manual(values = colors_homey[c("minor", "neutral", "major")]) +
+    ggplot2::scale_color_manual(values = unlist(colors_homey)) +
+    ggplot2::ggtitle(title) +
+    ggplot2::xlab(xlab) +
+    ggplot2::ylab(ylab) +
+    ggplot2::labs(color = NULL, fill = NULL) +
+    theme_homey()
+
+  # 7) overlay integer labels
   base_plot +
     ggplot2::annotate(
       geom  = 'label',
