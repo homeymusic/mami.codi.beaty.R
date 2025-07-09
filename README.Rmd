@@ -42,19 +42,19 @@ dyads <- timbre_paper %>% dplyr::rowwise() %>% dplyr::mutate(
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
 params = list(
-  list(h=5, o=2.0,t='5Partials'),
-  list(h=10,o=2.0,t='Harmonic'),
-  list(h=1, o=2.0,t='Pure'),
-  list(h=5, o=2.0,t='5PartialsNo3'),
-  list(h=10,o=2.1,t='Stretched'),
-  list(h=10,o=1.9,t='Compressed'),
-  list(h=4, o=2.0,t='Bonang'),
-  list(h=10,o=2.0,t='M3'),
-  list(h=10,o=2.0,t='M6'),
-  list(h=10,o=2.0,t='P8'),
-  list(h=10,o=2.0,t='m3'),
-  list(h=10,o=2.0,t='m6'),
-  list(h=10,o=2.0,t='P1'),
+  list(h=5, o=2.0,t='5Partials'), # all signals will agree
+  list(h=10,o=2.0,t='Harmonic'), # all signals will agree
+  list(h=10,o=2.0,t='M3'), # adding place signals
+  list(h=10,o=2.0,t='M6'), # adding place signals
+  list(h=4, o=2.0,t='Bonang'), # alignment with roughness and periodicity
+  list(h=10,o=2.1,t='Stretched'), # uncertainty limit is the same
+  list(h=10,o=1.9,t='Compressed'), # uncertainty limit is the same
+  list(h=1, o=2.0,t='Pure'), # the cochlear distortion works around the HUP limit
+  list(h=5, o=2.0,t='5PartialsNo3'), # major minor hypothesis
+  list(h=10,o=2.0,t='P8'), # squint to see this
+  list(h=10,o=2.0,t='m3'), # future predictions
+  list(h=10,o=2.0,t='m6'), # future predictions
+  list(h=10,o=2.0,t='P1'), # future predictions
   list(h=10,o=2.2,t='ExtraStretched'),
   list(h=10,o=1.87,t='ExtraCompressed')
 )

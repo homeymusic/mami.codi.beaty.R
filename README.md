@@ -27,7 +27,9 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-13.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-14.png)<!-- -->
 
-##### Pure ~ Partials: 1
+#### Dyads spanning 1 quarter tone
+
+##### M3 ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-15.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-16.png)<!-- -->  
@@ -37,7 +39,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-20.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-21.png)<!-- -->
 
-##### 5PartialsNo3 ~ Partials: 5
+##### M6 ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-22.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-23.png)<!-- -->  
@@ -47,7 +49,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-27.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-28.png)<!-- -->
 
-##### Stretched ~ Partials: 10
+##### Bonang ~ Partials: 4
 
 ![](man/figures/README-unnamed-chunk-4-29.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-30.png)<!-- -->  
@@ -57,7 +59,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-34.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-35.png)<!-- -->
 
-##### Compressed ~ Partials: 10
+##### Stretched ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-36.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-37.png)<!-- -->  
@@ -67,7 +69,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-41.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-42.png)<!-- -->
 
-##### Bonang ~ Partials: 4
+##### Compressed ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-43.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-44.png)<!-- -->  
@@ -77,9 +79,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-48.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-49.png)<!-- -->
 
-#### Dyads spanning 1 quarter tone
-
-##### M3 ~ Partials: 10
+##### Pure ~ Partials: 1
 
 ![](man/figures/README-unnamed-chunk-4-50.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-51.png)<!-- -->  
@@ -89,7 +89,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-55.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-56.png)<!-- -->
 
-##### M6 ~ Partials: 10
+##### 5PartialsNo3 ~ Partials: 5
 
 ![](man/figures/README-unnamed-chunk-4-57.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-58.png)<!-- -->  
