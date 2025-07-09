@@ -109,6 +109,60 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-69.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-70.png)<!-- -->
 
+#### Predictions ~ No behavioral data
+
+##### m3 ~ Partials: 10
+
+![](man/figures/README-unnamed-chunk-4-71.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-72.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-73.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-74.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-75.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-76.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-77.png)<!-- -->
+
+##### m6 ~ Partials: 10
+
+![](man/figures/README-unnamed-chunk-4-78.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-79.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-80.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-81.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-82.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-83.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-84.png)<!-- -->
+
+##### P1 ~ Partials: 10
+
+![](man/figures/README-unnamed-chunk-4-85.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-86.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-87.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-88.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-89.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-90.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-91.png)<!-- -->
+
+##### ExtraStretched ~ Partials: 10
+
+Thus, 2.2 is stretched a bit too far, and … (Sethares)
+![](man/figures/README-unnamed-chunk-4-92.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-93.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-94.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-95.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-96.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-97.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-98.png)<!-- -->
+
+##### ExtraCompressed ~ Partials: 10
+
+… 1.87 is squished a bit too much. (Sethares)
+![](man/figures/README-unnamed-chunk-4-99.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-100.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-101.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-102.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-103.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-104.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-105.png)<!-- -->
+
 # Fourier uncertainty principle in number‑theoretic form matches musical consonance perception
 
 ## Heisenberg Uncertainty

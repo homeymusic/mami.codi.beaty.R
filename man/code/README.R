@@ -96,13 +96,59 @@ grid_P8 = tidyr::expand_grid(
   timbre = 'P8'
 )
 
+# Predictions
+
+experiment.rds = './man/data/input/M3.rds'
+grid_m3 = tidyr::expand_grid(
+  interval = readRDS(experiment.rds)$profile$interval-1.0,
+  num_harmonics=10,
+  pseudo_octave=2.0,
+  timbre = 'm3'
+)
+
+experiment.rds = './man/data/input/M6.rds'
+grid_m6 = tidyr::expand_grid(
+  interval = readRDS(experiment.rds)$profile$interval - 1.0,
+  num_harmonics=10,
+  pseudo_octave=2.0,
+  timbre = 'm6'
+)
+
+experiment.rds = './man/data/input/P8.rds'
+grid_P1 = tidyr::expand_grid(
+  interval = readRDS(experiment.rds)$profile$interval - 12.0,
+  num_harmonics=10,
+  pseudo_octave=2.0,
+  timbre = 'P1'
+)
+
+# Thus, 2.2 is stretched a bit too far, and ...
+experiment.rds = './man/data/input/Stretched.rds'
+grid_10_extra_stretched = tidyr::expand_grid(
+  interval = readRDS(experiment.rds)$profile$interval,
+  num_harmonics = 10,
+  pseudo_octave = 2.2,
+  timbre = 'ExtraStretched'
+)
+
+# ... 1.87 is squished a bit too much. (Sethares p.110 Chapter 6 Plastic City: A Stretched Journey)
+experiment.rds = './man/data/input/Compressed.rds'
+grid_10_extra_compressed = tidyr::expand_grid(
+  interval = readRDS(experiment.rds)$profile$interval,
+  num_harmonics=10,
+  pseudo_octave=1.87,
+  timbre = 'ExtraCompressed'
+)
+
 grid = dplyr::bind_rows(
   grid_1,
   grid_Bonang,
   grid_5,grid_5PartialsNo3,
-  grid_10,grid_10_stretched,grid_10_compressed,
-  grid_M3,grid_M6,
-  grid_P8
+  grid_10,
+  grid_10_stretched,grid_10_compressed,
+  grid_M3,grid_M6,grid_P8,
+  grid_m3,grid_m6,grid_P1,
+  grid_10_extra_stretched,grid_10_extra_compressed
 )
 
 plan(multisession, workers=parallelly::availableCores())

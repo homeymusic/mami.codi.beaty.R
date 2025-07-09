@@ -51,14 +51,18 @@ params = list(
   list(h=4, o=2.0,t='Bonang'),
   list(h=10,o=2.0,t='M3'),
   list(h=10,o=2.0,t='M6'),
-  list(h=10,o=2.0,t='P8')
+  list(h=10,o=2.0,t='P8'),
+  list(h=10,o=2.0,t='m3'),
+  list(h=10,o=2.0,t='m6'),
+  list(h=10,o=2.0,t='P1'),
+  list(h=10,o=2.2,t='ExtraStretched'),
+  list(h=10,o=1.87,t='ExtraCompressed')
 )
 
 BEHAVIOURAL_SMOOTH_BROAD  <- 0.2
 BEHAVIOURAL_SMOOTH_NARROW <- 0.035
-min_semitone=0
-max_semitone=12
 
+behavioral_data_available = T
 
 p = params %>% purrr::map(\(p) {
   if (p$o==2 & p$h==10 & p$t == 'Harmonic') {
@@ -111,7 +115,37 @@ p = params %>% purrr::map(\(p) {
     black_vlines  = c(11.94, 12.08)
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
-    max_semitone=13
+  } else if (p$t == 'm3') {
+    gray_vlines = c()
+    black_vlines  = c()
+    description   = ''
+    sigma = BEHAVIOURAL_SMOOTH_NARROW
+    behavioral_data_available = F
+  } else if (p$t == 'm6') {
+    gray_vlines = c()
+    black_vlines  = c()
+    description   = ''
+    sigma = BEHAVIOURAL_SMOOTH_NARROW
+    behavioral_data_available = F
+  } else if (p$t == 'P1') {
+    gray_vlines = c()
+    black_vlines  = c()
+    description   = ''
+    sigma = BEHAVIOURAL_SMOOTH_NARROW
+    min_semitone=-1
+    behavioral_data_available = F
+  } else if (p$o>2 & p$t == 'ExtraStretched') {
+    black_vlines  = c()
+    gray_vlines = c()
+    description   = 'Thus, 2.2 is stretched a bit too far, and ... (Sethares)'
+    sigma = BEHAVIOURAL_SMOOTH_BROAD
+    behavioral_data_available = F
+  } else if (p$o<2 & p$t == 'ExtraCompressed') {
+    black_vlines  = c()
+    gray_vlines = c()
+    description   = '... 1.87 is squished a bit too much. (Sethares)'
+    sigma = BEHAVIOURAL_SMOOTH_BROAD
+    behavioral_data_available = F
   }
   
   title = paste(
@@ -145,23 +179,28 @@ p = params %>% purrr::map(\(p) {
   
   chords$space_consonance_z = z_scores(-chords$space_dissonance)
   chords$time_consonance_z = z_scores(-chords$time_dissonance)
-
-  experiment.rds = paste0('./man/data/input/',
-                          p$t,
-                          '.rds')
   
-  experiment_all = readRDS(experiment.rds)
-  
-  experiment = experiment_all$profile %>%
-    dplyr::rename(semitone=interval)
-  
-  experiment <- experiment %>% dplyr::mutate(
-    consonance = rating
-  )
-  
-  experiment_raw = experiment_all$data %>% 
-    dplyr::rename(semitone=interval, 
-                  consonance_z=rating)
+  if (behavioral_data_available) {
+    
+    experiment.rds = paste0('./man/data/input/',
+                            p$t,
+                            '.rds')
+    
+    experiment_all = readRDS(experiment.rds)
+    
+    experiment = experiment_all$profile %>%
+      dplyr::rename(semitone=interval)
+    
+    experiment <- experiment %>% dplyr::mutate(
+      consonance = rating
+    )
+    
+    experiment_raw = experiment_all$data %>% 
+      dplyr::rename(semitone=interval, 
+                    consonance_z=rating)
+  } else {
+    experiment = NULL
+  }
   
   if (p$t=='5Partials') {
     cat('  \n#### Dyads spanning 15 semitones\n')
@@ -169,7 +208,12 @@ p = params %>% purrr::map(\(p) {
   if (p$t=='M3') {
     cat('  \n#### Dyads spanning 1 quarter tone\n')
   }
+  if (p$t=='m3') {
+    cat('  \n#### Predictions ~ No behavioral data\n')
+  }
   cat("  \n#####", title, '\n')
+  
+  cat("  \n", description, '\n')
   
   print(plot_semitone_codi(chords, paste0(p$t, ': Consonance-Dissonance: Periodicity + Smoothness'),
                            goal=experiment,sigma=sigma,
@@ -198,12 +242,10 @@ p = params %>% purrr::map(\(p) {
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_mami_codi(chords, paste0(p$t, ': Consonance-Dissonance versus Major-Minor'), sigma=sigma,
-                       min_semitone=min_semitone,max_semitone=max_semitone))
+  print(plot_mami_codi(chords, paste0(p$t, ': Consonance-Dissonance versus Major-Minor'), sigma=sigma))
   cat("  \n")
   
-  print(plot_roughness_periodicity(chords, paste0(p$t, ': Smoothness versus Periodicity'), sigma=sigma,
-                                   min_semitone=min_semitone,max_semitone=max_semitone))
+  print(plot_roughness_periodicity(chords, paste0(p$t, ': Smoothness versus Periodicity'), sigma=sigma))
   cat("  \n")
   
 
