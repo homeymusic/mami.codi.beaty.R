@@ -55,8 +55,8 @@ params = list(
   list(h=10,o=2.0,t='m3'), # future predictions
   list(h=10,o=2.0,t='m6'), # future predictions
   list(h=10,o=2.0,t='P1'), # future predictions
-  list(h=10,o=2.2,t='ExtraStretched'),
-  list(h=10,o=1.87,t='ExtraCompressed')
+  list(h=10,o=2.2,t='ExtraStretched'), # future predictions
+  list(h=10,o=1.87,t='ExtraCompressed') # future predictions
 )
 
 BEHAVIOURAL_SMOOTH_BROAD  <- 0.2
