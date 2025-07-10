@@ -18,15 +18,22 @@ double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
   std::vector<double> candidates;
   candidates.reserve(n * (n - 1) / 2);
 
+  double log2_uncert = std::log2(1 + uncertainty);
+
   for (int i = 0; i < n; ++i) {
     for (int j = i + 1; j < n; ++j) {
-      double pseudo_harmonic = x[j] / x[i];
-      int    ideal_harmonic  = int(std::round(pseudo_harmonic));
-      if     (ideal_harmonic < 2) continue; // skip the unisons
+      double ratio    = x[j] / x[i];
+      double log_ratio = std::log2(ratio);
 
-      if (std::abs(pseudo_harmonic - ideal_harmonic) / ideal_harmonic < uncertainty) {
-        double candidate_pseudo_octave = std::exp2( std::log2(pseudo_harmonic)/ std::log2(ideal_harmonic) );
-        candidates.push_back(candidate_pseudo_octave);
+      // 2. round in log2-space to get the nearest octave count
+      int roundedOctaveCount = int(std::round(log_ratio));
+      if (roundedOctaveCount < 1) continue;   // skip <1-octave (i.e. ratios <2)
+
+      // 4. check it's within ±log2(1+uncertainty) octaves
+      if (std::abs(log_ratio - roundedOctaveCount) < log2_uncert) {
+        // your “stretched octave” is the k-th root of the true ratio
+        double candidate = std::exp2(log_ratio / roundedOctaveCount);
+        candidates.push_back(candidate);
       }
     }
   }
