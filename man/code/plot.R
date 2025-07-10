@@ -658,11 +658,8 @@ plot_semitone_euclids_orchard_height <- function(chords, title='', include_line=
 
 plot_mami_codi <- function(chords, title = '', sigma = 0.2,
                            xlab = 'Major-Minor (Z-Score)',
-                           ylab = 'Consonance-Dissonance (Z-Score)',
-                           min_semitone=0, max_semitone=12) {
+                           ylab = 'Consonance-Dissonance (Z-Score)') {
 
-
-  chords <- chords[chords$semitone >= min_semitone & chords$semitone <= max_semitone, ]
 
   # 1) smooth once
   chords$smoothed_consonance_z <- smoothed(chords$semitone,
@@ -728,24 +725,26 @@ plot_mami_codi <- function(chords, title = '', sigma = 0.2,
     theme_homey()
 
   # 7) overlay integer labels
+  has_both_sides <- sapply(annotate_label, function(s) {
+    any(chords$semitone <  s) &&
+      any(chords$semitone >  s)
+  })
+
   base_plot +
     ggplot2::annotate(
-      geom  = 'label',
-      x     = annotate_x,
-      y     = annotate_y,
-      label = annotate_label,
-      vjust = -0.5,
-      fill  = colors_homey$neutral,
-      color = colors_homey$background
+      geom   = "label",
+      x      = annotate_x[has_both_sides],
+      y      = annotate_y[has_both_sides],
+      label  = annotate_label[has_both_sides],
+      vjust  = -0.5,
+      fill   = colors_homey$neutral,
+      color  = colors_homey$background
     )
 }
 
 plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
                                        xlab = 'Periodicity (Z-Score)',
-                                       ylab = 'Smoothness (Z-Score)',
-                                       min_semitone=0,max_semitone=12) {
-
-  chords <- chords[chords$semitone >= min_semitone & chords$semitone < max_semitone, ]
+                                       ylab = 'Smoothness (Z-Score)') {
 
   # 1) smooth once
   chords$smoothed_periodicity_z <- smoothed(chords$semitone,
@@ -813,17 +812,23 @@ plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
     ggplot2::labs(color = NULL, fill = NULL) +
     theme_homey()
 
-  # 7) overlay integer labels
+
+  has_both_sides <- sapply(annotate_label, function(s) {
+    any(chords$semitone <  s) &&
+      any(chords$semitone >  s)
+  })
+
   base_plot +
     ggplot2::annotate(
-      geom  = 'label',
-      x     = annotate_x,
-      y     = annotate_y,
-      label = annotate_label,
-      vjust = -0.5,
-      fill  = colors_homey$neutral,
-      color = colors_homey$background
+      geom   = "label",
+      x      = annotate_x[has_both_sides],
+      y      = annotate_y[has_both_sides],
+      label  = annotate_label[has_both_sides],
+      vjust  = -0.5,
+      fill   = colors_homey$neutral,
+      color  = colors_homey$background
     )
+
 }
 
 plot_semitone_mami <- function(chords, title='', include_line=T, sigma=0.2,

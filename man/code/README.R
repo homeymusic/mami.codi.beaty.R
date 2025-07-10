@@ -98,25 +98,22 @@ grid_P8 = tidyr::expand_grid(
 
 # Predictions
 
-experiment.rds = './man/data/input/M3.rds'
 grid_m3 = tidyr::expand_grid(
-  interval = readRDS(experiment.rds)$profile$interval-1.0,
+  interval = seq(from = 2.85, to = 3.35, length.out = 1000),
   num_harmonics=10,
   pseudo_octave=2.0,
   timbre = 'm3'
 )
 
-experiment.rds = './man/data/input/M6.rds'
 grid_m6 = tidyr::expand_grid(
-  interval = readRDS(experiment.rds)$profile$interval - 1.0,
+  interval = seq(from = 7.85, to = 8.35, length.out = 1000),
   num_harmonics=10,
   pseudo_octave=2.0,
   timbre = 'm6'
 )
 
-experiment.rds = './man/data/input/P8.rds'
 grid_P1 = tidyr::expand_grid(
-  interval = readRDS(experiment.rds)$profile$interval - 12.0,
+  interval = seq(from = -0.25, to = 0.25, length.out = 1000),
   num_harmonics=10,
   pseudo_octave=2.0,
   timbre = 'P1'

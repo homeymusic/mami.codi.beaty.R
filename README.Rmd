@@ -116,23 +116,22 @@ p = params %>% purrr::map(\(p) {
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
   } else if (p$t == 'm3') {
-    gray_vlines = c()
+    gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * c(6/5))-60,3)
     black_vlines  = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     behavioral_data_available = F
   } else if (p$t == 'm6') {
-    gray_vlines = c()
+    gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * c(8/5))-60,8.0)
     black_vlines  = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     behavioral_data_available = F
   } else if (p$t == 'P1') {
-    gray_vlines = c()
+    gray_vlines = c(0.0)
     black_vlines  = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
-    min_semitone=-1
     behavioral_data_available = F
   } else if (p$o>2 & p$t == 'ExtraStretched') {
     black_vlines  = c()
