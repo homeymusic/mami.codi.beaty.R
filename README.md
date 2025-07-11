@@ -330,7 +330,7 @@ $$\mathbf{f} = ( 261.63, 479.65 )$$
 
 ![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
 
-## But wait! I can hear that difference!
+## But wait! I can see (and hear) that difference!
 
 Yes, you can! Luckily for us, our auditory system is not a simple,
 linear frequency sensor.
@@ -468,7 +468,7 @@ $$
 &\quad\mathbf{FOR}\ j\gets i+1\ \mathbf{TO}\ N\ \mathbf{DO}\\
 &\quad\quad \mathbf{IF}\ \mathrm{round}\bigl(\tfrac{r_{j}}{r_{i}}\bigr) < 2\ \mathbf{CONTINUE}\\
 &\quad\quad \mathbf{UNLESS}\ \boxed{\frac{\lvert  \frac{r_{j}}{r_{i}} - \mathrm{round}( \frac{r_{j}}{r_{i}})\rvert}{\mathrm{round}( \frac{r_{j}}{r_{i}})} \ge \frac{1}{4\pi n}}\ \mathbf{THEN}\\
-&\quad\quad\quad\quad candidate\_pseudo\_octave \gets \exp_{2}\!\bigl(\frac{\log(\tilde h)}{\log(h)}\bigr)\\
+&\quad\quad\quad\quad candidate\_pseudo\_octave \gets \exp_{2} \bigl(\frac{\log(\tilde h)}{\log(h)}\bigr)\\
 &\quad\quad\quad\quad candidates \gets candidates \cup \{pseudo\_octave\}\\
 &\quad\quad\mathbf{END\_UNLESS}\\
 &\quad\mathbf{END\_FOR}\\
