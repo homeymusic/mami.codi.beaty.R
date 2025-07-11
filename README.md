@@ -173,6 +173,10 @@ $$
 
 ## Gabor Uncertainty
 
+![](man/images/signal_spectrum_uncertainty.png)
+
+![](man/images/physical_spectral_2d.png)
+
 $$
 \Delta t \Delta \omega \ge \frac{1}{2}
 $$
