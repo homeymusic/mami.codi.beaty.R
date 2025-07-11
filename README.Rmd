@@ -333,8 +333,8 @@ $$
 
 $$
 \begin{align*}
-\widetilde f   \text{is an approximate frequency} \\
 f   \text{is an idealized frequency} \\
+\widetilde f   \text{is an approximate frequency} \\
 \end{align*}
 $$
 
@@ -434,7 +434,7 @@ $$
 \mathrm{gcd}(a,b)=1 \quad \Longrightarrow \quad a \perp b \quad  \Longrightarrow \tilde f = \frac{a}{b} \in \mathbb{Q_\perp}
 $$
 
-## Fundamental Frequency of a N-Tone Chord
+## Number-Theoretic Signal Processing
 
 $$
 f_0 = f_{ref}\frac{\mathrm{gcd}(a_1, a_2, \dots, a_N)}{\mathrm{lcm}(b_1, b_2, \dots, b_N)}, \quad f_{ref} = \mathrm{min}(f_1, f_2, \dots, f_N), \quad a_i \perp b_i
@@ -660,35 +660,15 @@ $$
 \frac{1}{4\pi n}}
 $$
 
-### Psuedo Octave from Harmonics
-
-$$
-\tilde \Omega =2^{\log_{h}\tilde h}
-$$
-
-### Log Base 2 Uncertainty Limit
-
-What is the uncertainty limit for perceiving an octave?
-
-$$
-\log_2 \bigl( 1 + \frac{1}{4 \pi} \bigr) \approx 0.11
-$$
-
-$$
-\tilde \Omega = \Omega \pm \log_2 \bigl( 1 + \frac{1}{4 \pi} \bigr) = \Omega \pm 0.11
-$$
-
-Aligns with Sethares experiments with octave stretching and compressing from $1.9$ to $2.1$.
-
 ### Heuristic to Find Pseudo Octave of a N-Tone Chord from Harmonic Spacing within Uncertainty Limit
 
 $$
 \begin{aligned}
 &\mathbf{FOR}\ i\gets 1\ \mathbf{TO}\ N\ \mathbf{DO}\\
 &\quad\mathbf{FOR}\ j\gets i+1\ \mathbf{TO}\ N\ \mathbf{DO}\\
-&\quad\quad \mathbf{IF}\ \mathrm{round}\bigl(\tfrac{r_{j}}{r_{i}}\bigr) < 2\ \mathbf{CONTINUE}\\
-&\quad\quad \mathbf{UNLESS}\ \boxed{\frac{\lvert  \frac{r_{j}}{r_{i}} - \mathrm{round}( \frac{r_{j}}{r_{i}})\rvert}{\mathrm{round}( \frac{r_{j}}{r_{i}})} \ge \frac{1}{4\pi n}}\ \mathbf{THEN}\\
-&\quad\quad\quad\quad candidate\_pseudo\_octave \gets \exp_{2} \bigl(\frac{\log(\tilde h)}{\log(h)}\bigr)\\
+&\quad\quad \mathbf{IF}\ \mathrm{round}\bigl(\tfrac{f_{j}}{f_{i}}\bigr) < 2\ \mathbf{CONTINUE}\\
+&\quad\quad \mathbf{UNLESS}\ \boxed{\frac{\lvert  \frac{f_{j}}{f_{i}} - \mathrm{round}( \frac{f_{j}}{f_{i}})\rvert}{\mathrm{round}( \frac{f_{j}}{f_{i}})} \ge \frac{1}{4\pi n}}\ \mathbf{THEN}\\
+&\quad\quad\quad\quad candidate\_pseudo\_octave \gets \exp_{2} \bigl(\frac{\log_2(f_j / f_i)}{\log_2(round(f_j / f_i))}\bigr)\\
 &\quad\quad\quad\quad candidates \gets candidates \cup \{pseudo\_octave\}\\
 &\quad\quad\mathbf{END\_UNLESS}\\
 &\quad\mathbf{END\_FOR}\\
@@ -697,12 +677,21 @@ $$
 \end{aligned}
 $$
 
+#### Alignment with Sethares Plastic Range
+
+For the $log_2$ form of the uncertainty limit
+
 $$
-\frac{f}{f_{\mathrm{ref}}}
-\quad\mapsto\quad
-\exp_{2}\biggl(\frac{\log_{2}\bigl(f/f_{\mathrm{ref}}\bigr)}{\log_{2}(\tilde \Omega)}\biggr)
+\log_2\!\bigl(1+\tfrac{1}{4 \pi n}\bigr)
 $$
 
+with $n = 1.0$ we align well with Sethares range between $1.87$ and $2.2$.
+
+$$
+2^{1 - 0.110467} \approx 1.85 \le \mathrm{pseudo\_octave} \le 2^{1 + 0.110467} \approx 2.16
+$$
+
+More text here.
 ## Cubic Distortion Products
 
 For all combinations of $f$ partials, we added the cubic distortion products to the stimuli.
