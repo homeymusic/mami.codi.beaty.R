@@ -168,8 +168,11 @@ Thus, 2.2 is stretched a bit too far, and … (Sethares)
 ## Heisenberg Uncertainty
 
 $$
-\boxed{\Delta x \Delta p \ge \frac{\hbar}{2}, \quad p = \frac{h}{\lambda}}
+\boxed{\Delta x \Delta p \ge \frac{\hbar}{2}, \quad  \lambda = \frac{h}{p}}
 $$
+
+When de Broglie gave matter a wavelength, did he give us a pattern
+recognition problem?
 
 ## Gabor Uncertainty
 
@@ -180,8 +183,10 @@ $$
 ![](man/images/quantum_blob.png)
 
 *“Each of these areas, with its associated datum, represents, as it
-were, one elementary quantum of information, and it is proposed to call
-it a logon.” -Gabor, 1944*
+were, one **elementary quantum of information**, and it is proposed to
+call it a **logon**.” -Gabor, 1944*
+
+*“…phase-space is subdivided in **quantum blobs**…” -de Gasson, 2002*
 
 $$
 \boxed{\Delta t \Delta \omega \ge \frac{1}{2}}
@@ -192,7 +197,7 @@ $$
 ### Reference Time Period
 
 $$
-\Delta t = n T = n \frac{2 \pi }{\omega_{ref}}, \quad n \enspace \text{periods}
+\Delta t = n T_{ref} = n \frac{2 \pi }{\omega_{ref}}, \quad n \enspace \text{periods}
 $$
 
 $$
@@ -303,7 +308,7 @@ $$
 ### Stern–Brocot: Rational Fractions Lowest Terms
 
 $$
-a \perp b \quad \Longrightarrow \quad  \mathrm{gcd}(a,b)=1
+\mathrm{gcd}(a,b)=1 \quad \Longrightarrow \quad a \perp b \quad  \Longrightarrow \tilde f = \frac{a}{b} \in \mathbb{Q_\perp}
 $$
 
 ## Fundamental Frequency of a N-Tone Chord
