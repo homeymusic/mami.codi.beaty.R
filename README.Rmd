@@ -508,15 +508,42 @@ title(
 cat("  \n")
 ```
 
-## But wait! I can see (and hear) that difference!
+## This Is a Bad Idea
 
-Yes, you can! Luckily for us, our auditory system is not a simple, linear frequency sensor.
+For \(n = 1\), the resolution of pure-tone frequency ratios is poor. 
+However, our auditory-system model explains how, despite this limitation, 
+we can still perceive the difference between a unison (P1) and a minor second (m2).
 
-Our auditory system amplifies signals in a way that creates new tones. 
-Those tones give us more information that allows us to hear changes and still
-obey the uncertainty principle.
+```{r, echo=FALSE, results='asis'}
+# your inputs
+C4         <- hrep::midi_to_freq(60)
+Db4        <- hrep::midi_to_freq(61)
+freqs      <- c(C4, Db4)
+results    <- rational_fractions(freqs, C4, uncertainty())
 
-TODO: show this example again but with the cochlear distortion products.
+# build the columns
+interval   <- c("P1", "m2")
+num        <- results[,1]
+den        <- results[,2]
+ref_freq   <- rep(C4, length(freqs))
+
+# now emit a *completely blank* line, then the table header
+cat("\n\n",
+    "| Interval | f     | ref  | Ratio | Uncertainty |", "\n",
+    "|:---------|------:|-------:|------------:|------------:|", "\n",
+    # one row per observation:
+    paste0(
+      "| ", interval,
+      " | ", sprintf("%.3f", freqs),
+      " | ", sprintf("%.3f", ref_freq),
+      " | ", num, ':', den,
+      " | ", "1/4π",
+      " |"
+    , collapse = "\n"),
+    "\n\n",
+    sep = ""
+)
+```
 
 ## Fundamental Wavelength of a N-Tone Chord
 

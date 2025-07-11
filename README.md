@@ -341,16 +341,17 @@ $$\mathbf{f} = ( 261.63, 479.65 )$$
 
 ![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
 
-## But wait! I can see (and hear) that difference!
+## This Is a Bad Idea
 
-Yes, you can! Luckily for us, our auditory system is not a simple,
-linear frequency sensor.
+For $n = 1$, the resolution of pure-tone frequency ratios is poor.
+However, our auditory-system model explains how, despite this
+limitation, we can still perceive the difference between a unison (P1)
+and a minor second (m2).
 
-Our auditory system amplifies signals in a way that creates new tones.
-Those tones give us more information that allows us to hear changes and
-still obey the uncertainty principle.
-
-TODO: show this example again but with the cochlear distortion products.
+| Interval |       f |     ref | Ratio | Uncertainty |
+|:---------|--------:|--------:|------:|------------:|
+| P1       | 261.626 | 261.626 |   1:1 |        1/4π |
+| m2       | 277.183 | 261.626 |   1:1 |        1/4π |
 
 ## Fundamental Wavelength of a N-Tone Chord
 
@@ -381,9 +382,9 @@ at C4.
 
 $$f = \{261.63, 397.67, 905.22, 1025.57\}$$
 
-![](man/figures/README-unnamed-chunk-13-1.png)<!-- -->
-
 ![](man/figures/README-unnamed-chunk-14-1.png)<!-- -->
+
+![](man/figures/README-unnamed-chunk-15-1.png)<!-- -->
 
 ### Roughness: Stern-Brocot Traversal Depth
 
@@ -401,7 +402,7 @@ $$
 
 #### Bonang: MaMi.CoDi.Beaty Roughness with Hutchinson & Knopoff 1978
 
-![](man/figures/README-unnamed-chunk-15-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-16-1.png)<!-- -->
 
 ### Overall Frequency Dissonance
 
@@ -535,8 +536,8 @@ $$
 
 ## Gabor Wavelets from Rational Approximations
 
-![](man/figures/README-unnamed-chunk-16-1.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-16-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-17-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-17-2.png)<!-- -->
 
 ### Daugman’s Gabor Wavelet in Computer Vision
 
