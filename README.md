@@ -168,7 +168,7 @@ Thus, 2.2 is stretched a bit too far, and … (Sethares)
 ## Heisenberg Uncertainty
 
 $$
-\Delta x \Delta p \ge \frac{\hbar}{2}, \quad p = \frac{h}{\lambda}
+\boxed{\Delta x \Delta p \ge \frac{\hbar}{2}, \quad p = \frac{h}{\lambda}}
 $$
 
 ## Gabor Uncertainty
@@ -177,8 +177,14 @@ $$
 
 ![](man/images/physical_spectral_uncertainty.png)
 
+![](man/images/quantum_blob.png)
+
+*“Each of these areas, with its associated datum, represents, as it
+were, one elementary quantum of information, and it is proposed to call
+it a logon.” -Gabor, 1944*
+
 $$
-\Delta t \Delta \omega \ge \frac{1}{2}
+\boxed{\Delta t \Delta \omega \ge \frac{1}{2}}
 $$
 
 ## Relative Uncertainty
