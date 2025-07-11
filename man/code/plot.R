@@ -658,8 +658,12 @@ plot_semitone_euclids_orchard_height <- function(chords, title='', include_line=
 
 plot_mami_codi <- function(chords, title = '', sigma = 0.2,
                            xlab = 'Major-Minor (Z-Score)',
-                           ylab = 'Consonance-Dissonance (Z-Score)') {
+                           ylab = 'Consonance-Dissonance (Z-Score)',
+                           min_semitone=0, max_semitone=12,
+                           include_extreme_labels = T) {
 
+
+  chords <- chords[chords$semitone >= min_semitone & chords$semitone <= max_semitone, ]
 
   # 1) smooth once
   chords$smoothed_consonance_z <- smoothed(chords$semitone,
@@ -724,27 +728,73 @@ plot_mami_codi <- function(chords, title = '', sigma = 0.2,
     ggplot2::labs(color = NULL, fill = NULL) +
     theme_homey()
 
-  # 7) overlay integer labels
-  has_both_sides <- sapply(annotate_label, function(s) {
-    any(chords$semitone <  s) &&
-      any(chords$semitone >  s)
-  })
+  if (include_extreme_labels) {
+    base_plot +
+      ggplot2::annotate(
+        geom   = "label",
+        x      = annotate_x,
+        y      = annotate_y,
+        label  = annotate_label,
+        vjust  = -0.5,
+        fill   = colors_homey$neutral,
+        color  = colors_homey$background
+      )
+  } else {
 
-  base_plot +
-    ggplot2::annotate(
-      geom   = "label",
-      x      = annotate_x[has_both_sides],
-      y      = annotate_y[has_both_sides],
-      label  = annotate_label[has_both_sides],
-      vjust  = -0.5,
-      fill   = colors_homey$neutral,
-      color  = colors_homey$background
+    label_integer  <- integer_semitones
+
+    label_precise  <- as.character(
+      signif(chords$semitone[nearest_indices], 3)
     )
+
+    # 1) which are the “interior” points?
+    is_interior <- sapply(label_integer, function(s) {
+      any(chords$semitone <  s) &&
+        any(chords$semitone >  s)
+    })
+
+    # 2) which are the extremes?
+    extremes <- label_integer %in%
+      c(semitone_minimum, semitone_maximum)
+
+    # 3) keep both interior *and* extremes
+    keep_idx <- which(is_interior | extremes)
+
+    # 4) build a single label vector:
+    #    default to integer, but swap in the precise for the extremes
+    mixed_labels <- as.character(label_integer)
+    mixed_labels[extremes] <- label_precise[extremes]
+
+    # 5) draw only those points
+    df_labels <- data.frame(
+      x     = annotate_x[keep_idx],
+      y     = annotate_y[keep_idx],
+      label = mixed_labels[keep_idx]
+    )
+
+    base_plot +
+      ggrepel::geom_label_repel(
+        data          = df_labels,
+        mapping       = ggplot2::aes(x = x, y = y, label = label),
+        fill          = colors_homey$neutral,
+        color         = colors_homey$background,
+        box.padding   = 0.35,    # how much space around each label
+        point.padding = 0.3,     # how far from the point to start the label
+        segment.color = "grey50",
+        seed          = 42       # for reproducible repelling
+      )
+  }
+
 }
 
 plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
                                        xlab = 'Periodicity (Z-Score)',
-                                       ylab = 'Smoothness (Z-Score)') {
+                                       ylab = 'Smoothness (Z-Score)',
+                                       min_semitone=0,max_semitone=12,
+                                       include_extreme_labels = T) {
+
+
+  chords <- chords[chords$semitone >= min_semitone & chords$semitone <= max_semitone, ]
 
   # 1) smooth once
   chords$smoothed_periodicity_z <- smoothed(chords$semitone,
@@ -813,21 +863,63 @@ plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
     theme_homey()
 
 
-  has_both_sides <- sapply(annotate_label, function(s) {
-    any(chords$semitone <  s) &&
-      any(chords$semitone >  s)
-  })
+  if (include_extreme_labels) {
 
-  base_plot +
-    ggplot2::annotate(
-      geom   = "label",
-      x      = annotate_x[has_both_sides],
-      y      = annotate_y[has_both_sides],
-      label  = annotate_label[has_both_sides],
-      vjust  = -0.5,
-      fill   = colors_homey$neutral,
-      color  = colors_homey$background
+    base_plot +
+      ggplot2::annotate(
+        geom   = "label",
+        x      = annotate_x,
+        y      = annotate_y,
+        label  = annotate_label,
+        vjust  = -0.5,
+        fill   = colors_homey$neutral,
+        color  = colors_homey$background
+      )
+
+  } else {
+
+    label_integer  <- integer_semitones
+
+    label_precise  <- as.character(
+      signif(chords$semitone[nearest_indices], 3)
     )
+
+    # 1) which are the “interior” points?
+    is_interior <- sapply(label_integer, function(s) {
+      any(chords$semitone <  s) &&
+        any(chords$semitone >  s)
+    })
+
+    # 2) which are the extremes?
+    extremes <- label_integer %in%
+      c(semitone_minimum, semitone_maximum)
+
+    # 3) keep both interior *and* extremes
+    keep_idx <- which(is_interior | extremes)
+
+    # 4) build a single label vector:
+    #    default to integer, but swap in the precise for the extremes
+    mixed_labels <- as.character(label_integer)
+    mixed_labels[extremes] <- label_precise[extremes]
+
+    df_labels <- data.frame(
+      x     = annotate_x[keep_idx],
+      y     = annotate_y[keep_idx],
+      label = mixed_labels[keep_idx]
+    )
+
+    base_plot +
+      ggrepel::geom_label_repel(
+        data          = df_labels,
+        mapping       = ggplot2::aes(x = x, y = y, label = label),
+        fill          = colors_homey$neutral,
+        color         = colors_homey$background,
+        box.padding   = 0.35,    # how much space around each label
+        point.padding = 0.3,     # how far from the point to start the label
+        segment.color = "grey50",
+        seed          = 42       # for reproducible repelling
+      )
+  }
 
 }
 

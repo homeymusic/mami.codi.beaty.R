@@ -64,6 +64,10 @@ BEHAVIOURAL_SMOOTH_NARROW <- 0.035
 
 behavioral_data_available = T
 
+min_semitone=0
+max_semitone=12
+include_extreme_labels=T
+
 p = params %>% purrr::map(\(p) {
   if (p$o==2 & p$h==10 & p$t == 'Harmonic') {
     black_vlines  = c(2,3,4,5,7,8,9,12)
@@ -105,34 +109,44 @@ p = params %>% purrr::map(\(p) {
     black_vlines  = c(3.95)
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
+    include_extreme_labels=F
   } else if (p$t == 'M6') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * 5/3)-60,9,8.66952)
     black_vlines  = c(8.78,8.93)
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
+    include_extreme_labels=F
   } else if (p$t == 'P8') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * 2/1)-60)
     black_vlines  = c(11.94, 12.08)
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
+    min_semitone=1
+    max_semitone=13
+    include_extreme_labels=F
   } else if (p$t == 'm3') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * c(6/5))-60,3)
     black_vlines  = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     behavioral_data_available = F
+    include_extreme_labels=F
   } else if (p$t == 'm6') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * c(8/5))-60,8.0)
     black_vlines  = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     behavioral_data_available = F
+    include_extreme_labels=F
   } else if (p$t == 'P1') {
     gray_vlines = c(0.0)
     black_vlines  = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     behavioral_data_available = F
+    min_semitone=-1
+    max_semitone=1
+    include_extreme_labels=F
   } else if (p$o>2 & p$t == 'ExtraStretched') {
     black_vlines  = c()
     gray_vlines = c()
@@ -229,7 +243,6 @@ p = params %>% purrr::map(\(p) {
                                              black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  
   print(plot_semitone_roughness_space_time(chords,title = paste0(p$t, ': Smoothness: Space & Time'),
                                           goal=experiment, sigma=sigma,
                                            black_vlines = black_vlines,gray_vlines  = gray_vlines)
@@ -241,13 +254,18 @@ p = params %>% purrr::map(\(p) {
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_mami_codi(chords, paste0(p$t, ': Consonance-Dissonance versus Major-Minor'), sigma=sigma))
+  print(plot_mami_codi(chords, 
+                       min_semitone=min_semitone,max_semitone=max_semitone,
+                       include_extreme_labels=include_extreme_labels,
+                       paste0(p$t, ': Consonance-Dissonance versus Major-Minor'), sigma=sigma))
   cat("  \n")
   
-  print(plot_roughness_periodicity(chords, paste0(p$t, ': Smoothness versus Periodicity'), sigma=sigma))
+  print(plot_roughness_periodicity(chords, 
+                                   min_semitone=min_semitone,max_semitone=max_semitone,
+                                   include_extreme_labels=include_extreme_labels,
+                                   paste0(p$t, ': Smoothness versus Periodicity'), sigma=sigma))
   cat("  \n")
   
-
 })
 ```
 
