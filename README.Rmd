@@ -67,55 +67,65 @@ behavioral_data_available = T
 min_semitone=0
 max_semitone=12
 include_extreme_labels=T
+N=0
 
 p = params %>% purrr::map(\(p) {
   if (p$o==2 & p$h==10 & p$t == 'Harmonic') {
     black_vlines  = c(2,3,4,5,7,8,9,12)
-  gray_vlines = c()
+    gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
+    N = 198
   } else if (p$o==2 & p$h==5 & p$t == '5Partials') {
     black_vlines  = c(3,4,5,7,9,12,14)
-  gray_vlines = c()
+    gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
+    N = 149
   } else if (p$o==2 & p$h==5 & p$t == '5PartialsNo3') {
     black_vlines  = c(4,5,7,9,12,14)
-  gray_vlines = c()
+    gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
+    N = 160
   } else if (p$o==2 & p$h==1 & p$t == 'Pure') {
     black_vlines  = c(7,12)
-  gray_vlines = c()
+    gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
+    N = 176
   } else if (p$o>2 & p$t == 'Stretched') {
     black_vlines  = c(4.2,7.5,9.4,12.78)
-  gray_vlines = c()
+    gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
+    N = 194
   } else if (p$o<2 & p$t == 'Compressed') {
     black_vlines  = c(3.8,4.8,11.1,14.5)
-  gray_vlines = c()
+    gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
+    N = 202
   } else if (p$t == 'Bonang') {
     black_vlines = c(2.60, 4.80, 12.0)
     gray_vlines  = c(7.2, 9.6)
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
+    N = 170
   } else if (p$t == 'M3') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * 5/4)-60,4,4.092442)
     black_vlines  = c(3.95)
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     include_extreme_labels=F
+    N = 237
   } else if (p$t == 'M6') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * 5/3)-60,9,8.66952)
     black_vlines  = c(8.78,8.93)
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     include_extreme_labels=F
+    N = 230
   } else if (p$t == 'P8') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * 2/1)-60)
     black_vlines  = c(11.94, 12.08)
@@ -124,6 +134,7 @@ p = params %>% purrr::map(\(p) {
     min_semitone=1
     max_semitone=13
     include_extreme_labels=F
+    N = 196
   } else if (p$t == 'm3') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * c(6/5))-60,3)
     black_vlines  = c()
@@ -228,28 +239,28 @@ p = params %>% purrr::map(\(p) {
   
   cat("  \n", description, '\n')
   
-  print(plot_semitone_codi(chords, paste0(p$t, ': Consonance-Dissonance: Periodicity + Smoothness'),
+  print(plot_semitone_codi(chords, paste0(p$t, ' (N=', N,' participants) : Consonance-Dissonance: Periodicity + Smoothness'),
                            goal=experiment,sigma=sigma,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_periodicity_roughness(chords, paste0(p$t, ': Consonance: Periodicity & Smoothness'),
+  print(plot_semitone_periodicity_roughness(chords, paste0(p$t, ' (N=', N,' participants) : Consonance: Periodicity & Smoothness'),
                                             goal=experiment,sigma=sigma,
                                             black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_periodicity_space_time(chords, paste0(p$t, ': Periodicity: Space & Time'),
+  print(plot_semitone_periodicity_space_time(chords, paste0(p$t, ' (N=', N,' participants) : Periodicity: Space & Time'),
                                              goal=experiment,sigma=sigma,
                                              black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_roughness_space_time(chords,title = paste0(p$t, ': Smoothness: Space & Time'),
+  print(plot_semitone_roughness_space_time(chords,title = paste0(p$t, ' (N=', N,' participants) : Smoothness: Space & Time'),
                                           goal=experiment, sigma=sigma,
                                            black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
   cat("  \n")
   
-  print(plot_semitone_mami(chords, paste0(p$t, ': Major-Minor: Time Consonance minus Space Consonance'),
+  print(plot_semitone_mami(chords, paste0(p$t, ' (N=', N,' participants) : Major-Minor: Time Consonance minus Space Consonance'),
                            goal=experiment,sigma=sigma,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
