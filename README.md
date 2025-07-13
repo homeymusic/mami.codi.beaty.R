@@ -539,14 +539,19 @@ $$
 \log_2 \bigl(1+\tfrac{1}{4 \pi n}\bigr)
 $$
 
-with $n = 1.0$ we align well with Sethares range between $1.87$ and
-$2.2$.
+for $n = 1.0$
+
+$$
+\log_2 \bigl(1+\tfrac{1}{4 \pi}\bigr) \approx 0.110467 
+$$
+
+we align well with Sethares range between $1.87$ and $2.2$.
 
 $$
 2^{1 - 0.110467} \approx 1.85 \le \mathrm{pseudo\_octave} \le 2^{1 + 0.110467} \approx 2.16
 $$
 
-More text here. \## Cubic Distortion Products
+## Cubic Distortion Products
 
 For all combinations of $f$ partials, we added the cubic distortion
 products to the stimuli.
