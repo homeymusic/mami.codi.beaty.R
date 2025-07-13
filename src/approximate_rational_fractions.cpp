@@ -24,7 +24,7 @@ double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
       int    ideal_harmonic  = int(std::round(pseudo_harmonic));
       if     (ideal_harmonic < 2) continue; // skip the unisons
 
-      if (std::abs(pseudo_harmonic - ideal_harmonic) / ideal_harmonic < uncertainty) {
+      if (std::abs(pseudo_harmonic - ideal_harmonic) < uncertainty) {
         double candidate_pseudo_octave = std::exp2( std::log2(pseudo_harmonic)/ std::log2(ideal_harmonic) );
         candidates.push_back(candidate_pseudo_octave);
       }
