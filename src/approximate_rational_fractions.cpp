@@ -138,7 +138,7 @@ inline double round_to_precision(double value, int precision = 15) {
 
      // continue while |x/x_ref - num/den| >= uncertainty
      while ((
-         std::abs(ideal - approximation) >= uncertainty
+         std::abs(ideal - approximation) / approximation >= uncertainty
      ) && iter < MAX_ITER) {
        if (approximation < ideal) {
          left_num = approximation_num;  left_den = approximation_den;
