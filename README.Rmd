@@ -696,7 +696,7 @@ $$
 ### Harmonic Reference Time Period
 
 $$
-\Delta t = n T_{h} = n \frac{2 \pi }{h \omega_{ref}}, \quad n \enspace \text{periods}, \quad h \in \mathbb{Z} \; \text{harmonic number}
+\Delta t = n T_{h} = n \frac{2 \pi }{h \omega_{ref}}, \quad n \enspace \text{periods}, \quad h \in \mathbb{Z} \quad \text{harmonic number}
 $$
 
 $$
@@ -744,7 +744,7 @@ $$
 $$
 \Delta f = 
 \bigl| h f_{ref} - f\bigr| = 
-\frac{f_{ref}}{f_{ref}} \bigl| h - f \bigr| = 
+\frac{f_{ref}}{f_{ref}} \bigl| h f_{ref} - f \bigr| = 
 f_{ref} \bigl| h - \tfrac{f}{f_{ref}}\bigr|
 $$
 
@@ -783,7 +783,7 @@ $$
 For the $log_2$ form of the uncertainty limit
 
 $$
-\log_2\!\bigl(1+\tfrac{1}{4 \pi n}\bigr)
+\log_2 \bigl(1+\tfrac{1}{4 \pi n}\bigr)
 $$
 
 with $n = 1.0$ we align well with Sethares range between $1.87$ and $2.2$.
@@ -821,7 +821,7 @@ $$
 $$
 
 $$
-\Delta x \frac{2\pi}{\lambda^2}\,\Delta\lambda \ge \frac{1}{2}
+\Delta x \frac{2\pi}{\lambda^2}\Delta\lambda \ge \frac{1}{2}
 $$
 
 $$
