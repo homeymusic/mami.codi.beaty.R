@@ -578,6 +578,19 @@ $$
 P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L_\lambda\bigr) \quad \text{[Proposed Units: Sz]}
 $$
 
+
+## How many periods?
+
+What is the correct value of $n$?
+
+$$
+\frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi n}
+$$
+
+$$
+n T_{ref} = \mathrm{LCM}(T_i, T_j) = p T_i = q T_j.
+$$
+
 #### Bonang: MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018
 
 We use a simulated Bonang spectrum. Here is an example unison P1 pitch at C4.
@@ -690,6 +703,8 @@ $$
 ## Pseudo-Octaves: Stretching and Compressing Harmonics
 
 ### Relative Harmonics Uncertainty
+
+
 
 $$
 \frac{\Delta h}{h} =
