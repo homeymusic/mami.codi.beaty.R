@@ -578,19 +578,6 @@ $$
 P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L_\lambda\bigr) \quad \text{[Proposed Units: Sz]}
 $$
 
-
-## How many periods?
-
-What is the correct value of $n$?
-
-$$
-\frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi n}
-$$
-
-$$
-n T_{ref} = \mathrm{LCM}(T_i, T_j) = p T_i = q T_j.
-$$
-
 #### Bonang: MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018
 
 We use a simulated Bonang spectrum. Here is an example unison P1 pitch at C4.
@@ -702,15 +689,74 @@ $$
 
 ## Pseudo-Octaves: Stretching and Compressing Harmonics
 
-### Relative Harmonics Uncertainty
+$$
+\boxed{\Delta t \Delta \omega \ge \frac{1}{2}}
+$$
 
-
+### Harmonic Reference Time Period
 
 $$
-\frac{\Delta h}{h} =
-\frac{\bigl| \tilde h - h \bigr|}{h} = 
-\boxed{\frac{\bigl| \frac{f_j}{f_i} - \mathrm{round} \bigl( \frac{f_j}{f_i} \bigr) \bigr|}{\mathrm{round} \bigl( \frac{f_j}{f_i} \bigr)} \ge 
-\frac{1}{4\pi n}}
+\Delta t = n T_{h} = n \frac{2 \pi }{h \omega_{ref}}, \quad n \enspace \text{periods}, \quad h \in \mathbb{Z} \; \text{harmonic number}
+$$
+
+$$
+n \frac{2 \pi}{h \omega_{ref}}\Delta \omega \ge \frac{1}{2}
+$$
+
+### Relative Harmonic Frequency Uncertainty
+
+$$
+\frac{\Delta \omega}{h \omega_{ref}} \ge \frac{1}{4 \pi n}
+$$
+
+$$
+\boxed 
+{
+\frac{\Delta f}{h f_{ref}} \ge \frac{1}{4 \pi n}
+}
+$$
+
+### Idealized Frequency and Harmonic Frequency
+
+$$
+\Delta f = \bigl| \widetilde f - f \bigr|
+$$
+
+$$
+\begin{align*}
+f   \text{is an idealized frequency} \\
+\widetilde f   \text{is a harmonic frequency} \\
+\end{align*}
+$$
+
+### Harmonic Template (aka Integers)
+
+$$
+h = \mathrm{round}(\frac{f}{f_{ref}})
+$$
+
+$$
+\widetilde f = h f_{ref}
+$$
+
+### Rational Approximation Uncertainty
+
+$$
+\Delta f = 
+\bigl| h f_{ref} - f\bigr| = 
+\frac{f_{ref}}{f_{ref}} \bigl| h - f \bigr| = 
+f_{ref} \bigl| h - \tfrac{f}{f_{ref}}\bigr|
+$$
+
+$$
+\frac{\Delta f}{ h f_{ref}} = 
+\frac{f_{ref} \bigl| h - \frac{f}{f_{ref}} \bigr|}{f_{ref} h } \ge \frac{1}{4 \pi n}
+$$
+
+$$
+\boxed {
+\frac{\bigl| \mathrm{round}(\frac{f}{f_{ref}}) - \tfrac{f}{f_{ref}} \bigr|}{\mathrm{round}(\frac{f}{f_{ref}})} \ge \frac{1}{4 \pi n}
+}
 $$
 
 ### Heuristic to Find Pseudo Octave of a N-Tone Chord from Harmonic Spacing within Uncertainty Limit
@@ -720,7 +766,9 @@ $$
 &\mathbf{FOR}\ i\gets 1\ \mathbf{TO}\ N\ \mathbf{DO}\\
 &\quad\mathbf{FOR}\ j\gets i+1\ \mathbf{TO}\ N\ \mathbf{DO}\\
 &\quad\quad \mathbf{IF}\ \mathrm{round}\bigl(\tfrac{f_{j}}{f_{i}}\bigr) < 2\ \mathbf{CONTINUE}\\
-&\quad\quad \mathbf{UNLESS}\ \boxed{\frac{\lvert  \frac{f_{j}}{f_{i}} - \mathrm{round}( \frac{f_{j}}{f_{i}})\rvert}{\mathrm{round}( \frac{f_{j}}{f_{i}})} \ge \frac{1}{4\pi n}}\ \mathbf{THEN}\\
+&\quad\quad \mathbf{UNLESS}\ \boxed {
+\frac{\bigl| \mathrm{round}(\frac{f}{f_{ref}}) - \tfrac{f}{f_{ref}} \bigr|}{\mathrm{round}(\frac{f}{f_{ref}})} \ge \frac{1}{4 \pi n}
+}\ \mathbf{THEN}\\
 &\quad\quad\quad\quad candidate\_pseudo\_octave \gets \exp_{2} \bigl(\frac{\log_2(f_j / f_i)}{\log_2(round(f_j / f_i))}\bigr)\\
 &\quad\quad\quad\quad candidates \gets candidates \cup \{pseudo\_octave\}\\
 &\quad\quad\mathbf{END\_UNLESS}\\
