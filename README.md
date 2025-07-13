@@ -292,13 +292,13 @@ $$
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
 
-We traverse the Stern–Brocot tree to a depth of **7** levels along the
-path **RRLRRRR** landing us on the fraction $\frac{11}{6}$.
+We traverse the Stern–Brocot tree to a depth of **2** levels along the
+path **RR** landing us on the fraction $\frac{2}{1}$.
 
 $$
-\bigl| \tfrac{493.8833}{261.6256} - \tfrac{11}{6}\bigr| = 
-\bigl| 1.8877  - 1.8333 \bigr| =
-0.0544 < 
+\bigl| \tfrac{493.8833}{261.6256} - \tfrac{2}{1}\bigr| = 
+\bigl| 1.8877  - 2 \bigr| =
+0.1123 < 
 \frac{1}{4 \pi} =
 0.0796
 $$
@@ -335,7 +335,7 @@ $$
 
 Rational Fraction Frequencies:
 
-$$\mathbf{f} = ( 261.63, 479.65 )$$
+$$\mathbf{f} = ( 261.63, 523.25 )$$
 
 ![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->
 
@@ -655,6 +655,6 @@ cycle.
 
 The Stern-Brocot Tree traversals give us many binary encodings:
 
-**RRLRRRR**
+**RR**
 
 Seems like this could be fertile ground for exploration.
