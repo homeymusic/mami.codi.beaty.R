@@ -434,7 +434,7 @@ $$
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
 
-  coprimer::plot_stern_brocot_tree(sb$depth, sb$path)
+  coprimer::plot_stern_brocot_tree(sb$depth, sb$path, dark_mode=T)
   cat("  \n")
   
 ```
