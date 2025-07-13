@@ -4,6 +4,8 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
+DataFrame rational_fractions(const NumericVector& x, double x_ref, double uncertainty);
+
 // [[Rcpp::export]]
 double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
                                  const double uncertainty) {
@@ -24,8 +26,20 @@ double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
       int    ideal_harmonic  = int(std::round(pseudo_harmonic));
       if     (ideal_harmonic < 2) continue; // skip the unisons
 
-      if (std::abs(pseudo_harmonic - ideal_harmonic) / ideal_harmonic < uncertainty) {
-        double candidate_pseudo_octave = std::exp2( std::log2(pseudo_harmonic)/ std::log2(ideal_harmonic) );
+      if (std::abs(pseudo_harmonic - ideal_harmonic) < uncertainty) {
+        // build a 1-element vector containing x[j]
+        NumericVector single_x = NumericVector::create(x[j]);
+
+        // call rational_fractions(vec_of_length1, reference = x[i], uncertainty)
+        DataFrame df = rational_fractions(single_x, x[i], uncertainty);
+
+        // pull out the single "approximation" value:
+        NumericVector approx_col = df["approximation"];
+        double approx_val = approx_col[0];
+
+        // now compute your pseudo-octave
+        double candidate_pseudo_octave =
+          std::exp2(std::log2(approx_val) / std::log2(ideal_harmonic));
         candidates.push_back(candidate_pseudo_octave);
       }
     }
