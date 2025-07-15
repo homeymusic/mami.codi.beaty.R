@@ -541,11 +541,12 @@ par(
   col      = "white",   # default color for points/lines
   col.axis = "white",   # axis tick labels
   col.lab  = "white",   # axis labels
-  col.main = "white"    # main title
+  col.main = "white",   # main title
+  col.sub  = "white"    # sub title
 )
 
 plot(hrep::wave(MT_sparse_fr_spectrum, length_sec = plot_period))
-title("Signal of Pure Tone ET Major Triad")
+title("Pure Tone ET Major Triad Signal")
 cat("  \n")
 
 plot(hrep::wave(MT_rational_sparse_fr_spectrum, length_sec = plot_period))
@@ -554,15 +555,13 @@ abline(
   lty = "dashed"
 )
 title(
-  paste(
-    "Signal of Perceived Pure Tone ET Major Triad f0:", 
-    round(MT_mami_codi$fundamental_frequency, 2), 
-    "Hz  T0:", 
-    round(MT_mami_codi$fundamental_period, 2),
-    "s  plotted over",
-    number_of_periods_to_plot,
-    "periods"
-    ))
+  main = paste(
+    "Pure Tone ET Major Triad Coprime Signal\n",
+    "f0:", round(MT_mami_codi$fundamental_frequency, 2), "Hz",
+    "T0:", round(MT_mami_codi$fundamental_period, 2), "s",
+    "plotted over", number_of_periods_to_plot, "periods"
+  )
+)
 cat("  \n")
 ```
 
