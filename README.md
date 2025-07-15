@@ -346,6 +346,8 @@ Major Triad Signal from Coprime Spectrum:
 
 ![](man/figures/README-unnamed-chunk-12-2.png)<!-- -->
 
+![](man/figures/README-unnamed-chunk-12-3.png)<!-- -->
+
 ## Is This a Bad Idea?
 
 For $n = 1$, the resolution of pure-tone frequency ratios is poor.
@@ -384,8 +386,6 @@ $$
 
 We use a simulated Bonang spectrum. Here is an example unison P1 pitch
 at C4.
-
-$$f = \{261.63, 397.67, 905.22, 1025.57\}$$
 
 ![](man/figures/README-unnamed-chunk-15-1.png)<!-- -->
 

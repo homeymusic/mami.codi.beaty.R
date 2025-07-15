@@ -549,6 +549,19 @@ par(
   col.sub  = "white"
 )
 
+
+plot(MT_sparse_fr_spectrum,
+     xlim = c(100, 500))
+title(
+  main = bquote(
+    atop(
+      "Spectrum of Pure Tone ET Major Triad with Cubic Difference Tones",
+      "Plot: 100 to 500 Hz"
+    )
+  )
+)
+cat("\n\n")
+
 # first signal
 plot(
   hrep::wave(MT_sparse_fr_spectrum, length_sec = plot_period),
@@ -559,7 +572,7 @@ plot(
 title(
   main = bquote(
     atop(
-      "Pure Tone ET Major Triad Signal",
+      "Signal of Pure Tone ET Major Triad with Cubic Difference Tones",
       "Plot:" ~ .(plot_time) ~ "s"
     )
   )
@@ -582,7 +595,7 @@ abline(
 title(
   main = bquote(
     atop(
-      "Pure Tone ET Major Triad Coprime Signal",
+      "Coprime Signal of Pure Tone ET Major Triad with Cubic Difference Tones",
       f[0] == .(f0_val) ~ "Hz  | " ~
       T[0] == .(T0_val) ~ "s  | " ~
       "Plot:"  ~ .(plot_time) ~ "s (" ~ .(n) ~ "periods )"
@@ -657,17 +670,28 @@ $$
 We use a simulated Bonang spectrum. Here is an example unison P1 pitch at C4.
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
-bonang_harmonics = c(1.0, 1.52, 3.46, 3.92)
-bonang_spectrum = hrep::sparse_fr_spectrum(list(frequency=hrep::midi_to_freq(60) * bonang_harmonics, amplitude=rep(1, length(bonang_harmonics))))
-vals <- sprintf("%.2f", bonang_spectrum$x)
-f_list <- paste(vals, collapse = ", ")
-cat(sprintf("  \n$$f = \\{%s\\}$$  \n", f_list))
+bonang_simulus_harmonics = c(1.0, 1.52, 3.46, 3.92)
+bonang_simulus_spectrum = hrep::sparse_fr_spectrum(list(frequency=C4 * bonang_simulus_harmonics, amplitude=rep(1, length(bonang_simulus_harmonics))))
+bonang_mami_codi = mami.codi.beaty(bonang_simulus_spectrum, verbose=T)
+bonang_freqs = bonang_mami_codi$frequency_spectrum[[1]]$frequency
+bonang_sparse_fr_spectrum = hrep::sparse_fr_spectrum(list(frequency=bonang_freqs, amplitude=rep(1,length(bonang_freqs))))
+bonang_rational_freqs = C4 * bonang_mami_codi$time_fractions[[1]]$approximation
+bonang_rational_sparse_fr_spectrum = hrep::sparse_fr_spectrum(list(frequency=bonang_rational_freqs, amplitude=rep(1,length(bonang_rational_freqs))))
 ```
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
-plot(bonang_spectrum,
-     xlim = c(0, 1500))
-title("Simulated Bonang Spectrum P1 Unison")
+par(
+  bg       = "black",
+  fg       = "white",
+  col      = "white",
+  col.axis = "white",
+  col.lab  = "white",
+  col.main = "white",
+  col.sub  = "white"
+)
+plot(bonang_sparse_fr_spectrum,
+     xlim = c(0, 1250))
+title("Simulated Bonang Spectrum with Cubic Difference Tones")
 cat("  \n")
 ```
 
