@@ -342,7 +342,8 @@ $$\mathbf{f} = ( 261.63, 479.65 )$$
 
 Major Triad Signal from Coprime Spectrum:
 
-![](man/figures/README-unnamed-chunk-12-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-12-1.png)<!-- -->
+
 ![](man/figures/README-unnamed-chunk-12-2.png)<!-- -->
 
 ## Is This a Bad Idea?
