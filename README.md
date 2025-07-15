@@ -308,7 +308,7 @@ $$
 ### Stern–Brocot: Rational Fractions Lowest Terms
 
 $$
-\mathrm{gcd}(a,b)=1 \quad \Longrightarrow \quad a \perp b \quad  \Longrightarrow \tilde f = \frac{a}{b} \in \mathbb{Q_\perp}
+\mathrm{gcd}(a,b)=1 \quad \Longrightarrow \quad a \perp b \quad  \Longrightarrow \quad \frac{a}{b} \in \mathbb{Q_\perp}
 $$
 
 ## Number-Theoretic Signal Processing
@@ -333,13 +333,12 @@ $$
 \mathbf{f} = 261.63  \cdot \bigl( \frac{1}{1},\frac{11}{6} \bigr)
 $$
 
-Rational Fraction Frequencies:
+M7 Signal from Coprime Spectrum:
 
 $$\mathbf{f} = ( 261.63, 479.65 )$$
 
-![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->
-
-![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-10-2.png)<!-- -->
 
 ## This Is a Bad Idea
 
@@ -382,9 +381,9 @@ at C4.
 
 $$f = \{261.63, 397.67, 905.22, 1025.57\}$$
 
-![](man/figures/README-unnamed-chunk-14-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-13-1.png)<!-- -->
 
-![](man/figures/README-unnamed-chunk-15-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-14-1.png)<!-- -->
 
 ### Roughness: Stern-Brocot Traversal Depth
 
@@ -402,7 +401,7 @@ $$
 
 #### Bonang: MaMi.CoDi.Beaty Roughness with Hutchinson & Knopoff 1978
 
-![](man/figures/README-unnamed-chunk-16-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-15-1.png)<!-- -->
 
 ### Overall Frequency Dissonance
 
@@ -604,8 +603,8 @@ $$
 
 ## Gabor Wavelets from Rational Approximations
 
-![](man/figures/README-unnamed-chunk-17-1.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-17-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-16-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-16-2.png)<!-- -->
 
 ### Daugman’s Gabor Wavelet in Computer Vision
 

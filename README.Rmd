@@ -442,7 +442,7 @@ $$
 ### Stern–Brocot: Rational Fractions Lowest Terms
 
 $$
-\mathrm{gcd}(a,b)=1 \quad \Longrightarrow \quad a \perp b \quad  \Longrightarrow \tilde f = \frac{a}{b} \in \mathbb{Q_\perp}
+\mathrm{gcd}(a,b)=1 \quad \Longrightarrow \quad a \perp b \quad  \Longrightarrow \quad \frac{a}{b} \in \mathbb{Q_\perp}
 $$
 
 ## Number-Theoretic Signal Processing
@@ -473,7 +473,7 @@ $$
 \mathbf{f} = `r round(C4,2)`  \cdot \bigl( \frac{1}{1},\frac{11}{6} \bigr)
 $$
 
-Rational Fraction Frequencies:
+M7 Signal from Coprime Spectrum:
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
 M7_mami_codi = mami.codi.beaty(M7, verbose=T)
@@ -488,6 +488,14 @@ cat(sprintf("  \n$$\\mathbf{f} = ( %s )$$  \n", f_list))
 ```
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+par(
+  bg       = "black",   # plotting region background
+  fg       = "white",   # default for lines and text
+  col      = "white",   # default color for points/lines
+  col.axis = "white",   # axis tick labels
+  col.lab  = "white",   # axis labels
+  col.main = "white"    # main title
+)
 
 plot(hrep::wave(M7, length_sec = plot_period))
 abline(
@@ -495,11 +503,9 @@ abline(
   col = "black",
   lty = "dashed"
 )
-title("Idealized Signal of Pure Tone M7")
+title("Original Signal of Pure Tone M7")
 cat("  \n")
-```
 
-```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
 plot(hrep::wave(M7_rational, length_sec = plot_period))
 abline(
   v   = seq(0, plot_period, by = M7_mami_codi$fundamental_period),
