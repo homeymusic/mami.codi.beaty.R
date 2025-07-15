@@ -340,7 +340,12 @@ $$\mathbf{f} = ( 261.63, 479.65 )$$
 ![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-10-2.png)<!-- -->
 
-## This Is a Bad Idea
+Major Triad Signal from Coprime Spectrum:
+
+![](man/figures/README-unnamed-chunk-12-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-12-2.png)<!-- -->
+
+## Is This a Bad Idea?
 
 For $n = 1$, the resolution of pure-tone frequency ratios is poor.
 However, our auditory-system model explains how, despite this
@@ -381,9 +386,9 @@ at C4.
 
 $$f = \{261.63, 397.67, 905.22, 1025.57\}$$
 
-![](man/figures/README-unnamed-chunk-13-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-15-1.png)<!-- -->
 
-![](man/figures/README-unnamed-chunk-14-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-16-1.png)<!-- -->
 
 ### Roughness: Stern-Brocot Traversal Depth
 
@@ -401,7 +406,7 @@ $$
 
 #### Bonang: MaMi.CoDi.Beaty Roughness with Hutchinson & Knopoff 1978
 
-![](man/figures/README-unnamed-chunk-15-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-17-1.png)<!-- -->
 
 ### Overall Frequency Dissonance
 
@@ -603,8 +608,8 @@ $$
 
 ## Gabor Wavelets from Rational Approximations
 
-![](man/figures/README-unnamed-chunk-16-1.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-16-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-18-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-18-2.png)<!-- -->
 
 ### Daugman’s Gabor Wavelet in Computer Vision
 

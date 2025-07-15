@@ -477,7 +477,7 @@ M7 Signal from Coprime Spectrum:
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
 M7_mami_codi = mami.codi.beaty(M7, verbose=T)
-number_of_periods_to_plot = 7
+number_of_periods_to_plot = 5
 plot_period = number_of_periods_to_plot * M7_mami_codi$fundamental_period
 C4 = hrep::midi_to_freq(60)
 B4_rational = C4 * sb$approximation
@@ -498,18 +498,12 @@ par(
 )
 
 plot(hrep::wave(M7, length_sec = plot_period))
-abline(
-  v   = seq(0, plot_period, by = M7_mami_codi$fundamental_period),
-  col = "black",
-  lty = "dashed"
-)
 title("Original Signal of Pure Tone M7")
 cat("  \n")
 
 plot(hrep::wave(M7_rational, length_sec = plot_period))
 abline(
   v   = seq(0, plot_period, by = M7_mami_codi$fundamental_period),
-  col = "black",
   lty = "dashed"
 )
 title(
@@ -525,7 +519,55 @@ title(
 cat("  \n")
 ```
 
-## This Is a Bad Idea
+
+
+Major Triad Signal from Coprime Spectrum:
+
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+MT_mami_codi = mami.codi.beaty(c(60,64,67), verbose=T, num_harmonics=1)
+MT_freqs = MT_mami_codi$frequency_spectrum[[1]]$frequency
+MT_sparse_fr_spectrum = hrep::sparse_fr_spectrum(list(frequency=MT_freqs, amplitude=rep(1,length(MT_freqs))))
+MT_rational_freqs = C4 * MT_mami_codi$time_fractions[[1]]$approximation
+MT_rational_sparse_fr_spectrum = hrep::sparse_fr_spectrum(list(frequency=MT_rational_freqs, amplitude=rep(1,length(MT_rational_freqs))))
+```
+
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+number_of_periods_to_plot = 5
+plot_period = number_of_periods_to_plot * MT_mami_codi$fundamental_period
+
+par(
+  bg       = "black",   # plotting region background
+  fg       = "white",   # default for lines and text
+  col      = "white",   # default color for points/lines
+  col.axis = "white",   # axis tick labels
+  col.lab  = "white",   # axis labels
+  col.main = "white"    # main title
+)
+
+plot(hrep::wave(MT_sparse_fr_spectrum, length_sec = plot_period))
+title("Original Signal of Pure Tone Major Triad")
+cat("  \n")
+
+plot(hrep::wave(MT_rational_sparse_fr_spectrum, length_sec = plot_period))
+abline(
+  v   = seq(0, plot_period, by = MT_mami_codi$fundamental_period),
+  lty = "dashed"
+)
+title(
+  paste(
+    "Rational-Fraction Signal of Pure Tone Major Triad with 10 Harmonics f0:", 
+    round(MT_mami_codi$fundamental_frequency, 2), 
+    "Hz  T0:", 
+    round(MT_mami_codi$fundamental_period, 2),
+    "s  plotted over",
+    number_of_periods_to_plot,
+    "periods"
+    ))
+cat("  \n")
+```
+
+
+## Is This a Bad Idea?
 
 For \(n = 1\), the resolution of pure-tone frequency ratios is poor. 
 However, our auditory-system model explains how, despite this limitation, 
