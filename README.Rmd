@@ -470,7 +470,7 @@ $$
 $$
 
 $$
-\mathbf{f} = `r round(C4,2)`  \cdot \bigl( \frac{1}{1},\frac{11}{6} \bigr)
+\mathbf{f} = `r round(C4,4)`  \cdot \bigl( \frac{1}{1},\frac{11}{6} \bigr)
 $$
 
 M7 Signal from Coprime Spectrum:
@@ -509,9 +509,9 @@ abline(
 title(
   paste(
     "Rational-Fraction Signal of Pure Tone M7 f0:", 
-    round(M7_mami_codi$fundamental_frequency, 2), 
+    round(M7_mami_codi$fundamental_frequency, 4), 
     "Hz  T0:", 
-    round(M7_mami_codi$fundamental_period, 2),
+    round(M7_mami_codi$fundamental_period, 4),
     "s  plotted over",
     number_of_periods_to_plot,
     "periods"
@@ -557,8 +557,8 @@ abline(
 title(
   main = paste(
     "Pure Tone ET Major Triad Coprime Signal\n",
-    "f0:", round(MT_mami_codi$fundamental_frequency, 2), "Hz",
-    "T0:", round(MT_mami_codi$fundamental_period, 2), "s",
+    "f0:", round(MT_mami_codi$fundamental_frequency, 4), "Hz",
+    "T0:", round(MT_mami_codi$fundamental_period, 4), "s",
     "plotted over", number_of_periods_to_plot, "periods"
   )
 )

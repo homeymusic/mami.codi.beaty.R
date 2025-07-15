@@ -330,7 +330,7 @@ $$
 $$
 
 $$
-\mathbf{f} = 261.63  \cdot \bigl( \frac{1}{1},\frac{11}{6} \bigr)
+\mathbf{f} = 261.6256  \cdot \bigl( \frac{1}{1},\frac{11}{6} \bigr)
 $$
 
 M7 Signal from Coprime Spectrum:
