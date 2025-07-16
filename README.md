@@ -163,6 +163,16 @@ Thus, 2.2 is stretched a bit too far, and … (Sethares)
 ![](man/figures/README-unnamed-chunk-4-104.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-105.png)<!-- -->
 
+##### 2PartialsFramed ~ Partials: 2
+
+![](man/figures/README-unnamed-chunk-4-106.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-107.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-108.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-109.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-110.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-111.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-112.png)<!-- -->
+
 # Fourier uncertainty principle in number‑theoretic form matches musical consonance perception
 
 ## Heisenberg Uncertainty

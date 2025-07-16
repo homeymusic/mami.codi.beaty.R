@@ -137,6 +137,14 @@ grid_10_extra_compressed = tidyr::expand_grid(
   timbre = 'ExtraCompressed'
 )
 
+grid_2PartialsFramed = tidyr::expand_grid(
+  interval = seq(from = 0.0, to = 15.0, length.out = 1000),
+  num_harmonics=2,
+  pseudo_octave=2.0,
+  timbre = '2PartialsFramed'
+)
+
+
 grid = dplyr::bind_rows(
   grid_1,
   grid_Bonang,
@@ -145,7 +153,8 @@ grid = dplyr::bind_rows(
   grid_10_stretched,grid_10_compressed,
   grid_M3,grid_M6,grid_P8,
   grid_m3,grid_m6,grid_P1,
-  grid_10_extra_stretched,grid_10_extra_compressed
+  grid_10_extra_stretched,grid_10_extra_compressed,
+  grid_2PartialsFramed
 )
 
 plan(multisession, workers=parallelly::availableCores())
@@ -183,6 +192,12 @@ output = grid %>% furrr::future_pmap_dfr(\(interval,
     ) %>% as.list() %>%  hrep::sparse_fr_spectrum()
 
     study_chord = do.call(hrep::combine_sparse_spectra, list(bass,upper))
+  } else if (timbre == '2PartialsFramed') {
+    study_chord = c(tonic_midi, interval + tonic_midi, tonic_midi + 12.0) %>% hrep::sparse_fr_spectrum(
+      num_harmonics = num_harmonics,
+      pseudo_octave  = pseudo_octave,
+      roll_off_dB   = 3.0
+    )
   } else {
     study_chord = c(tonic_midi, interval + tonic_midi) %>% hrep::sparse_fr_spectrum(
       num_harmonics = num_harmonics,
