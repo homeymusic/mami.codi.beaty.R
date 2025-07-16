@@ -468,7 +468,7 @@ plot_semitone_thomaes_function <- function(chords, title='', include_line=T, sig
 plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
                                                black_vlines=c(),gray_vlines=c(),goal=NULL,
                                                xlab='Semitone',
-                                               ylab='Smoothness (Z-Score)') {
+                                               ylab='-Roughness (Z-Score)') {
 
   chords$smoothed_roughness = smoothed(chords$semitone,
                                             chords$roughness_z,
@@ -788,8 +788,8 @@ plot_mami_codi <- function(chords, title = '', sigma = 0.2,
 }
 
 plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
-                                       xlab = 'Periodicity (Z-Score)',
-                                       ylab = 'Smoothness (Z-Score)',
+                                       xlab = '-Periodicity (Z-Score)',
+                                       ylab = '-Smoothness (Z-Score)',
                                        min_semitone=0,max_semitone=12,
                                        include_extreme_labels = T) {
 
@@ -1092,7 +1092,7 @@ plot_semitone_error_sum_space_time  <- function(chords, title='', include_line=T
 plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
                                                  black_vlines=c(),gray_vlines=c(),goal=NULL,
                                                  xlab='Semitone',
-                                                 ylab='Log2 of Cycle Length (Z-Score)') {
+                                                 ylab='-Periodicity (Z-Score)') {
 
   chords$smoothed_periodicity  = smoothed(chords$semitone,
                                           chords$periodicity_z,
@@ -1147,7 +1147,7 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
                                                 goal=NULL,
                                                 black_vlines=c(),gray_vlines=c(),
                                                 xlab='Semitone',
-                                                ylab='Periodicity & Smoothness (Z-Score)') {
+                                                ylab='-Periodicity & -Roughness (Z-Score)') {
 
   chords$smoothed_periodicity  = smoothed(chords$semitone,
                                                chords$periodicity_z,
@@ -1198,7 +1198,7 @@ plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
                                                 goal=NULL,model_name='',
                                                 black_vlines=c(),gray_vlines=c(),
                                                 xlab='Semitone',
-                                                ylab='Periodicity (Z-Score)') {
+                                                ylab='-Periodicity (Z-Score)') {
 
   chords$smoothed_periodicity_z = smoothed(chords$semitone,
                                            chords$periodicity_z,
@@ -1232,7 +1232,7 @@ plot_semitone_roughness_model_compare <- function(chords, title='', sigma=0.2,
                                                     goal=NULL,model_name='',
                                                     black_vlines=c(),gray_vlines=c(),
                                                     xlab='Semitone',
-                                                    ylab='Roughness (Z-Score)') {
+                                                    ylab='-Roughness (Z-Score)') {
 
   chords$smoothed_roughness_z = smoothed(chords$semitone,
                                            chords$roughness_z,

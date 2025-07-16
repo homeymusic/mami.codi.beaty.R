@@ -207,23 +207,23 @@ $$
 ### Reference Time Period
 
 $$
-\Delta t = n T_{ref} = n \frac{2 \pi }{\omega_{ref}}, \quad n \enspace \text{periods}
+\Delta t = \tau T_{ref} = \tau \frac{2 \pi }{\omega_{ref}}, \quad \tau \enspace \text{periods}
 $$
 
 $$
-n \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
+\tau \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
 $$
 
 ### Relative Frequency Uncertainty
 
 $$
-\frac{\Delta \omega}{\omega_{ref}} \ge \frac{1}{4 \pi n}
+\frac{\Delta \omega}{\omega_{ref}} \ge \frac{1}{4 \pi \tau}
 $$
 
 $$
 \boxed 
 {
-\frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi n}
+\frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi \tau}
 }
 $$
 
@@ -259,12 +259,12 @@ $$
 
 $$
 \frac{\Delta f}{f_{ref}} = 
-\frac{f_{ref} \bigl| \frac{a}{b} - \frac{f}{f_{ref}} \bigr|}{f_{ref}} \ge \frac{1}{4 \pi n}
+\frac{f_{ref} \bigl| \frac{a}{b} - \frac{f}{f_{ref}} \bigr|}{f_{ref}} \ge \frac{1}{4 \pi \tau}
 $$
 
 $$
 \boxed {
-\bigl| \frac{a}{b} - \tfrac{f}{f_{ref}} \bigr| \ge \frac{1}{4 \pi n}
+\bigl| \frac{a}{b} - \tfrac{f}{f_{ref}} \bigr| \ge \frac{1}{4 \pi \tau}
 }
 $$
 
@@ -274,7 +274,7 @@ $$
 \begin{aligned}
 &\mathbf{WHILE} 
 \boxed {
-\Bigl|\tfrac{a}{b} - \tfrac{f}{f_{\mathrm{ref}}}\Bigr| \ge \tfrac{1}{4\pi n}
+\Bigl|\tfrac{a}{b} - \tfrac{f}{f_{\mathrm{ref}}}\Bigr| \ge \tfrac{1}{4\pi \tau}
 }
 \quad\mathbf{DO}\\
 &\quad a  \gets  a_{\mathrm{left}} + a_{\mathrm{right}}\\
@@ -464,23 +464,23 @@ $$
 ### Harmonic Reference Time Period
 
 $$
-\Delta t = n T_{h} = n \frac{2 \pi }{h \omega_{ref}}, \quad n \enspace \text{periods}, \quad h \in \mathbb{Z} \quad \text{harmonic number}
+\Delta t = \tau T_{n} = \tau \frac{2 \pi }{n \omega_{ref}}, \quad \tau \enspace \text{periods}, \quad n \in \mathbb{Z} \quad \text{harmonic number}
 $$
 
 $$
-n \frac{2 \pi}{h \omega_{ref}}\Delta \omega \ge \frac{1}{2}
+\tau \frac{2 \pi}{n \omega_{ref}}\Delta \omega \ge \frac{1}{2}
 $$
 
 ### Relative Harmonic Frequency Uncertainty
 
 $$
-\frac{\Delta \omega}{h \omega_{ref}} \ge \frac{1}{4 \pi n}
+\frac{\Delta \omega}{n \omega_{ref}} \ge \frac{1}{4 \pi \tau}
 $$
 
 $$
 \boxed 
 {
-\frac{\Delta f}{h f_{ref}} \ge \frac{1}{4 \pi n}
+\frac{\Delta f}{n f_{ref}} \ge \frac{1}{4 \pi \tau}
 }
 $$
 
@@ -500,30 +500,30 @@ $$
 ### Harmonic Template (aka Integers)
 
 $$
-h = \mathrm{round}(\frac{f}{f_{ref}})
+n = \mathrm{round}(\frac{f}{f_{ref}})
 $$
 
 $$
-\widetilde f = h f_{ref}
+\widetilde f = n f_{ref}
 $$
 
 ### Rational Approximation Uncertainty
 
 $$
 \Delta f = 
-\bigl| h f_{ref} - f\bigr| = 
-\frac{f_{ref}}{f_{ref}} \bigl| h f_{ref} - f \bigr| = 
-f_{ref} \bigl| h - \tfrac{f}{f_{ref}}\bigr|
+\bigl| n f_{ref} - f\bigr| = 
+\frac{f_{ref}}{f_{ref}} \bigl| n f_{ref} - f \bigr| = 
+f_{ref} \bigl| n - \tfrac{f}{f_{ref}}\bigr|
 $$
 
 $$
-\frac{\Delta f}{ h f_{ref}} = 
-\frac{f_{ref} \bigl| h - \frac{f}{f_{ref}} \bigr|}{f_{ref} h } \ge \frac{1}{4 \pi n}
+\frac{\Delta f}{ n f_{ref}} = 
+\frac{f_{ref} \bigl| n - \frac{f}{f_{ref}} \bigr|}{n f_{ref} } \ge \frac{1}{4 \pi \tau}
 $$
 
 $$
 \boxed {
-\frac{\bigl| \mathrm{round}(\frac{f}{f_{ref}}) - \tfrac{f}{f_{ref}} \bigr|}{\mathrm{round}(\frac{f}{f_{ref}})} \ge \frac{1}{4 \pi n}
+\frac{\bigl| \mathrm{round}(\frac{f}{f_{ref}}) - \tfrac{f}{f_{ref}} \bigr|}{\mathrm{round}(\frac{f}{f_{ref}})} \ge \frac{1}{4 \pi \tau}
 }
 $$
 
@@ -535,7 +535,7 @@ $$
 &\quad\mathbf{FOR}\ j\gets i+1\ \mathbf{TO}\ N\ \mathbf{DO}\\
 &\quad\quad \mathbf{IF}\ \mathrm{round}\bigl(\tfrac{f_{j}}{f_{i}}\bigr) < 2\ \mathbf{CONTINUE}\\
 &\quad\quad \mathbf{UNLESS}\ \boxed {
-\frac{\bigl| \mathrm{round}(\frac{f}{f_{ref}}) - \tfrac{f}{f_{ref}} \bigr|}{\mathrm{round}(\frac{f}{f_{ref}})} \ge \frac{1}{4 \pi n}
+\frac{\bigl| \mathrm{round}(\frac{f}{f_{ref}}) - \tfrac{f}{f_{ref}} \bigr|}{\mathrm{round}(\frac{f}{f_{ref}})} \ge \frac{1}{4 \pi \tau}
 }\ \mathbf{THEN}\\
 &\quad\quad\quad\quad candidate\_pseudo\_octave \gets \exp_{2} \bigl(\frac{\log_2(f_j / f_i)}{\log_2(round(f_j / f_i))}\bigr)\\
 &\quad\quad\quad\quad candidates \gets candidates \cup \{pseudo\_octave\}\\
@@ -551,10 +551,10 @@ $$
 For the $log_2$ form of the uncertainty limit
 
 $$
-\log_2 \bigl(1+\tfrac{1}{4 \pi n}\bigr)
+\log_2 \bigl(1+\tfrac{1}{4 \pi \tau}\bigr)
 $$
 
-for $n = 1.0$
+for $\tau = 1$
 
 $$
 \log_2 \bigl(1+\tfrac{1}{4 \pi}\bigr) \approx 0.110467 
@@ -598,20 +598,20 @@ $$
 $$
 
 $$
-\Delta x = n \lambda_{ref}, \quad n \enspace \text{wavelengths}
+\Delta x = l \lambda_{ref}, \quad l \enspace \text{wavelengths}
 $$
 
 $$
 \Delta x \frac{2\pi}{\lambda^2} \Delta\lambda =
-n \lambda_{ref} \frac{2\pi}{\lambda^2_{ref}} \Delta\lambda =
-n \frac{2 \pi \Delta \lambda}{\lambda_{ref}} 
+l \lambda_{ref} \frac{2\pi}{\lambda^2_{ref}} \Delta\lambda =
+l \frac{2 \pi \Delta \lambda}{\lambda_{ref}} 
  \ge \frac{1}{2}
 $$
 
 $$
 \boxed{
 \frac{\Delta \lambda}{\lambda_{ref}} 
- \ge \frac{1}{4 \pi n}
+ \ge \frac{1}{4 \pi l}
 }
 $$
 
