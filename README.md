@@ -464,7 +464,7 @@ $$
 ### Harmonic Reference Time Period
 
 $$
-\Delta t = \tau T_{n} = \tau \frac{2 \pi }{n \omega_{ref}}, \quad \tau \enspace \text{periods}, \quad n \in \mathbb{Z} \quad \text{harmonic number}
+\Delta t = \tau \frac{T_{ref}}{n} = \tau \frac{2 \pi }{n \omega_{ref}}, \quad \tau \enspace \text{periods}, \quad n \in \mathbb{Z} \quad \text{harmonic number}
 $$
 
 $$
