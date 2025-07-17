@@ -9,8 +9,8 @@ rational_fractions <- function(x, x_ref, uncertainty) {
     .Call(`_mami_codi_beaty_R_rational_fractions`, x, x_ref, uncertainty)
 }
 
-approximate_rational_fractions <- function(x, x_ref, uncertainty) {
-    .Call(`_mami_codi_beaty_R_approximate_rational_fractions`, x, x_ref, uncertainty)
+approximate_rational_fractions <- function(x, x_ref, uncertainty, dimension) {
+    .Call(`_mami_codi_beaty_R_approximate_rational_fractions`, x, x_ref, uncertainty, dimension)
 }
 
 compute_cubic_distortion_products <- function(frequency, amplitude) {

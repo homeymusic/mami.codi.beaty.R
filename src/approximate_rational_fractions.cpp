@@ -214,45 +214,51 @@ inline double round_to_precision(double value, int precision = 15) {
  //' Approximates floating-point numbers to arbitrary uncertainty.
  //'
  //' @param x Vector of floating point numbers to approximate
+ //' @param x_ref Reference value (frequency or wavelength)
  //' @param uncertainty Precision for finding rational fractions
- //' @param deviation Deviation for estimating least common multiples
  //'
  //' @return A data frame of rational numbers and metadata
- //'
  //' @export
  // [[Rcpp::export]]
  DataFrame approximate_rational_fractions(NumericVector& x,
                                           const double x_ref,
-                                          const double uncertainty) {
+                                          const double uncertainty,
+                                          std::string dimension) {
+
+   // Constants for dimension values
+   const std::string DIMENSION_TIME  = "time";
+   const std::string DIMENSION_SPACE = "space";
+
    // de-duplicate
    int n = x.size();
    if (n == 0) {
      return DataFrame::create();
    }
 
-   // find the pseudo-octave in ratio-space
-   double pseudo_octave = approximate_pseudo_octave(x, uncertainty);
-
    // compute ratios relative to x_ref
-   NumericVector ratios(n);
+   NumericVector targets(n), uncertainties(n);
    for (int i = 0; i < n; ++i) {
-     ratios[i] = x[i] / x_ref;
-   }
-
-   // build the transformed vector for coprime search
-   NumericVector pseudo_x(n), uncertainties(n, uncertainty);
-   for (int i = 0; i < n; ++i) {
-     pseudo_x[i] = x_ref * std::exp2( std::log2(ratios[i]) / std::log2(pseudo_octave));
+     double tone_ratio = x[i] / x_ref;
+     double harmonic_ratio = std::max(std::round(tone_ratio), 1.0);
+     if (dimension == DIMENSION_TIME) {
+       targets[i] = tone_ratio / harmonic_ratio;
+       uncertainties[i] = uncertainty;
+     } else if (dimension == DIMENSION_SPACE) {
+       targets[i] = tone_ratio * harmonic_ratio;
+       uncertainties[i] = uncertainty * harmonic_ratio * harmonic_ratio;
+     } else {
+       Rcpp::stop("Invalid dimension: `%s`", dimension);
+     }
    }
 
    DataFrame df = rational_fractions(
-     pseudo_x,
+     targets,
      x_ref,
      uncertainty
    );
 
-   df["pseudo_x"]    = pseudo_x;
-   df["pseudo_octave"] = NumericVector(n, pseudo_octave);
+   df["pseudo_x"]       = targets;
+   df["pseudo_octave"]  = NumericVector(n, 2.0);
 
    return df;
  }

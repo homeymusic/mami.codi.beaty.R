@@ -927,7 +927,7 @@ $$
 # Appendix A: Relative Wavelength Uncertainty
 
 $$
-\Delta x \Delta k \ge \frac{1}{2}
+\boxed{\Delta x \Delta k \ge \frac{1}{2}}
 $$
 
 $$
@@ -947,20 +947,64 @@ $$
 $$
 
 $$
-\Delta x = l \lambda_{ref}, \quad l \enspace \text{wavelengths}
+\Delta x = l \frac{ \lambda_{ref}}{n}, \quad l \in \mathbb R\ \text{cycles}, 
+\quad
+n \in \mathbb Z\ \text{harmonics}.
 $$
 
 $$
 \Delta x \frac{2\pi}{\lambda^2} \Delta\lambda =
-l \lambda_{ref} \frac{2\pi}{\lambda^2_{ref}} \Delta\lambda =
-l \frac{2 \pi \Delta \lambda}{\lambda_{ref}} 
+l \lambda_{ref} \frac{2\pi}{n \lambda^2_{ref}} \Delta\lambda =
+l \frac{2 \pi \Delta \lambda}{n\lambda_{ref}} 
  \ge \frac{1}{2}
 $$
 
 $$
 \boxed{
-\frac{\Delta \lambda}{\lambda_{ref}} 
+\frac{\Delta \lambda}{n \lambda_{ref}} 
  \ge \frac{1}{4 \pi l}
+}
+$$
+
+## Relative Rational Approximation Uncertainty
+
+### Idealized Wavelength and Approximate Wavelength
+
+$$
+\Delta \lambda = \bigl| \widetilde \lambda - \lambda \bigr|
+$$
+
+$$
+\begin{align*}
+\lambda \    \text{is an idealized wavelength} \\
+\widetilde \lambda  \  \text{is an approximate wavelength} \\
+\end{align*}
+$$
+
+### Rational Approximation
+
+$$
+\widetilde \lambda = \frac{\lambda_{ref}}{n} \frac{a}{b}, \quad a \in \mathbb{Z},  b \in  \mathbb{N}
+$$
+
+### Rational Approximation Uncertainty
+
+$$
+\Delta \lambda = 
+\bigl| \frac{\lambda_{ref}}{n} \frac{a}{b} - \lambda \bigr| = \frac{\lambda_{\text{ref}}}{n} \left| \frac{a}{b} - \frac{n \lambda}{\lambda_{\text{ref}}} \right|
+$$
+
+
+$$
+\frac{\frac{\lambda_{\text{ref}}}{n} \left| \frac{a}{b} - \frac{n \lambda}{\lambda_{\text{ref}}} \right|}{n \lambda_{ref}} =
+\frac{\left| \frac{a}{b} - \frac{n \lambda}{\lambda_{\text{ref}}} \right|}{n^2} \ge
+\frac{1}{4 \pi l}
+$$
+
+$$
+\boxed{
+\frac{\left| \frac{a}{b} - \frac{n \lambda}{\lambda_{\text{ref}}} \right|}{n^2} \ge
+\frac{1}{4 \pi l}
 }
 $$
 

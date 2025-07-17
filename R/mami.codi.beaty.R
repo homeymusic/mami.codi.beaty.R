@@ -193,7 +193,7 @@ compute_time_cycles <- function(
 #' @export
 compute_cycle_length <- function(x, ref, dimension) {
 
-  fractions = approximate_rational_fractions(x, ref, uncertainty())
+  fractions = approximate_rational_fractions(x, ref, uncertainty(), dimension)
 
   t = tibble::tibble_row(
     cycle_length = lcm_integers(fractions$den),

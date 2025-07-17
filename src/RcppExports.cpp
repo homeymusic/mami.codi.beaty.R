@@ -36,15 +36,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // approximate_rational_fractions
-DataFrame approximate_rational_fractions(NumericVector& x, const double x_ref, const double uncertainty);
-RcppExport SEXP _mami_codi_beaty_R_approximate_rational_fractions(SEXP xSEXP, SEXP x_refSEXP, SEXP uncertaintySEXP) {
+DataFrame approximate_rational_fractions(NumericVector& x, const double x_ref, const double uncertainty, std::string dimension);
+RcppExport SEXP _mami_codi_beaty_R_approximate_rational_fractions(SEXP xSEXP, SEXP x_refSEXP, SEXP uncertaintySEXP, SEXP dimensionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const double >::type x_ref(x_refSEXP);
     Rcpp::traits::input_parameter< const double >::type uncertainty(uncertaintySEXP);
-    rcpp_result_gen = Rcpp::wrap(approximate_rational_fractions(x, x_ref, uncertainty));
+    Rcpp::traits::input_parameter< std::string >::type dimension(dimensionSEXP);
+    rcpp_result_gen = Rcpp::wrap(approximate_rational_fractions(x, x_ref, uncertainty, dimension));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -64,7 +65,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_mami_codi_beaty_R_approximate_pseudo_octave", (DL_FUNC) &_mami_codi_beaty_R_approximate_pseudo_octave, 2},
     {"_mami_codi_beaty_R_rational_fractions", (DL_FUNC) &_mami_codi_beaty_R_rational_fractions, 3},
-    {"_mami_codi_beaty_R_approximate_rational_fractions", (DL_FUNC) &_mami_codi_beaty_R_approximate_rational_fractions, 3},
+    {"_mami_codi_beaty_R_approximate_rational_fractions", (DL_FUNC) &_mami_codi_beaty_R_approximate_rational_fractions, 4},
     {"_mami_codi_beaty_R_compute_cubic_distortion_products", (DL_FUNC) &_mami_codi_beaty_R_compute_cubic_distortion_products, 2},
     {NULL, NULL, 0}
 };
