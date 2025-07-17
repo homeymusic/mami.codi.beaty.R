@@ -112,8 +112,7 @@ inline double round_to_precision(double value, int precision = 15) {
  //' @export
  // [[Rcpp::export]]
  DataFrame rational_fractions(const NumericVector& x,
-                              double x_ref,
-                              double uncertainty) {
+                              const NumericVector& uncertainty) {
    int n = x.size();
    IntegerVector nums(n), dens(n), depths(n);
    NumericVector approximations(n), errors(n), minkowski(n), entropy(n), thomae(n), euclids_orchard_height(n);
@@ -122,7 +121,7 @@ inline double round_to_precision(double value, int precision = 15) {
    const int MAX_ITER = 10000;
 
    for (int i = 0; i < n; ++i) {
-     double ideal = round_to_precision(x[i] / x_ref);
+     double ideal = round_to_precision(x[i]);
      std::vector<char> path;
      // Initialize Stern–Brocot endpoints
      int left_num = -1, left_den = 0;
@@ -136,9 +135,8 @@ inline double round_to_precision(double value, int precision = 15) {
 
      int iter = 0;
 
-     // continue while |x/x_ref - num/den| >= uncertainty
      while ((
-         std::abs(ideal - approximation) >= uncertainty
+         std::abs(ideal - approximation) >= uncertainty[i]
      ) && iter < MAX_ITER) {
        if (approximation < ideal) {
          left_num = approximation_num;  left_den = approximation_den;
@@ -201,11 +199,10 @@ inline double round_to_precision(double value, int precision = 15) {
    }
 
    // pack constant uncertainty vector
-   NumericVector unc(n, uncertainty);
    return rational_fraction_dataframe(
      nums, dens, approximations,
      x, errors, minkowski, entropy, thomae, euclids_orchard_height,
-     depths, paths, unc
+     depths, paths, uncertainty
    );
  }
 
@@ -239,11 +236,12 @@ inline double round_to_precision(double value, int precision = 15) {
    NumericVector targets(n), uncertainties(n);
    for (int i = 0; i < n; ++i) {
      double tone_ratio = x[i] / x_ref;
-     double harmonic_ratio = std::max(std::round(tone_ratio), 1.0);
      if (dimension == DIMENSION_TIME) {
+       double harmonic_ratio = std::max(std::round(tone_ratio), 1.0);
        targets[i] = tone_ratio / harmonic_ratio;
        uncertainties[i] = uncertainty;
      } else if (dimension == DIMENSION_SPACE) {
+       double harmonic_ratio = std::max(std::round(1.0/tone_ratio), 1.0);
        targets[i] = tone_ratio * harmonic_ratio;
        uncertainties[i] = uncertainty * harmonic_ratio * harmonic_ratio;
      } else {
@@ -253,8 +251,7 @@ inline double round_to_precision(double value, int precision = 15) {
 
    DataFrame df = rational_fractions(
      targets,
-     x_ref,
-     uncertainty
+     uncertainties
    );
 
    df["pseudo_x"]       = targets;

@@ -373,10 +373,10 @@ However, our auditory-system model explains how, despite this
 limitation, we can still perceive the difference between a unison (P1)
 and a minor second (m2).
 
-| Interval |       f |     ref | Ratio | Uncertainty |
-|:---------|--------:|--------:|------:|------------:|
-| P1       | 261.626 | 261.626 |   1:1 |        1/4π |
-| m2       | 277.183 | 261.626 |   1:1 |        1/4π |
+| Interval |       f |     ref |               Ratio | Uncertainty |
+|:---------|--------:|--------:|--------------------:|------------:|
+| P1       | 261.626 | 261.626 |                 1:1 |        1/4π |
+| m2       | 277.183 | 261.626 | 160929076:151896821 |        1/4π |
 
 ## Fundamental Wavelength of a N-Tone Chord
 

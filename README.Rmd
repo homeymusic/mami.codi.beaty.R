@@ -416,7 +416,7 @@ $$
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F, include=F}
   C4 = round(hrep::midi_to_freq(60),4)
   B4 = round(hrep::midi_to_freq(71),4)
-  sb = rational_fractions(B4, C4, UNCERTAINTY_LIMIT)
+  sb = rational_fractions(B4 / C4, uncertainty())
 ```
 
 Let's find the rational approximation of two example frequencies that form a Major 7th interval:
@@ -632,7 +632,7 @@ we can still perceive the difference between a unison (P1) and a minor second (m
 C4         <- hrep::midi_to_freq(60)
 Db4        <- hrep::midi_to_freq(61)
 freqs      <- c(C4, Db4)
-results    <- rational_fractions(freqs, C4, uncertainty())
+results    <- rational_fractions(freqs / C4, uncertainty())
 
 # build the columns
 interval   <- c("P1", "m2")
