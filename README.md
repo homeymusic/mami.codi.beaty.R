@@ -207,23 +207,23 @@ $$
 ### Reference Time Period
 
 $$
-\Delta t = \tau T_{ref} = \tau \frac{2 \pi }{\omega_{ref}}, \quad \tau \enspace \text{periods}
+\Delta t = \tau T_{ref}  = \tau \frac{2 \pi }{n \omega_{ref}}, \quad \tau \in \mathbb{R} \enspace \text{periods}, \quad n \in \mathbb{Z} \enspace \text{harmonics}
 $$
 
 $$
-\tau \frac{2 \pi}{\omega_{ref}}\Delta \omega \ge \frac{1}{2}
+\tau \frac{2 \pi}{n \omega_{ref}}\Delta \omega \ge \frac{1}{2}
 $$
 
 ### Relative Frequency Uncertainty
 
 $$
-\frac{\Delta \omega}{\omega_{ref}} \ge \frac{1}{4 \pi \tau}
+\frac{\Delta \omega}{n \omega_{ref}} \ge \frac{1}{4 \pi \tau}
 $$
 
 $$
 \boxed 
 {
-\frac{\Delta f}{f_{ref}} \ge \frac{1}{4 \pi \tau}
+\frac{\Delta f}{n f_{ref}} \ge \frac{1}{4 \pi \tau}
 }
 $$
 
@@ -245,27 +245,31 @@ $$
 ### Rational Approximation
 
 $$
-\widetilde f = f_{ref} \frac{a}{b}, \quad a \in \mathbb{Z},  b \in  \mathbb{N}
+\widetilde f = n f_{ref} \frac{a}{b}, \quad a \in \mathbb{Z},  b \in  \mathbb{N}
 $$
 
 ### Rational Approximation Uncertainty
 
 $$
 \Delta f = 
-\bigl| f_{ref}  \frac{a}{b} - f\bigr| = 
-\frac{f_{ref}}{f_{ref}} \bigl| f_{ref} \frac{a}{b} - f \bigr| = 
-f_{ref} \bigl| \tfrac{a}{b} - \tfrac{f}{f_{ref}}\bigr|
+\bigl| n f_{ref}  \frac{a}{b} - f\bigr| = 
+\frac{n f_{ref}}{n f_{ref}} \bigl| n f_{ref} \frac{a}{b} - f \bigr| = 
+n f_{ref} \bigl| \tfrac{a}{b} - \tfrac{f}{n f_{ref}}\bigr|
 $$
 
 $$
-\frac{\Delta f}{f_{ref}} = 
-\frac{f_{ref} \bigl| \frac{a}{b} - \frac{f}{f_{ref}} \bigr|}{f_{ref}} \ge \frac{1}{4 \pi \tau}
+\frac{\Delta f}{n f_{ref}} = 
+\frac{n f_{ref} \bigl| \frac{a}{b} - \frac{f}{n f_{ref}} \bigr|}{n f_{ref}} \ge \frac{1}{4 \pi \tau}
 $$
 
 $$
 \boxed {
-\bigl| \frac{a}{b} - \tfrac{f}{f_{ref}} \bigr| \ge \frac{1}{4 \pi \tau}
+\bigl| \frac{a}{b} - \tfrac{f}{n f_{ref}} \bigr| \ge \frac{1}{4 \pi \tau}
 }
+$$
+
+$$
+n = \mathrm{round}\bigl(\frac{f}{f_{ref}}\bigr)
 $$
 
 ## Stern-Brocot: Traversal
@@ -274,12 +278,12 @@ $$
 \begin{aligned}
 &\mathbf{WHILE} 
 \boxed {
-\Bigl|\tfrac{a}{b} - \tfrac{f}{f_{\mathrm{ref}}}\Bigr| \ge \tfrac{1}{4\pi \tau}
+\Bigl|\tfrac{a}{b} - \tfrac{f}{n f_{\mathrm{ref}}}\Bigr| \ge \tfrac{1}{4\pi \tau}
 }
 \quad\mathbf{DO}\\
 &\quad a  \gets  a_{\mathrm{left}} + a_{\mathrm{right}}\\
 &\quad b  \gets  b_{\mathrm{left}} + b_{\mathrm{right}}\\
-&\quad \mathbf{IF} \tfrac{f}{f_{\mathrm{ref}}} > \tfrac{a}{b} \mathbf{THEN}\\
+&\quad \mathbf{IF} \tfrac{f}{n f_{\mathrm{ref}}} > \tfrac{a}{b} \mathbf{THEN}\\
 &\quad\quad a_{\mathrm{left}} \gets a,\quad b_{\mathrm{left}} \gets b\\
 &\quad \mathbf{ELSE}\\
 &\quad\quad a_{\mathrm{right}} \gets a,\quad b_{\mathrm{right}} \gets b\\
@@ -533,11 +537,12 @@ $$
 \begin{aligned}
 &\mathbf{FOR}\ i\gets 1\ \mathbf{TO}\ N\ \mathbf{DO}\\
 &\quad\mathbf{FOR}\ j\gets i+1\ \mathbf{TO}\ N\ \mathbf{DO}\\
-&\quad\quad \mathbf{IF}\ \mathrm{round}\bigl(\tfrac{f_{j}}{f_{i}}\bigr) < 2\ \mathbf{CONTINUE}\\
+&\quad\quad n \gets \mathrm{round}\bigl(\tfrac{f_{j}}{f_{i}}\bigr) \\\
+&\quad\quad \mathbf{IF}\ n < 2\ \mathbf{CONTINUE}\\
 &\quad\quad \mathbf{UNLESS}\ \boxed {
-\frac{\bigl| \mathrm{round}(\frac{f}{f_{ref}}) - \tfrac{f}{f_{ref}} \bigr|}{\mathrm{round}(\frac{f}{f_{ref}})} \ge \frac{1}{4 \pi \tau}
+\frac{\bigl| n - \tfrac{f}{f_{ref}} \bigr|}{n} \ge \frac{1}{4 \pi \tau}
 }\ \mathbf{THEN}\\
-&\quad\quad\quad\quad candidate\_pseudo\_octave \gets \exp_{2} \bigl(\frac{\log_2(f_j / f_i)}{\log_2(round(f_j / f_i))}\bigr)\\
+&\quad\quad\quad\quad candidate\_pseudo\_octave \gets \exp_{2} \bigl(\frac{\log_2(f_j / f_i)}{\log_2(n)}\bigr)\\
 &\quad\quad\quad\quad candidates \gets candidates \cup \{pseudo\_octave\}\\
 &\quad\quad\mathbf{END\_UNLESS}\\
 &\quad\mathbf{END\_FOR}\\
