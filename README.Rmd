@@ -383,7 +383,11 @@ $$
 $$
 
 $$
-n = \mathrm{round}\bigl(\frac{f}{f_{ref}}\bigr)
+r = \frac{f}{f_{ref}} \\
+n = \begin{cases}
+\displaystyle \mathrm{round}\bigl( r  \bigr), \ r \ge 1 \  \\
+\displaystyle \frac{1} {\mathrm{round}\bigl( 1/r  \bigr)}, \ r < 1 \ 
+\end{cases}
 $$
 
 ## Stern-Brocot: Traversal
