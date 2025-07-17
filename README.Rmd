@@ -895,10 +895,8 @@ $$
 \log_2 \bigl(1+\tfrac{1}{4 \pi \tau}\bigr)
 $$
 
-for $\tau = 1$ 
-
 $$
-\log_2 \bigl(1+\tfrac{1}{4 \pi}\bigr) \approx 0.110467 
+\log_2 \bigl(1+\tfrac{1}{4 \pi}\bigr) \approx 0.110467, \  \tau = 1 
 $$
 
 we align well with Sethares range between $1.87$ and $2.2$.
