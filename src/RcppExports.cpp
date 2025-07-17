@@ -36,23 +36,10 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// compute_cubic_distortion_products
-DataFrame compute_cubic_distortion_products(NumericVector& frequency, NumericVector& amplitude);
-RcppExport SEXP _mami_codi_beaty_R_compute_cubic_distortion_products(SEXP frequencySEXP, SEXP amplitudeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector& >::type frequency(frequencySEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type amplitude(amplitudeSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_cubic_distortion_products(frequency, amplitude));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mami_codi_beaty_R_rational_fractions", (DL_FUNC) &_mami_codi_beaty_R_rational_fractions, 2},
     {"_mami_codi_beaty_R_approximate_rational_fractions", (DL_FUNC) &_mami_codi_beaty_R_approximate_rational_fractions, 4},
-    {"_mami_codi_beaty_R_compute_cubic_distortion_products", (DL_FUNC) &_mami_codi_beaty_R_compute_cubic_distortion_products, 2},
     {NULL, NULL, 0}
 };
 
