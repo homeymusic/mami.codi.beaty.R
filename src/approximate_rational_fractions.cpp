@@ -7,45 +7,6 @@ using namespace Rcpp;
 #define DIMENSION_TIME  "time"
 #define DIMENSION_SPACE "space"
 
-// [[Rcpp::export]]
-double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
-                                 const double uncertainty) {
-
-  int n = unsorted_x.size();
-  if (n <= 2) return 2.0;
-
-  // Copy into our working 'ratios' and sort
-  std::vector<double> x(unsorted_x.begin(), unsorted_x.end());
-  std::sort(x.begin(), x.end());
-
-  std::vector<double> candidates;
-  candidates.reserve(n * (n - 1) / 2);
-
-  for (int i = 0; i < n; ++i) {
-    for (int j = i + 1; j < n; ++j) {
-      double pseudo_harmonic = x[j] / x[i];
-      int    ideal_harmonic  = int(std::round(pseudo_harmonic));
-      if     (ideal_harmonic < 2) continue; // skip the unisons
-
-      if (std::abs(pseudo_harmonic - ideal_harmonic) / ideal_harmonic < uncertainty) {
-        double candidate_pseudo_octave = std::exp2( std::log2(pseudo_harmonic)/ std::log2(ideal_harmonic) );
-        candidates.push_back(candidate_pseudo_octave);
-      }
-    }
-  }
-
-  if (candidates.empty()) return 2.0;
-
-  Rcpp::NumericVector qualifiedCandidates(candidates.begin(), candidates.end());
-  Rcpp::IntegerVector counts = Rcpp::table(qualifiedCandidates);
-  Rcpp::CharacterVector candidateBins = counts.names();
-  Rcpp::IntegerVector idx = Rcpp::seq_along(counts) - 1;
-  std::sort(idx.begin(), idx.end(),
-            [&](int a, int b){ return counts[a] > counts[b]; });
-
-  return std::stod(Rcpp::as<std::string>(candidateBins[idx[0]]));
-}
-
 DataFrame rational_fraction_dataframe(const IntegerVector &nums,
                                       const IntegerVector &dens,
                                       const NumericVector &approximations,
@@ -225,14 +186,14 @@ inline double round_to_precision(double value, int precision = 15) {
                                           const double uncertainty,
                                           std::string dimension) {
 
-   // de-duplicate
    int n = x.size();
    if (n == 0) {
      return DataFrame::create();
    }
 
    // compute ratios relative to x_ref
-   NumericVector targets(n), uncertainties(n);
+   NumericVector targets(n), uncertainties(n),  harmonic_ratios(n);
+
    for (int i = 0; i < n; ++i) {
      double tone_ratio = x[i] / x_ref;
      if (dimension == DIMENSION_TIME) {
@@ -244,6 +205,7 @@ inline double round_to_precision(double value, int precision = 15) {
        }
        targets[i] = tone_ratio / harmonic_ratio;
        uncertainties[i] = uncertainty;
+       harmonic_ratios[i] = harmonic_ratio;
      } else if (dimension == DIMENSION_SPACE) {
        double harmonic_ratio;
        if (tone_ratio >= 1.0) {
@@ -253,6 +215,7 @@ inline double round_to_precision(double value, int precision = 15) {
        }
        targets[i] = tone_ratio * harmonic_ratio;
        uncertainties[i] = uncertainty * harmonic_ratio * harmonic_ratio;
+       harmonic_ratios[i] = harmonic_ratio;
      } else {
        Rcpp::stop("Invalid dimension: `%s`", dimension);
      }
@@ -263,8 +226,7 @@ inline double round_to_precision(double value, int precision = 15) {
      uncertainties
    );
 
-   df["pseudo_x"]       = targets;
-   df["pseudo_octave"]  = NumericVector(n, 2.0);
+   df["harmonic_ratio"]  = harmonic_ratios;
 
    return df;
  }
