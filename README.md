@@ -353,12 +353,19 @@ $$
 
 M7 Signal from Coprime Spectrum:
 
+i=0 tone_ratio=1.8877486253633871 i=1 tone_ratio=1 i=0 tone_ratio=1 i=1
+tone_ratio=1.8877486253633871
+
 $$\mathbf{f} = ( 261.63, 479.65 )$$
 
 ![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-10-2.png)<!-- -->
 
 Major Triad Signal from Coprime Spectrum:
+
+i=0 tone_ratio=1.4983070768766813 i=1 tone_ratio=1.189207115002721 i=2
+tone_ratio=1 i=0 tone_ratio=1 i=1 tone_ratio=1.2599210498948732 i=2
+tone_ratio=1.4983070768766815
 
 ![](man/figures/README-unnamed-chunk-12-1.png)<!-- -->
 
@@ -404,6 +411,10 @@ $$
 
 We use a simulated Bonang spectrum. Here is an example unison P1 pitch
 at C4.
+
+i=0 tone_ratio=3.9199999999999995 i=1 tone_ratio=2.5789473684210527 i=2
+tone_ratio=1.1329479768786126 i=3 tone_ratio=1 i=0 tone_ratio=1 i=1
+tone_ratio=1.52 i=2 tone_ratio=3.46 i=3 tone_ratio=3.9199999999999999
 
 ![](man/figures/README-unnamed-chunk-15-1.png)<!-- -->
 

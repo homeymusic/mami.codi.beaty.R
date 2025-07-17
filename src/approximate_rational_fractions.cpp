@@ -169,6 +169,8 @@ inline double round_to_precision(double value, int precision = 15) {
    );
  }
 
+
+constexpr int ROUNDING_HARMONICS_PRECISION = 6;
  //' approximate_rational_fractions
  //'
  //' Approximates floating-point numbers to arbitrary uncertainty.
@@ -207,9 +209,9 @@ inline double round_to_precision(double value, int precision = 15) {
      if (dimension == DIMENSION_TIME) {
        double harmonic_ratio;
        if (tone_ratio >= 1.0) {
-         harmonic_ratio = std::round(round_to_precision(tone_ratio, 2));
+         harmonic_ratio = std::round(round_to_precision(tone_ratio, ROUNDING_HARMONICS_PRECISION));
        } else {
-         harmonic_ratio = 1.0 / std::round(1.0/round_to_precision(tone_ratio,2));
+         harmonic_ratio = 1.0 / std::round(1.0/round_to_precision(tone_ratio, ROUNDING_HARMONICS_PRECISION));
        }
        targets[i] = tone_ratio / harmonic_ratio;
        uncertainties[i] = uncertainty;
@@ -217,9 +219,9 @@ inline double round_to_precision(double value, int precision = 15) {
      } else if (dimension == DIMENSION_SPACE) {
        double harmonic_ratio;
        if (tone_ratio >= 1.0) {
-         harmonic_ratio = 1.0 / std::round(round_to_precision(tone_ratio, 2));
+         harmonic_ratio = 1.0 / std::round(round_to_precision(tone_ratio, ROUNDING_HARMONICS_PRECISION));
        } else {
-         harmonic_ratio = std::round(1.0 / round_to_precision(tone_ratio, 2));
+         harmonic_ratio = std::round(1.0 / round_to_precision(tone_ratio, ROUNDING_HARMONICS_PRECISION));
        }
        targets[i] = tone_ratio * harmonic_ratio;
        uncertainties[i] = uncertainty * harmonic_ratio * harmonic_ratio;
