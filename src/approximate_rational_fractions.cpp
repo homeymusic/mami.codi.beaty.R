@@ -237,11 +237,21 @@ inline double round_to_precision(double value, int precision = 15) {
    for (int i = 0; i < n; ++i) {
      double tone_ratio = x[i] / x_ref;
      if (dimension == DIMENSION_TIME) {
-       double harmonic_ratio = std::max(std::round(tone_ratio), 1.0);
+       double harmonic_ratio;
+       if (tone_ratio >= 1.0) {
+         harmonic_ratio = std::round(tone_ratio);
+       } else {
+         harmonic_ratio = 1.0 / std::round(1.0/tone_ratio);
+       }
        targets[i] = tone_ratio / harmonic_ratio;
        uncertainties[i] = uncertainty;
      } else if (dimension == DIMENSION_SPACE) {
-       double harmonic_ratio = std::max(std::round(1.0/tone_ratio), 1.0);
+       double harmonic_ratio;
+       if (tone_ratio >= 1.0) {
+         harmonic_ratio = 1.0 / std::round(tone_ratio);
+       } else {
+         harmonic_ratio = std::round(1.0 / tone_ratio);
+       }
        targets[i] = tone_ratio * harmonic_ratio;
        uncertainties[i] = uncertainty * harmonic_ratio * harmonic_ratio;
      } else {
