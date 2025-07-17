@@ -7,6 +7,32 @@ using namespace Rcpp;
 #define DIMENSION_TIME  "time"
 #define DIMENSION_SPACE "space"
 
+
+// Same signature as before, but protects against rounding‑to‑zero
+inline double round_to_precision(double value, int precision = 15)
+{
+  if (!std::isfinite(value)) return value;
+  double scale = std::pow(10.0, precision);
+  double rounded = std::round(value * scale) / scale;
+  if (rounded == 0.0 && value != 0.0)
+    rounded = std::nextafter(0.0, 1.0);   // smallest positive sub‑normal
+  return rounded;
+}
+
+// Smallest number of decimals required to resolve the given uncertainty
+inline int decimals_from_uncertainty(double u)
+{
+  if (u <= 0.0 || !std::isfinite(u)) return 15;            // fallback
+  return std::max(0, static_cast<int>(-std::floor(std::log10(u))));
+}
+
+// Snap a value to the nearest integer if it is already within tol
+inline long long snap_to_integer(double x, double tol)
+{
+  long long n = static_cast<long long>(std::llround(x));
+  return (std::fabs(x - static_cast<double>(n)) <= tol ? n : 0LL);
+}
+
 DataFrame rational_fraction_dataframe(const IntegerVector &nums,
                                       const IntegerVector &dens,
                                       const NumericVector &approximations,
@@ -53,11 +79,6 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
     _["path"]                  = paths,
     _["uncertainty"]           = uncertainty
   );
-}
-
-inline double round_to_precision(double value, int precision = 15) {
-  double scale = std::pow(10.0, precision);
-  return std::round(value * scale) / scale;
 }
 
  // -------------------------------------------------------------------------
@@ -170,7 +191,8 @@ inline double round_to_precision(double value, int precision = 15) {
  }
 
 
-constexpr int ROUNDING_HARMONICS_PRECISION = 6;
+constexpr int MAX_STATIC_DECIMALS = 15;
+
  //' approximate_rational_fractions
  //'
  //' Approximates floating-point numbers to arbitrary uncertainty.
@@ -185,47 +207,72 @@ constexpr int ROUNDING_HARMONICS_PRECISION = 6;
  DataFrame approximate_rational_fractions(NumericVector& x,
                                           const double x_ref,
                                           const double uncertainty,
-                                          std::string dimension) {
-
+                                          std::string dimension)
+ {
    int n = x.size();
    if (n == 0) {
      return DataFrame::create();
    }
 
-   // compute ratios relative to x_ref
-   NumericVector targets(n), uncertainties(n),  harmonic_ratios(n);
+   /* ------------------------------------------------------------------
+    Derive working precision and tolerances from the uncertainty
+    ------------------------------------------------------------------ */
+   const int decimals = std::min(decimals_from_uncertainty(uncertainty),
+                                 MAX_STATIC_DECIMALS);
+   const double int_snap_tol = std::pow(10.0, -decimals) * 0.5;
+
+   NumericVector targets(n), uncertainties(n), harmonic_ratios(n);
 
    for (int i = 0; i < n; ++i) {
+
      double tone_ratio = x[i] / x_ref;
 
-     Rcpp::Rcout
-     << "i=" << i
-     << "  tone_ratio="
-     << std::setprecision(std::numeric_limits<double>::max_digits10)
-     << tone_ratio
-     << std::endl;
-
-
+     /* --------------------------------------------------------------
+      TIME domain  (ratios ≥ 1 map directly to integers)
+      -------------------------------------------------------------- */
      if (dimension == DIMENSION_TIME) {
+
+       long long maybe_int = snap_to_integer(tone_ratio, int_snap_tol);
+
        double harmonic_ratio;
-       if (tone_ratio >= 1.0) {
-         harmonic_ratio = std::round(round_to_precision(tone_ratio, ROUNDING_HARMONICS_PRECISION));
+       if (maybe_int > 0) {
+         harmonic_ratio = static_cast<double>(maybe_int);
+       } else if (tone_ratio >= 1.0) {
+         harmonic_ratio =
+           std::round(round_to_precision(tone_ratio, decimals));
        } else {
-         harmonic_ratio = 1.0 / std::round(1.0/round_to_precision(tone_ratio, ROUNDING_HARMONICS_PRECISION));
+         double inv = 1.0 / tone_ratio;
+         harmonic_ratio =
+           1.0 / std::round(round_to_precision(inv, decimals));
        }
-       targets[i] = tone_ratio / harmonic_ratio;
+
+       targets[i]       = tone_ratio / harmonic_ratio;
        uncertainties[i] = uncertainty;
        harmonic_ratios[i] = harmonic_ratio;
+
+       /* --------------------------------------------------------------
+        SPACE domain  (reciprocal logic)
+        -------------------------------------------------------------- */
      } else if (dimension == DIMENSION_SPACE) {
+
+       long long maybe_int = snap_to_integer(tone_ratio, int_snap_tol);
+
        double harmonic_ratio;
-       if (tone_ratio >= 1.0) {
-         harmonic_ratio = 1.0 / std::round(round_to_precision(tone_ratio, ROUNDING_HARMONICS_PRECISION));
+       if (maybe_int > 0) {
+         harmonic_ratio = 1.0 / static_cast<double>(maybe_int);
+       } else if (tone_ratio >= 1.0) {
+         harmonic_ratio =
+           1.0 / std::round(round_to_precision(tone_ratio, decimals));
        } else {
-         harmonic_ratio = std::round(1.0 / round_to_precision(tone_ratio, ROUNDING_HARMONICS_PRECISION));
+         double inv = 1.0 / tone_ratio;
+         harmonic_ratio =
+           std::round(round_to_precision(inv, decimals));
        }
-       targets[i] = tone_ratio * harmonic_ratio;
+
+       targets[i]       = tone_ratio * harmonic_ratio;
        uncertainties[i] = uncertainty * harmonic_ratio * harmonic_ratio;
        harmonic_ratios[i] = harmonic_ratio;
+
      } else {
        Rcpp::stop("Invalid dimension: `%s`", dimension);
      }
@@ -236,7 +283,6 @@ constexpr int ROUNDING_HARMONICS_PRECISION = 6;
      uncertainties
    );
 
-   df["harmonic_ratio"]  = harmonic_ratios;
-
+   df["harmonic_ratio"] = harmonic_ratios;
    return df;
  }
