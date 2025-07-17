@@ -55,7 +55,6 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
   );
 }
 
-// forward declaration of round_to_precision
 inline double round_to_precision(double value, int precision = 15) {
   double scale = std::pow(10.0, precision);
   return std::round(value * scale) / scale;
@@ -196,12 +195,21 @@ inline double round_to_precision(double value, int precision = 15) {
 
    for (int i = 0; i < n; ++i) {
      double tone_ratio = x[i] / x_ref;
+
+     Rcpp::Rcout
+     << "i=" << i
+     << "  tone_ratio="
+     << std::setprecision(std::numeric_limits<double>::max_digits10)
+     << tone_ratio
+     << std::endl;
+
+
      if (dimension == DIMENSION_TIME) {
        double harmonic_ratio;
        if (tone_ratio >= 1.0) {
-         harmonic_ratio = std::round(tone_ratio);
+         harmonic_ratio = std::round(round_to_precision(tone_ratio, 2));
        } else {
-         harmonic_ratio = 1.0 / std::round(1.0/tone_ratio);
+         harmonic_ratio = 1.0 / std::round(1.0/round_to_precision(tone_ratio,2));
        }
        targets[i] = tone_ratio / harmonic_ratio;
        uncertainties[i] = uncertainty;
@@ -209,9 +217,9 @@ inline double round_to_precision(double value, int precision = 15) {
      } else if (dimension == DIMENSION_SPACE) {
        double harmonic_ratio;
        if (tone_ratio >= 1.0) {
-         harmonic_ratio = 1.0 / std::round(tone_ratio);
+         harmonic_ratio = 1.0 / std::round(round_to_precision(tone_ratio, 2));
        } else {
-         harmonic_ratio = std::round(1.0 / tone_ratio);
+         harmonic_ratio = std::round(1.0 / round_to_precision(tone_ratio, 2));
        }
        targets[i] = tone_ratio * harmonic_ratio;
        uncertainties[i] = uncertainty * harmonic_ratio * harmonic_ratio;
