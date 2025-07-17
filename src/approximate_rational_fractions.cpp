@@ -4,6 +4,9 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
+#define DIMENSION_TIME  "time"
+#define DIMENSION_SPACE "space"
+
 // [[Rcpp::export]]
 double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
                                  const double uncertainty) {
@@ -221,10 +224,6 @@ inline double round_to_precision(double value, int precision = 15) {
                                           const double x_ref,
                                           const double uncertainty,
                                           std::string dimension) {
-
-   // Constants for dimension values
-   const std::string DIMENSION_TIME  = "time";
-   const std::string DIMENSION_SPACE = "space";
 
    // de-duplicate
    int n = x.size();
