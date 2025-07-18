@@ -270,8 +270,7 @@ constexpr int MAX_STATIC_DECIMALS = 15;
        }
 
        targets[i]       = tone_ratio * harmonic_ratio;
-       // uncertainties[i] = uncertainty * harmonic_ratio * harmonic_ratio;
-       uncertainties[i] = uncertainty;
+       uncertainties[i] = uncertainty * harmonic_ratio * harmonic_ratio;
        harmonic_ratios[i] = harmonic_ratio;
 
      } else {
