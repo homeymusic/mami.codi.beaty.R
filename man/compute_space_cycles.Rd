@@ -7,12 +7,12 @@
 compute_space_cycles(x)
 }
 \arguments{
-\item{x}{Wavelength spectrum that include stimulus, side bands.}
+\item{x}{wavenumber spectrum that include stimulus, side bands.}
 }
 \value{
 spatial cycle length
 }
 \description{
-Computes the spatial cycle length from a wavelength spectrum that
+Computes the spatial cycle length from a wavenumber spectrum that
 includes stimulus, side bands.
 }

@@ -7,7 +7,7 @@
 compute_time_cycles(x)
 }
 \arguments{
-\item{x}{Wavelength spectrum that include stimulus and side bands.}
+\item{x}{wavenumber spectrum that include stimulus and side bands.}
 }
 \value{
 temporal cycle length

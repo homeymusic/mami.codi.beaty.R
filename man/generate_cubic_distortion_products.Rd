@@ -13,12 +13,12 @@ generate_cubic_distortion_products(x)
 \value{
 The input \code{x} augmented with:
 \itemize{
-\item \code{amplitude_modulation_frequency_spectrum}: filtered sideband frequencies & amplitudes
-\item \code{amplitude_modulation_wavelength_spectrum}: corresponding wavelengths & amplitudes
+\item \code{cubic_distortion_frequency_spectrum}: filtered sideband frequencies & amplitudes
+\item \code{cubic_distortion_wavenumber_spectrum}: corresponding wavenumbers & amplitudes
 }
 }
 \description{
 For a given stimulus spectrum, compute the difference frequncies
 and the spectral sidebands (fi ± |fj – fi|) for every unordered
-pair of input frequencies, then convert to wavelength and filter into range.
+pair of input frequencies, then convert to wavenumber and filter into range.
 }

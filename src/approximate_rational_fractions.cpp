@@ -4,10 +4,6 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
-#define DIMENSION_TIME  "time"
-#define DIMENSION_SPACE "space"
-
-
 // Same signature as before, but protects against rounding‑to‑zero
 inline double round_to_precision(double value, int precision = 15)
 {
@@ -204,89 +200,48 @@ constexpr int MAX_STATIC_DECIMALS = 15;
  //' @return A data frame of rational numbers and metadata
  //' @export
  // [[Rcpp::export]]
- DataFrame approximate_rational_fractions(NumericVector& x,
-                                          const double x_ref,
-                                          const double uncertainty,
-                                          std::string dimension)
- {
+ DataFrame approximate_rational_fractions(
+     NumericVector& x,
+     const double x_ref,
+     const double uncertainty
+ ) {
    int n = x.size();
    if (n == 0) {
      return DataFrame::create();
    }
 
-   /* ------------------------------------------------------------------
-    Derive working precision and tolerances from the uncertainty
-    ------------------------------------------------------------------ */
-   const int decimals = std::min(decimals_from_uncertainty(uncertainty),
-                                 MAX_STATIC_DECIMALS);
+   // precision & snap tolerance
+   const int    decimals     = std::min(decimals_from_uncertainty(uncertainty),
+                                        MAX_STATIC_DECIMALS);
    const double int_snap_tol = std::pow(10.0, -decimals) * 0.5;
 
    NumericVector targets(n), uncertainties(n), harmonic_ratios(n);
 
    for (int i = 0; i < n; ++i) {
-
      double tone_ratio = x[i] / x_ref;
+     long long maybe_int = snap_to_integer(tone_ratio, int_snap_tol);
 
-     /* --------------------------------------------------------------
-      TIME domain  (ratios ≥ 1 map directly to integers)
-      -------------------------------------------------------------- */
-     if (dimension == DIMENSION_TIME) {
-
-       long long maybe_int = snap_to_integer(tone_ratio, int_snap_tol);
-
-       double harmonic_ratio;
-       if (maybe_int > 0) {
-         harmonic_ratio = static_cast<double>(maybe_int);
-       } else if (tone_ratio >= 1.0) {
-         harmonic_ratio =
-           std::round(round_to_precision(tone_ratio, decimals));
-       } else {
-         double inv = 1.0 / tone_ratio;
-         harmonic_ratio =
-           1.0 / std::round(round_to_precision(inv, decimals));
-       }
-
-       targets[i]       = tone_ratio / harmonic_ratio;
-       uncertainties[i] = uncertainty;
-       harmonic_ratios[i] = harmonic_ratio;
-
-       /* --------------------------------------------------------------
-        SPACE domain  (reciprocal logic)
-        -------------------------------------------------------------- */
-     } else if (dimension == DIMENSION_SPACE) {
-
-       long long maybe_int = snap_to_integer(tone_ratio, int_snap_tol);
-
-       double harmonic_ratio;
-       if (maybe_int > 0) {
-         harmonic_ratio = 1.0 / static_cast<double>(maybe_int);
-       } else if (tone_ratio >= 1.0) {
-         harmonic_ratio =
-           1.0 / std::round(round_to_precision(tone_ratio, decimals));
-       } else {
-         double inv = 1.0 / tone_ratio;
-         harmonic_ratio =
-           std::round(round_to_precision(inv, decimals));
-       }
-
-       targets[i]       = tone_ratio * harmonic_ratio;
-       uncertainties[i] = uncertainty * harmonic_ratio * harmonic_ratio;
-       harmonic_ratios[i] = harmonic_ratio;
-
+     double harmonic_ratio;
+     if (maybe_int > 0) {
+       harmonic_ratio = static_cast<double>(maybe_int);
+     } else if (tone_ratio >= 1.0) {
+       harmonic_ratio =
+         std::round(round_to_precision(tone_ratio, decimals));
      } else {
-       Rcpp::stop("Invalid dimension: `%s`", dimension);
+       double inv = 1.0 / tone_ratio;
+       harmonic_ratio =
+         1.0 / std::round(round_to_precision(inv, decimals));
      }
+     targets[i]         = tone_ratio / harmonic_ratio;
+     uncertainties[i]   = uncertainty;
+     harmonic_ratios[i] = harmonic_ratio;
    }
 
-   DataFrame df = rational_fractions(
-     targets,
-     uncertainties
-   );
-
+   // build the fractions table as before
+   DataFrame df = rational_fractions(targets, uncertainties);
    df["harmonic_ratio"] = harmonic_ratios;
    return df;
  }
-
 
  //' Compute cubic distortion products (2 f_low − f_high)
         //'

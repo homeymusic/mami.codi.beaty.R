@@ -2,7 +2,7 @@
 % Please edit documentation in R/mami.codi.beaty.R
 \name{generate_stimulus}
 \alias{generate_stimulus}
-\title{Generate the stimulus tones as frequency and wavelength spectra}
+\title{Generate the stimulus tones as frequency and wavenumber spectra}
 \usage{
 generate_stimulus(x)
 }
@@ -11,8 +11,8 @@ generate_stimulus(x)
 frequency content of the stimulus tones.}
 }
 \value{
-The frequency and wavelength spectra for the stimulus tones.
+The frequency and wavenumber spectra for the stimulus tones.
 }
 \description{
-Generate the stimulus tones as frequency and wavelength spectra
+Generate the stimulus tones as frequency and wavenumber spectra
 }

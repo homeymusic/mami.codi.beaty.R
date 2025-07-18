@@ -7,7 +7,7 @@
 compute_harmony_perception(x)
 }
 \arguments{
-\item{x}{Cycle lengths for the fundamental frequency and fundamental wavelength.}
+\item{x}{Cycle lengths for the fundamental frequency and fundamental wavenumber.}
 }
 \value{
 Overall dissonance and major-minor tonality perception.
@@ -15,7 +15,7 @@ Overall dissonance and major-minor tonality perception.
 \description{
 Computes harmony perception based on cycle lengths from the spatial
 and temporal frequency domains, converting them into psychophysical measures
-of dissonance perception. The sum of wavelength dissonance and frequency
+of dissonance perception. The sum of wavenumber dissonance and frequency
 dissonance provides an overall sense of dissonance, while the difference
 indicates major-minor tonality.
 }

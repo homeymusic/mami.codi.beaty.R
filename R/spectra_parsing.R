@@ -74,68 +74,6 @@ empty_frequency_spectrum <- function() {
   )
 }
 
-#' Helper functions to combine spectra
-validate_combine_spectra <- function(..., tolerance = 1e-15) {
-  # Collect all spectra passed in as a list
-  spectra_list <- list(...)
-
-  # Check if the list is empty
-  if (length(spectra_list) == 0) {
-    stop("Error: At least one spectrum must be provided.")
-  }
-
-  # Determine the type of spectra based on the first spectrum
-  first_spectrum <- spectra_list[[1]]
-  if ("frequency" %in% names(first_spectrum)) {
-    dimension <- DIMENSION$TIME
-    spec_type <- "frequency"
-    sort_order <- "asc"
-  } else if ("wavelength" %in% names(first_spectrum)) {
-    dimension <- DIMENSION$SPACE
-    spec_type <- "wavelength"
-    sort_order <- "desc"
-  } else {
-    stop("Error: Spectra must have either 'frequency' or 'wavelength' as a column.")
-  }
-
-  # Ensure all spectra have the same type as the first one
-  for (spectrum in spectra_list) {
-    if (!(spec_type %in% names(spectrum))) {
-      stop("Error: All spectra must have the same type (either all frequency or all wavelength).")
-    }
-  }
-
-  # Combine all spectra into a single tibble
-  combined <- dplyr::bind_rows(spectra_list) %>%
-    filter_spectrum_in_range() %>%
-    dplyr::rename(value = {{spec_type}})
-
-  # Aggregate amplitudes within tolerance for the combined tibble
-  result <- combined %>%
-    dplyr::arrange(value) %>%
-    dplyr::mutate(
-      # Group values that fall within the tolerance range
-      group = cumsum(c(TRUE, diff(value) > tolerance))
-    ) %>%
-    dplyr::group_by(group) %>%
-    dplyr::summarize(
-      value = mean(value),
-      amplitude = sum(amplitude),
-      .groups = "drop"
-    ) %>%
-    dplyr::select(!!spec_type := value, amplitude)
-
-  # Apply sorting based on type
-  result <- if (sort_order == "asc") {
-    result %>% dplyr::arrange(!!rlang::sym(spec_type))
-  } else {
-    result %>% dplyr::arrange(dplyr::desc(!!rlang::sym(spec_type)))
-  }
-
-  return(result)
-}
-
-
 sparse_fr_spectrum_from_wavelength_spectrum <- function(x) {
   hrep::sparse_fr_spectrum(list(
     frequency = SPEED_OF_SOUND / x$wavelength,
@@ -166,17 +104,84 @@ frequency_spectrum_from_sparse_fr_spectrum <- function(x) {
 
 filter_spectrum_in_range <- function(spectrum) {
 
-  if ("frequency" %in% colnames(spectrum)) {
-    # Filter for frequencies within the audible range
+  if ("frequency"  %in% colnames(spectrum)) {
     spectrum <- spectrum %>%
-      dplyr::filter(amplitude > 1e-15 & frequency >= MIN_FREQUENCY & frequency <= MAX_FREQUENCY)
+      dplyr::filter(
+        amplitude > 1e-15,
+        frequency >= MIN_FREQUENCY,
+        frequency <= MAX_FREQUENCY
+      )
+
   } else if ("wavelength" %in% colnames(spectrum)) {
-    # Filter for wavelengths within the audible range
     spectrum <- spectrum %>%
-      dplyr::filter(amplitude > 1e-15 & wavelength >= MIN_WAVELENGTH & wavelength <= MAX_WAVELENGTH)
+      dplyr::filter(
+        amplitude > 1e-15,
+        wavelength >= MIN_WAVELENGTH,
+        wavelength <= MAX_WAVELENGTH
+      )
+
+  } else if ("wavenumber" %in% colnames(spectrum)) {
+    spectrum <- spectrum %>%
+      dplyr::filter(
+        amplitude > 1e-15,
+        wavenumber >= MIN_WAVENUMBER,
+        wavenumber <= MAX_WAVENUMBER
+      )
+
   } else {
-    stop("The tibble must contain either 'frequency' or 'wavelength' column.")
+    stop("The tibble must contain one of 'frequency', 'wavelength', or 'wavenumber' columns.")
   }
 
-  return(spectrum)
+  spectrum
+}
+
+validate_combine_spectra <- function(..., tolerance = 1e-15) {
+  spectra_list <- list(...)
+  if (length(spectra_list) == 0) {
+    stop("Error: At least one spectrum must be provided.")
+  }
+
+  first_spectrum <- spectra_list[[1]]
+  if      ("frequency"  %in% names(first_spectrum)) {
+    spec_type  <- "frequency"; sort_order <- "asc"
+  } else if ("wavelength" %in% names(first_spectrum)) {
+    spec_type  <- "wavelength"; sort_order <- "desc"
+  } else if ("wavenumber" %in% names(first_spectrum)) {
+    spec_type  <- "wavenumber"; sort_order <- "asc"
+  } else {
+    stop("Spectra must have 'frequency', 'wavelength', or 'wavenumber' as a column.")
+  }
+
+  # ensure uniform type
+  for (sp in spectra_list) {
+    if (!(spec_type %in% names(sp))) {
+      stop("All spectra must have the same type (all ", spec_type, ").")
+    }
+  }
+
+  combined <- dplyr::bind_rows(spectra_list) %>%
+    filter_spectrum_in_range() %>%
+    dplyr::rename(value = !!rlang::sym(spec_type))
+
+  result <- combined %>%
+    dplyr::arrange(value) %>%
+    dplyr::mutate(group = cumsum(c(TRUE, diff(value) > tolerance))) %>%
+    dplyr::group_by(group) %>%
+    dplyr::summarize(
+      value     = mean(value),
+      amplitude = sum(amplitude),
+      .groups   = "drop"
+    ) %>%
+    dplyr::select(
+      !!rlang::sym(spec_type) := value,
+      amplitude
+    )
+
+  if (sort_order == "asc") {
+    result <- result %>% dplyr::arrange(!!rlang::sym(spec_type))
+  } else {
+    result <- result %>% dplyr::arrange(dplyr::desc(!!rlang::sym(spec_type)))
+  }
+
+  result
 }
