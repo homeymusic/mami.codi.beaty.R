@@ -150,6 +150,13 @@ wavelength_spectrum_from_sparse_fr_spectrum <- function(x) {
   ) %>% filter_spectrum_in_range()
 }
 
+wavenumber_spectrum_from_sparse_fr_spectrum <- function(x) {
+  tibble::tibble(
+    wavenumber = x$x / SPEED_OF_SOUND,  # cycles per metre
+    amplitude  = x$y
+  ) %>% filter_spectrum_in_range()
+}
+
 frequency_spectrum_from_sparse_fr_spectrum <- function(x) {
   tibble::tibble(
     frequency = x$x,
