@@ -533,11 +533,12 @@ $$
 \begin{aligned}
 &\mathbf{FOR}\ i\gets 1\ \mathbf{TO}\ N\ \mathbf{DO}\\
 &\quad\mathbf{FOR}\ j\gets i+1\ \mathbf{TO}\ N\ \mathbf{DO}\\
-&\quad\quad \mathbf{IF}\ \mathrm{round}\bigl(\tfrac{f_{j}}{f_{i}}\bigr) < 2\ \mathbf{CONTINUE}\\
+&\quad\quad n \gets \mathrm{round}\bigl(\tfrac{f_{j}}{f_{i}}\bigr) \\\
+&\quad\quad \mathbf{IF}\ n < 2\ \mathbf{CONTINUE}\\
 &\quad\quad \mathbf{UNLESS}\ \boxed {
-\frac{\bigl| \mathrm{round}(\frac{f}{f_{ref}}) - \tfrac{f}{f_{ref}} \bigr|}{\mathrm{round}(\frac{f}{f_{ref}})} \ge \frac{1}{4 \pi \tau}
+\frac{\bigl| n - \tfrac{f}{f_{ref}} \bigr|}{n} \ge \frac{1}{4 \pi \tau}
 }\ \mathbf{THEN}\\
-&\quad\quad\quad\quad candidate\_pseudo\_octave \gets \exp_{2} \bigl(\frac{\log_2(f_j / f_i)}{\log_2(round(f_j / f_i))}\bigr)\\
+&\quad\quad\quad\quad candidate\_pseudo\_octave \gets \exp_{2} \bigl(\frac{\log_2(f_j / f_i)}{\log_2(n)}\bigr)\\
 &\quad\quad\quad\quad candidates \gets candidates \cup \{pseudo\_octave\}\\
 &\quad\quad\mathbf{END\_UNLESS}\\
 &\quad\mathbf{END\_FOR}\\
@@ -554,10 +555,8 @@ $$
 \log_2 \bigl(1+\tfrac{1}{4 \pi \tau}\bigr)
 $$
 
-for $\tau = 1$
-
 $$
-\log_2 \bigl(1+\tfrac{1}{4 \pi}\bigr) \approx 0.110467 
+\log_2 \bigl(1+\tfrac{1}{4 \pi}\bigr) \approx 0.110467, \  \tau = 1 
 $$
 
 we align well with Sethares range between $1.87$ and $2.2$.
