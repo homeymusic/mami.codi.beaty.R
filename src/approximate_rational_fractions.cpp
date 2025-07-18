@@ -3,6 +3,44 @@
 #include <Rcpp.h>
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
+// [[Rcpp::export]]
+double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
+                                 const double uncertainty) {
+
+  int n = unsorted_x.size();
+  if (n <= 2) return 2.0;
+
+  // Copy into our working 'ratios' and sort
+  std::vector<double> x(unsorted_x.begin(), unsorted_x.end());
+  std::sort(x.begin(), x.end());
+
+  std::vector<double> candidates;
+  candidates.reserve(n * (n - 1) / 2);
+
+  for (int i = 0; i < n; ++i) {
+    for (int j = i + 1; j < n; ++j) {
+      double pseudo_harmonic = x[j] / x[i];
+      int    ideal_harmonic  = int(std::round(pseudo_harmonic));
+      if     (ideal_harmonic < 2) continue; // skip the unisons
+
+      if (std::abs(pseudo_harmonic - ideal_harmonic) / ideal_harmonic < uncertainty) {
+        double candidate_pseudo_octave = std::exp2( std::log2(pseudo_harmonic)/ std::log2(ideal_harmonic) );
+        candidates.push_back(candidate_pseudo_octave);
+      }
+    }
+  }
+
+  if (candidates.empty()) return 2.0;
+
+  Rcpp::NumericVector qualifiedCandidates(candidates.begin(), candidates.end());
+  Rcpp::IntegerVector counts = Rcpp::table(qualifiedCandidates);
+  Rcpp::CharacterVector candidateBins = counts.names();
+  Rcpp::IntegerVector idx = Rcpp::seq_along(counts) - 1;
+  std::sort(idx.begin(), idx.end(),
+            [&](int a, int b){ return counts[a] > counts[b]; });
+
+  return std::stod(Rcpp::as<std::string>(candidateBins[idx[0]]));
+}
 
 // Same signature as before, but protects against rounding‑to‑zero
 inline double round_to_precision(double value, int precision = 15)
@@ -13,20 +51,6 @@ inline double round_to_precision(double value, int precision = 15)
   if (rounded == 0.0 && value != 0.0)
     rounded = std::nextafter(0.0, 1.0);   // smallest positive sub‑normal
   return rounded;
-}
-
-// Smallest number of decimals required to resolve the given uncertainty
-inline int decimals_from_uncertainty(double u)
-{
-  if (u <= 0.0 || !std::isfinite(u)) return 15;            // fallback
-  return std::max(0, static_cast<int>(-std::floor(std::log10(u))));
-}
-
-// Snap a value to the nearest integer if it is already within tol
-inline long long snap_to_integer(double x, double tol)
-{
-  long long n = static_cast<long long>(std::llround(x));
-  return (std::fabs(x - static_cast<double>(n)) <= tol ? n : 0LL);
 }
 
 DataFrame rational_fraction_dataframe(const IntegerVector &nums,
@@ -92,7 +116,8 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
  //' @export
  // [[Rcpp::export]]
  DataFrame rational_fractions(const NumericVector& x,
-                              const NumericVector& uncertainty) {
+                              double x_ref,
+                              double uncertainty) {
    int n = x.size();
    IntegerVector nums(n), dens(n), depths(n);
    NumericVector approximations(n), errors(n), minkowski(n), entropy(n), thomae(n), euclids_orchard_height(n);
@@ -101,7 +126,7 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
    const int MAX_ITER = 10000;
 
    for (int i = 0; i < n; ++i) {
-     double ideal = round_to_precision(x[i]);
+     double ideal = round_to_precision(x[i] / x_ref);
      std::vector<char> path;
      // Initialize Stern–Brocot endpoints
      int left_num = -1, left_den = 0;
@@ -115,8 +140,9 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
 
      int iter = 0;
 
+     // continue while |x/x_ref - num/den| >= uncertainty
      while ((
-         std::abs(ideal - approximation) >= uncertainty[i]
+         std::abs(ideal - approximation) >= uncertainty
      ) && iter < MAX_ITER) {
        if (approximation < ideal) {
          left_num = approximation_num;  left_den = approximation_den;
@@ -179,15 +205,13 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
    }
 
    // pack constant uncertainty vector
+   NumericVector unc(n, uncertainty);
    return rational_fraction_dataframe(
      nums, dens, approximations,
      x, errors, minkowski, entropy, thomae, euclids_orchard_height,
-     depths, paths, uncertainty
+     depths, paths, unc
    );
  }
-
-
-constexpr int MAX_STATIC_DECIMALS = 15;
 
  //' approximate_rational_fractions
  //'
@@ -200,48 +224,42 @@ constexpr int MAX_STATIC_DECIMALS = 15;
  //' @return A data frame of rational numbers and metadata
  //' @export
  // [[Rcpp::export]]
- DataFrame approximate_rational_fractions(
-     NumericVector& x,
-     const double x_ref,
-     const double uncertainty
- ) {
+ DataFrame approximate_rational_fractions(NumericVector& x,
+                                          const double x_ref,
+                                          const double uncertainty) {
+   // de-duplicate
    int n = x.size();
    if (n == 0) {
      return DataFrame::create();
    }
 
-   // precision & snap tolerance
-   const int    decimals     = std::min(decimals_from_uncertainty(uncertainty),
-                                        MAX_STATIC_DECIMALS);
-   const double int_snap_tol = std::pow(10.0, -decimals) * 0.5;
+   // find the pseudo-octave in ratio-space
+   double pseudo_octave = approximate_pseudo_octave(x, uncertainty);
 
-   NumericVector targets(n), uncertainties(n), harmonic_ratios(n);
-
+   // compute ratios relative to x_ref
+   NumericVector ratios(n);
    for (int i = 0; i < n; ++i) {
-     double tone_ratio = x[i] / x_ref;
-     long long maybe_int = snap_to_integer(tone_ratio, int_snap_tol);
-
-     double harmonic_ratio;
-     if (maybe_int > 0) {
-       harmonic_ratio = static_cast<double>(maybe_int);
-     } else if (tone_ratio >= 1.0) {
-       harmonic_ratio =
-         std::round(round_to_precision(tone_ratio, decimals));
-     } else {
-       double inv = 1.0 / tone_ratio;
-       harmonic_ratio =
-         1.0 / std::round(round_to_precision(inv, decimals));
-     }
-     targets[i]         = tone_ratio / harmonic_ratio;
-     uncertainties[i]   = uncertainty;
-     harmonic_ratios[i] = harmonic_ratio;
+     ratios[i] = x[i] / x_ref;
    }
 
-   // build the fractions table as before
-   DataFrame df = rational_fractions(targets, uncertainties);
-   df["harmonic_ratio"] = harmonic_ratios;
+   // build the transformed vector for coprime search
+   NumericVector pseudo_x(n), uncertainties(n, uncertainty);
+   for (int i = 0; i < n; ++i) {
+     pseudo_x[i] = x_ref * std::exp2( std::log2(ratios[i]) / std::log2(pseudo_octave));
+   }
+
+   DataFrame df = rational_fractions(
+     pseudo_x,
+     x_ref,
+     uncertainty
+   );
+
+   df["pseudo_x"]    = pseudo_x;
+   df["pseudo_octave"] = NumericVector(n, pseudo_octave);
+
    return df;
  }
+
 
  //' Compute cubic distortion products (2 f_low − f_high)
         //'
@@ -265,7 +283,7 @@ constexpr int MAX_STATIC_DECIMALS = 15;
             );
           }
 
-          double minFreq    = Rcpp::min(frequency);
+          double min_frequency = min(frequency);
           int    maxPairs   = 2.0 * (n * (n - 1) / 2);
           NumericVector outFreqs(maxPairs), outAmps(maxPairs);
           int count = 0;
@@ -279,14 +297,13 @@ constexpr int MAX_STATIC_DECIMALS = 15;
               double fj   = frequency[j];
               double Aj   = amplitude[j];
 
-              // sort into low/high
               double f_low  = std::min(fi, fj);
               double f_high = std::max(fi, fj);
 
-              // compute difference and apply tolerance + critical-band gate
               double diff = f_high - f_low;
               double tol  = std::max(ABS_TOL, eps * f_high);
-              if (diff < minFreq) {
+
+              if (diff < min_frequency) {
                 double lower_cubic = 2.0 * f_low - f_high;
                 if (lower_cubic > tol) {
                   outFreqs[count] = lower_cubic;
@@ -294,12 +311,11 @@ constexpr int MAX_STATIC_DECIMALS = 15;
                   ++count;
                 }
 
-                if (diff > tol) {
-                  outFreqs[count] = diff;
-                  outAmps [count] = Aj * 0.1;
-                  ++count;
-                }
-
+                // if (diff > tol && diff < f_low) {
+                //   outFreqs[count] = diff;
+                //   outAmps [count] = Aj * 0.1;
+                //   ++count;
+                // }
               }
             }
           }
