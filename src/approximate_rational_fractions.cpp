@@ -267,7 +267,6 @@ constexpr int MAX_STATIC_DECIMALS = 15;
 
           double minFreq    = Rcpp::min(frequency);
           int    maxPairs   = 2.0 * (n * (n - 1) / 2);
-          // int    maxPairs   = 2.0 * (n * (n - 1) / 2);
           NumericVector outFreqs(maxPairs), outAmps(maxPairs);
           int count = 0;
 
@@ -295,11 +294,11 @@ constexpr int MAX_STATIC_DECIMALS = 15;
                   ++count;
                 }
 
-                // if (diff > tol) {
-                //   outFreqs[count] = diff;
-                //   outAmps [count] = Aj * 0.1;
-                //   ++count;
-                // }
+                if (diff > tol) {
+                  outFreqs[count] = diff;
+                  outAmps [count] = Aj * 0.1;
+                  ++count;
+                }
 
               }
             }
