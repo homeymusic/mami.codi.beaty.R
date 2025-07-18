@@ -33,6 +33,7 @@ colors_homey <- list(
 colors_homey$time = colors_homey$major
 colors_homey$mami.codi.beaty = colors_homey$neutral
 colors_homey$space = colors_homey$minor
+colors_homey$place = colors_homey$minor
 colors_homey$HarrisonPearce2018=colors_homey$other_models
 colors_homey$HutchinsonKnopoff1978Revised=colors_homey$other_models
 
@@ -505,7 +506,7 @@ plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
       ggplot2::geom_line(
         ggplot2::aes(
           y     = .data$smoothed_space_roughness,
-          color = "space"
+          color = "place"
         ),
         linewidth = 1
       ) +
@@ -524,7 +525,7 @@ plot_semitone_roughness_space_time <- function(chords, title='', sigma=0.2,
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
       values=unlist(colors_homey),
-      breaks=c('space', 'time', 'behavioral')) +
+      breaks=c('place', 'time', 'behavioral')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
@@ -1121,7 +1122,7 @@ plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
       linewidth = 1) +
     ggplot2::geom_line(ggplot2::aes(
       y = .data$smoothed_space_periodicity,
-      color = 'space'),
+      color = 'place'),
       linewidth = 1) +
 
     {if (!is.null(goal))
@@ -1138,7 +1139,7 @@ plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
       values=unlist(colors_homey),
-      breaks=c('space', 'time', 'behavioral')) +
+      breaks=c('place', 'time', 'behavioral')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }

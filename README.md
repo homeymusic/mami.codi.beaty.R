@@ -5,9 +5,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 
 ## Manipulating Harmonic Frequencies
 
-#### Dyads spanning 15 semitones
-
-##### 5Partials ~ Partials: 5
+##### Harmonic ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-2.png)<!-- -->  
@@ -15,72 +13,67 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-4.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-5.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-6.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-7.png)<!-- -->
+![](man/figures/README-unnamed-chunk-4-7.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-8.png)<!-- -->
 
-##### Harmonic ~ Partials: 10
+##### Stretched ~ Partials: 10
 
-![](man/figures/README-unnamed-chunk-4-8.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-9.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-10.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-11.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-12.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-13.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-14.png)<!-- -->
-
-#### Dyads spanning 1 quarter tone
-
-##### M3 ~ Partials: 10
-
+![](man/figures/README-unnamed-chunk-4-14.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-15.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-16.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-16.png)<!-- -->
+
+##### Compressed ~ Partials: 10
+
 ![](man/figures/README-unnamed-chunk-4-17.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-18.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-19.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-20.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-21.png)<!-- -->
-
-##### M6 ~ Partials: 10
-
+![](man/figures/README-unnamed-chunk-4-21.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-22.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-23.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-24.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-25.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-26.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-27.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-28.png)<!-- -->
+![](man/figures/README-unnamed-chunk-4-24.png)<!-- -->
 
 ##### Bonang ~ Partials: 4
 
+![](man/figures/README-unnamed-chunk-4-25.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-26.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-27.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-28.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-29.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-30.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-31.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-32.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-32.png)<!-- -->
+
+##### 5Partials ~ Partials: 5
+
 ![](man/figures/README-unnamed-chunk-4-33.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-34.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-35.png)<!-- -->
-
-##### Stretched ~ Partials: 10
-
+![](man/figures/README-unnamed-chunk-4-35.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-36.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-37.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-38.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-39.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-40.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-40.png)<!-- -->
+
+##### 5PartialsNo3 ~ Partials: 5
+
 ![](man/figures/README-unnamed-chunk-4-41.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-42.png)<!-- -->
-
-##### Compressed ~ Partials: 10
-
+![](man/figures/README-unnamed-chunk-4-42.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-43.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-44.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-45.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-46.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-47.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-48.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-49.png)<!-- -->
+![](man/figures/README-unnamed-chunk-4-48.png)<!-- -->
 
 ##### Pure ~ Partials: 1
 
+![](man/figures/README-unnamed-chunk-4-49.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-50.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-51.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-52.png)<!-- -->  
@@ -89,7 +82,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-55.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-56.png)<!-- -->
 
-##### 5PartialsNo3 ~ Partials: 5
+##### M3 ~ Partials: 10
 
 ![](man/figures/README-unnamed-chunk-4-57.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-58.png)<!-- -->  
@@ -97,74 +90,68 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 ![](man/figures/README-unnamed-chunk-4-60.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-61.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-62.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-63.png)<!-- -->
+![](man/figures/README-unnamed-chunk-4-63.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-64.png)<!-- -->
 
-##### P8 ~ Partials: 10
+##### M6 ~ Partials: 10
 
-![](man/figures/README-unnamed-chunk-4-64.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-65.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-66.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-67.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-68.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-69.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-70.png)<!-- -->
-
-#### Predictions ~ No behavioral data
-
-##### m3 ~ Partials: 10
-
+![](man/figures/README-unnamed-chunk-4-70.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-71.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-72.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-72.png)<!-- -->
+
+##### P8 ~ Partials: 10
+
 ![](man/figures/README-unnamed-chunk-4-73.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-74.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-75.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-76.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-77.png)<!-- -->
-
-##### m6 ~ Partials: 10
-
+![](man/figures/README-unnamed-chunk-4-77.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-78.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-79.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-80.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-80.png)<!-- -->
+
+##### m3 ~ Partials: 10
+
 ![](man/figures/README-unnamed-chunk-4-81.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-82.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-83.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-84.png)<!-- -->
-
-##### P1 ~ Partials: 10
-
+![](man/figures/README-unnamed-chunk-4-84.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-85.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-86.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-87.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-88.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-88.png)<!-- -->
+
+##### m6 ~ Partials: 10
+
 ![](man/figures/README-unnamed-chunk-4-89.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-90.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-91.png)<!-- -->
-
-##### ExtraStretched ~ Partials: 10
-
-Thus, 2.2 is stretched a bit too far, and … (Sethares)
+![](man/figures/README-unnamed-chunk-4-91.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-92.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-93.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-94.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-95.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-96.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-96.png)<!-- -->
+
+##### P1 ~ Partials: 10
+
 ![](man/figures/README-unnamed-chunk-4-97.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-98.png)<!-- -->
-
-##### ExtraCompressed ~ Partials: 10
-
-… 1.87 is squished a bit too much. (Sethares)
+![](man/figures/README-unnamed-chunk-4-98.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-99.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-100.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-101.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-102.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-103.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-104.png)<!-- -->  
-![](man/figures/README-unnamed-chunk-4-105.png)<!-- -->
+![](man/figures/README-unnamed-chunk-4-104.png)<!-- -->
 
-##### 2PartialsFramed ~ Partials: 2
+##### ExtraStretched ~ Partials: 10
 
+Thus, 2.2 is stretched a bit too far, and … (Sethares)
+![](man/figures/README-unnamed-chunk-4-105.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-106.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-107.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-108.png)<!-- -->  
@@ -172,6 +159,29 @@ Thus, 2.2 is stretched a bit too far, and … (Sethares)
 ![](man/figures/README-unnamed-chunk-4-110.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-111.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-112.png)<!-- -->
+
+##### ExtraCompressed ~ Partials: 10
+
+… 1.87 is squished a bit too much. (Sethares)
+![](man/figures/README-unnamed-chunk-4-113.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-114.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-115.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-116.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-117.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-118.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-119.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-120.png)<!-- -->
+
+##### 2PartialsFramed ~ Partials: 2
+
+![](man/figures/README-unnamed-chunk-4-121.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-122.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-123.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-124.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-125.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-126.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-127.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-4-128.png)<!-- -->
 
 # Fourier uncertainty principle in number‑theoretic form matches musical consonance perception
 

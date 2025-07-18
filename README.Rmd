@@ -42,15 +42,15 @@ dyads <- timbre_paper %>% dplyr::rowwise() %>% dplyr::mutate(
 
 ```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
 params = list(
-  list(h=5, o=2.0,t='5Partials'), # all signals will agree
   list(h=10,o=2.0,t='Harmonic'), # all signals will agree
-  list(h=10,o=2.0,t='M3'), # adding place signals
-  list(h=10,o=2.0,t='M6'), # adding place signals
-  list(h=4, o=2.0,t='Bonang'), # alignment with roughness and periodicity
   list(h=10,o=2.1,t='Stretched'), # uncertainty limit is the same
   list(h=10,o=1.9,t='Compressed'), # uncertainty limit is the same
-  list(h=1, o=2.0,t='Pure'), # the cochlear distortion works around the HUP limit
+  list(h=4, o=2.0,t='Bonang'), # alignment with roughness and periodicity
+  list(h=5, o=2.0,t='5Partials'), # all signals will agree
   list(h=5, o=2.0,t='5PartialsNo3'), # major minor hypothesis
+  list(h=1, o=2.0,t='Pure'), # the cochlear distortion works around the HUP limit
+  list(h=10,o=2.0,t='M3'), # adding place signals
+  list(h=10,o=2.0,t='M6'), # adding place signals
   list(h=10,o=2.0,t='P8'), # squint to see this
   list(h=10,o=2.0,t='m3'), # future predictions
   list(h=10,o=2.0,t='m6'), # future predictions
@@ -69,7 +69,7 @@ min_semitone=0
 max_semitone=12
 include_extreme_labels=T
 N=0
-
+title = ""
 p = params %>% purrr::map(\(p) {
   if (p$o==2 & p$h==10 & p$t == 'Harmonic') {
     black_vlines  = c(2,3,4,5,7,8,9,12)
@@ -77,42 +77,49 @@ p = params %>% purrr::map(\(p) {
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
     N = 198
+    title="10 Harmonics"
   } else if (p$o==2 & p$h==5 & p$t == '5Partials') {
     black_vlines  = c(3,4,5,7,9,12,14)
     gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
     N = 149
+    title="5 Harmonics"
   } else if (p$o==2 & p$h==5 & p$t == '5PartialsNo3') {
     black_vlines  = c(4,5,7,9,12,14)
     gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
     N = 160
+    title="5 Harmonics Minus 3rd Harmonic"
   } else if (p$o==2 & p$h==1 & p$t == 'Pure') {
     black_vlines  = c(7,12)
     gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
     N = 176
+    title = "Pure Tones"
   } else if (p$o>2 & p$t == 'Stretched') {
     black_vlines  = c(4.2,7.5,9.4,12.78)
     gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
     N = 194
+    title = "Stretched 10 Harmonics"
   } else if (p$o<2 & p$t == 'Compressed') {
     black_vlines  = c(3.8,4.8,11.1,14.5)
     gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
     N = 202
+    title = "Compressed 10 Harmonics"
   } else if (p$t == 'Bonang') {
     black_vlines = c(2.60, 4.80, 12.0)
     gray_vlines  = c(7.2, 9.6)
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
     N = 170
+    title = "4 Bonang Harmonics and 4 Standard Harmonics"
   } else if (p$t == 'M3') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * 5/4)-60,4,4.092442)
     black_vlines  = c(3.95)
@@ -120,6 +127,7 @@ p = params %>% purrr::map(\(p) {
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     include_extreme_labels=F
     N = 237
+    title = "Major 3rd 10 Harmonics"
   } else if (p$t == 'M6') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * 5/3)-60,9,8.66952)
     black_vlines  = c(8.78,8.93)
@@ -127,6 +135,7 @@ p = params %>% purrr::map(\(p) {
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     include_extreme_labels=F
     N = 230
+    title = "Major 6th 10 Harmonics"
   } else if (p$t == 'P8') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * 2/1)-60)
     black_vlines  = c(11.94, 12.08)
@@ -136,6 +145,7 @@ p = params %>% purrr::map(\(p) {
     max_semitone=13
     include_extreme_labels=F
     N = 196
+    title = "Octave 10 Harmonics"
   } else if (p$t == 'm3') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * c(6/5))-60,3)
     black_vlines  = c()
@@ -143,6 +153,7 @@ p = params %>% purrr::map(\(p) {
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     behavioral_data_available = F
     include_extreme_labels=F
+    title = "Minor 3rd 10 Harmonics"
   } else if (p$t == 'm6') {
     gray_vlines = c(hrep::freq_to_midi(hrep::midi_to_freq(60) * c(8/5))-60,8.0)
     black_vlines  = c()
@@ -150,6 +161,7 @@ p = params %>% purrr::map(\(p) {
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     behavioral_data_available = F
     include_extreme_labels=F
+    title = "Major 6th 10 Harmonics"
   } else if (p$t == 'P1') {
     gray_vlines = c(0.0)
     black_vlines  = c()
@@ -159,27 +171,31 @@ p = params %>% purrr::map(\(p) {
     min_semitone=-1
     max_semitone=1
     include_extreme_labels=F
+    title = "Unison 10 Harmonics"
   } else if (p$o>2 & p$t == 'ExtraStretched') {
     black_vlines  = c()
     gray_vlines = c()
     description   = 'Thus, 2.2 is stretched a bit too far, and ... (Sethares)'
     sigma = BEHAVIOURAL_SMOOTH_BROAD
     behavioral_data_available = F
+    title = "Extra Stretched 10 Harmonics"
   } else if (p$o<2 & p$t == 'ExtraCompressed') {
     black_vlines  = c()
     gray_vlines = c()
     description   = '... 1.87 is squished a bit too much. (Sethares)'
     sigma = BEHAVIOURAL_SMOOTH_BROAD
     behavioral_data_available = F
+    title = "Extra Compressed 10 Harmonics"
   } else if (p$o==2 & p$h==2 & p$t == '2PartialsFramed') {
     black_vlines  = c()
     gray_vlines = c()
     description   = ''
     sigma = BEHAVIOURAL_SMOOTH_BROAD
     behavioral_data_available = F
+    title = "Octave Doubling 2 Harmonics"
   }
   
-  title = paste(
+  plot_title = paste(
     p$t,
     '~',
     'Partials:', p$h
@@ -233,16 +249,7 @@ p = params %>% purrr::map(\(p) {
     experiment = NULL
   }
   
-  if (p$t=='5Partials') {
-    cat('  \n#### Dyads spanning 15 semitones\n')
-  }
-  if (p$t=='M3') {
-    cat('  \n#### Dyads spanning 1 quarter tone\n')
-  }
-  if (p$t=='m3') {
-    cat('  \n#### Predictions ~ No behavioral data\n')
-  }
-  cat("  \n#####", title, '\n')
+  cat("  \n#####", plot_title, '\n')
   
   cat("  \n", description, '\n')
   
@@ -256,18 +263,18 @@ p = params %>% purrr::map(\(p) {
                                             black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_periodicity_space_time(chords, paste0(p$t, ' (N=', N,' participants) : Periodicity: Space & Time'),
+  print(plot_semitone_periodicity_space_time(chords, paste0(p$t, ' (N=', N,' participants) : Periodicity: Place & Time'),
                                              goal=experiment,sigma=sigma,
                                              black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_roughness_space_time(chords,title = paste0(p$t, ' (N=', N,' participants) : Smoothness: Space & Time'),
+  print(plot_semitone_roughness_space_time(chords,title = paste0(p$t, ' (N=', N,' participants) : Smoothness: Place & Time'),
                                           goal=experiment, sigma=sigma,
                                            black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
   cat("  \n")
   
-  print(plot_semitone_mami(chords, paste0(p$t, ' (N=', N,' participants) : Major-Minor: Time Consonance minus Space Consonance'),
+  print(plot_semitone_mami(chords, paste0(p$t, ' (N=', N,' participants) : Major-Minor: Time Consonance minus Place Consonance'),
                            goal=experiment,sigma=sigma,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
@@ -284,6 +291,18 @@ p = params %>% purrr::map(\(p) {
                                    paste0(p$t, ': Smoothness versus Periodicity'), sigma=sigma))
   cat("  \n")
   
+  par(
+    bg       = "black",   # plotting region background
+    fg       = "white",   # default for lines and text
+    col      = "white",   # default color for points/lines
+    col.axis = "white",   # axis tick labels
+    col.lab  = "white",   # axis labels
+    col.main = "white"    # main title
+  )
+  
+  plot(chords$source_spectrum[[1]])
+  title(paste(title, "Stimulus Spectrum"))
+  cat("  \n")
 })
 ```
 
