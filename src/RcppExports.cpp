@@ -11,14 +11,15 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // approximate_pseudo_octave
-double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x, const double uncertainty);
-RcppExport SEXP _mami_codi_beaty_R_approximate_pseudo_octave(SEXP unsorted_xSEXP, SEXP uncertaintySEXP) {
+double approximate_pseudo_octave(Rcpp::NumericVector& unsorted_x, const double x_ref, const double uncertainty);
+RcppExport SEXP _mami_codi_beaty_R_approximate_pseudo_octave(SEXP unsorted_xSEXP, SEXP x_refSEXP, SEXP uncertaintySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type unsorted_x(unsorted_xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector& >::type unsorted_x(unsorted_xSEXP);
+    Rcpp::traits::input_parameter< const double >::type x_ref(x_refSEXP);
     Rcpp::traits::input_parameter< const double >::type uncertainty(uncertaintySEXP);
-    rcpp_result_gen = Rcpp::wrap(approximate_pseudo_octave(unsorted_x, uncertainty));
+    rcpp_result_gen = Rcpp::wrap(approximate_pseudo_octave(unsorted_x, x_ref, uncertainty));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -62,7 +63,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mami_codi_beaty_R_approximate_pseudo_octave", (DL_FUNC) &_mami_codi_beaty_R_approximate_pseudo_octave, 2},
+    {"_mami_codi_beaty_R_approximate_pseudo_octave", (DL_FUNC) &_mami_codi_beaty_R_approximate_pseudo_octave, 3},
     {"_mami_codi_beaty_R_rational_fractions", (DL_FUNC) &_mami_codi_beaty_R_rational_fractions, 3},
     {"_mami_codi_beaty_R_approximate_rational_fractions", (DL_FUNC) &_mami_codi_beaty_R_approximate_rational_fractions, 3},
     {"_mami_codi_beaty_R_compute_cubic_distortion_products", (DL_FUNC) &_mami_codi_beaty_R_compute_cubic_distortion_products, 2},
