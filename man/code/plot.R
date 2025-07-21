@@ -34,8 +34,8 @@ colors_homey$time = colors_homey$major
 colors_homey$mami.codi.beaty = colors_homey$neutral
 colors_homey$space = colors_homey$minor
 colors_homey$place = colors_homey$minor
-colors_homey$HarrisonPearce2018=colors_homey$other_models
-colors_homey$HutchinsonKnopoff1978Revised=colors_homey$other_models
+colors_homey$HarrisonPearce2018=colors_homey$periodicity
+colors_homey$HutchinsonKnopoff1978Revised=colors_homey$roughness
 
 color_factor_mami <- function(x,column_name) {
   cut(x[[column_name]],c(-Inf,-1e-6,1e-6,Inf),labels=c("minor","neutral","major"))
@@ -789,8 +789,8 @@ plot_mami_codi <- function(chords, title = '', sigma = 0.2,
 }
 
 plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
-                                       xlab = '-Periodicity (Z-Score)',
-                                       ylab = '-Smoothness (Z-Score)',
+                                       ylab = '-Periodicity (Z-Score)',
+                                       xlab = '-Smoothness (Z-Score)',
                                        min_semitone=0,max_semitone=12,
                                        include_extreme_labels = T) {
 
@@ -824,8 +824,8 @@ plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
   integer_semitones <- integer_semitones[index]
 
   # 6) extract the pre-smoothed X/Y and labels once, in draw order
-  annotate_x     <- chords$smoothed_periodicity_z[nearest_indices]
-  annotate_y     <- chords$smoothed_roughness_z[nearest_indices]
+  annotate_y     <- chords$smoothed_periodicity_z[nearest_indices]
+  annotate_x     <- chords$smoothed_roughness_z[nearest_indices]
   annotate_label <- integer_semitones
 
   # 6b) compute majorness factor for each spot
@@ -840,8 +840,8 @@ plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
 
   # 2) build base line plot + semitone-dots
   base_plot <- ggplot2::ggplot(chords,
-                               ggplot2::aes(x = smoothed_periodicity_z,
-                                            y = smoothed_roughness_z)) +
+                               ggplot2::aes(y = smoothed_periodicity_z,
+                                            x = smoothed_roughness_z)) +
     # path
     ggplot2::geom_path(ggplot2::aes(
       color = color_factor_mami(chords, 'smoothed_majorness_z'),
@@ -1216,7 +1216,7 @@ plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
                          ggplot2::aes(x = semitone,
                                       y = consonance_z,
                                       color = model_name,
-                                      group=1), linewidth = 0.5)} +
+                                      group=1), linewidth = 0.5,  linetype = "dashed")} +
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::guides(col = ggplot2::guide_legend()) +
@@ -1250,7 +1250,7 @@ plot_semitone_roughness_model_compare <- function(chords, title='', sigma=0.2,
                          ggplot2::aes(x = semitone,
                                       y = consonance_z,
                                       color = model_name,
-                                      group=1), linewidth = 0.5)} +
+                                      group=1), linewidth = 0.5,  linetype = "dashed")} +
     ggplot2::ggtitle(title) +
     ggplot2::scale_x_continuous(breaks = -15:15, minor_breaks = c()) +
     ggplot2::guides(col = ggplot2::guide_legend()) +
