@@ -4,6 +4,12 @@
 #include <R_ext/Rdynload.h>
 using namespace Rcpp;
 
+// forward declaration of round_to_precision
+inline double round_to_precision(double value, int precision = 15) {
+  double scale = std::pow(10.0, precision);
+  return std::round(value * scale) / scale;
+}
+
 // [[Rcpp::export]]
 double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
                                  const double uncertainty) {
@@ -21,26 +27,31 @@ double approximate_pseudo_octave(Rcpp::NumericVector unsorted_x,
   for (int i = 0; i < n; ++i) {
     for (int j = i + 1; j < n; ++j) {
       double pseudo_harmonic = x[j] / x[i];
-      int    ideal_harmonic  = int(std::round(pseudo_harmonic));
+      int    ideal_harmonic  = std::lround(pseudo_harmonic);
       if     (ideal_harmonic < 2) continue; // skip the unisons
 
       if (std::abs(pseudo_harmonic - ideal_harmonic) / ideal_harmonic < uncertainty) {
         double candidate_pseudo_octave = std::exp2( std::log2(pseudo_harmonic)/ std::log2(ideal_harmonic) );
-        candidates.push_back(candidate_pseudo_octave);
+        candidates.push_back(round_to_precision(candidate_pseudo_octave));
       }
     }
   }
 
   if (candidates.empty()) return 2.0;
 
-  Rcpp::NumericVector qualifiedCandidates(candidates.begin(), candidates.end());
-  Rcpp::IntegerVector counts = Rcpp::table(qualifiedCandidates);
-  Rcpp::CharacterVector candidateBins = counts.names();
-  Rcpp::IntegerVector idx = Rcpp::seq_along(counts) - 1;
-  std::sort(idx.begin(), idx.end(),
-            [&](int a, int b){ return counts[a] > counts[b]; });
+  std::unordered_map<double,int> freq;
+  double mode = candidates[0];
+  int maxCount = 0;
 
-  return std::stod(Rcpp::as<std::string>(candidateBins[idx[0]]));
+  for (double v : candidates) {
+    int count = ++freq[v];
+    if (count > maxCount) {
+      maxCount = count;
+      mode = v;
+    }
+  }
+
+  return mode;
 }
 
 DataFrame rational_fraction_dataframe(const IntegerVector &nums,
@@ -91,11 +102,6 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
   );
 }
 
-// forward declaration of round_to_precision
-inline double round_to_precision(double value, int precision = 15) {
-  double scale = std::pow(10.0, precision);
-  return std::round(value * scale) / scale;
-}
 
  // -------------------------------------------------------------------------
  // Main: simplified Stern–Brocot with direct uncertainty test
