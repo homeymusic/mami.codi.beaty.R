@@ -34,6 +34,7 @@ colors_homey$time = colors_homey$major
 colors_homey$mami.codi.beaty = colors_homey$neutral
 colors_homey$space = colors_homey$minor
 colors_homey$place = colors_homey$minor
+colors_homey$harmonicity=colors_homey$periodicity
 colors_homey$HarrisonPearce2018=colors_homey$periodicity
 colors_homey$HutchinsonKnopoff1978Revised=colors_homey$roughness
 
@@ -789,8 +790,8 @@ plot_mami_codi <- function(chords, title = '', sigma = 0.2,
 }
 
 plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
-                                       ylab = '-Periodicity (Z-Score)',
-                                       xlab = '-Smoothness (Z-Score)',
+                                       ylab = 'Harmonicity',
+                                       xlab = 'Roughness',
                                        min_semitone=0,max_semitone=12,
                                        include_extreme_labels = T) {
 
@@ -798,11 +799,11 @@ plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
   chords <- chords[chords$semitone >= min_semitone & chords$semitone <= max_semitone, ]
 
   # 1) smooth once
-  chords$smoothed_periodicity_z <- smoothed(chords$semitone,
-                                            chords$periodicity_z,
+  chords$smoothed_periodicity <- smoothed(chords$semitone,
+                                            chords$periodicity,
                                             sigma)
-  chords$smoothed_roughness_z <- smoothed(chords$semitone,
-                                          chords$roughness_z,
+  chords$smoothed_roughness <- smoothed(chords$semitone,
+                                          chords$roughness,
                                           sigma)
   chords$smoothed_majorness_z <- smoothed(chords$semitone,
                                           chords$time_consonance_z - chords$space_consonance_z,
@@ -824,8 +825,8 @@ plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
   integer_semitones <- integer_semitones[index]
 
   # 6) extract the pre-smoothed X/Y and labels once, in draw order
-  annotate_y     <- chords$smoothed_periodicity_z[nearest_indices]
-  annotate_x     <- chords$smoothed_roughness_z[nearest_indices]
+  annotate_y     <- chords$smoothed_periodicity[nearest_indices]
+  annotate_x     <- chords$smoothed_roughness[nearest_indices]
   annotate_label <- integer_semitones
 
   # 6b) compute majorness factor for each spot
@@ -840,8 +841,8 @@ plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
 
   # 2) build base line plot + semitone-dots
   base_plot <- ggplot2::ggplot(chords,
-                               ggplot2::aes(y = smoothed_periodicity_z,
-                                            x = smoothed_roughness_z)) +
+                               ggplot2::aes(y = smoothed_periodicity,
+                                            x = smoothed_roughness)) +
     # path
     ggplot2::geom_path(ggplot2::aes(
       color = color_factor_mami(chords, 'smoothed_majorness_z'),
@@ -1148,7 +1149,7 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
                                                 goal=NULL,
                                                 black_vlines=c(),gray_vlines=c(),
                                                 xlab='Semitone',
-                                                ylab='-Periodicity & -Roughness (Z-Score)') {
+                                                ylab='-Harmonicity & -Roughness (Z-Score)') {
 
   chords$smoothed_periodicity  = smoothed(chords$semitone,
                                                chords$periodicity_z,
@@ -1170,7 +1171,7 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
     ggplot2::geom_point(ggplot2::aes(y = .data$periodicity_z), shape=21, stroke=NA, size=1, alpha = 0.4, fill = colors_homey$periodicity) +
     ggplot2::geom_point(ggplot2::aes(y = .data$roughness_z), shape=21, stroke=NA, size=1, alpha = 0.4, fill = colors_homey$roughness) +
 
-    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity, color = 'periodicity'), linewidth = 1) +
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity, color = 'harmonicity'), linewidth = 1) +
     ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_roughness, color = "roughness"), linewidth = 1) +
 
     {if (!is.null(goal))
@@ -1187,10 +1188,10 @@ plot_semitone_periodicity_roughness <- function(chords, title='', sigma=0.2,
     ggplot2::xlab(xlab) +
     ggplot2::scale_fill_manual(
       values=unlist(colors_homey),
-      breaks=c('periodicity', 'roughness', 'behavioral')) +
+      breaks=c('harmonicity', 'roughness', 'behavioral')) +
     ggplot2::scale_color_manual(
       values=unlist(colors_homey),
-      breaks=c('periodicity', 'roughness', 'behavioral')) +
+      breaks=c('harmonicity', 'roughness', 'behavioral')) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }
@@ -1199,7 +1200,7 @@ plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
                                                 goal=NULL,model_name='',
                                                 black_vlines=c(),gray_vlines=c(),
                                                 xlab='Semitone',
-                                                ylab='-Periodicity (Z-Score)') {
+                                                ylab='-Harmonicity (Z-Score)') {
 
   chords$smoothed_periodicity_z = smoothed(chords$semitone,
                                            chords$periodicity_z,
@@ -1209,7 +1210,7 @@ plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
     ggplot2::geom_vline(xintercept = black_vlines, color=colors_homey$highlight) +
     ggplot2::geom_vline(xintercept = gray_vlines,color='gray44',linetype = 'dotted') +
 
-    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity_z, color = 'periodicity'), linewidth = 1) +
+    ggplot2::geom_line(ggplot2::aes(y = .data$smoothed_periodicity_z, color = 'harmonicity'), linewidth = 1) +
 
     {if (!is.null(goal))
       ggplot2::geom_line(data=goal,
@@ -1224,7 +1225,7 @@ plot_semitone_periodicity_model_compare <- function(chords, title='', sigma=0.2,
     ggplot2::xlab(xlab) +
     ggplot2::scale_color_manual(
       values=unlist(colors_homey),
-      breaks=c('periodicity',  model_name)) +
+      breaks=c('harmonicity',  model_name)) +
     ggplot2::labs(color = NULL) +
     theme_homey()
 }

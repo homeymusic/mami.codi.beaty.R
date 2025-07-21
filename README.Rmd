@@ -45,7 +45,7 @@ params = list(
   list(h=10,o=2.0,t='Harmonic'), # all signals will agree
   list(h=10,o=2.1,t='Stretched'), # uncertainty limit is the same
   list(h=10,o=1.9,t='Compressed'), # uncertainty limit is the same
-  list(h=4, o=2.0,t='Bonang'), # alignment with roughness and periodicity
+  list(h=4, o=2.0,t='Bonang'), # alignment with roughness and Harmonicity
   list(h=5, o=2.0,t='5Partials'), # all signals will agree
   list(h=5, o=2.0,t='5PartialsNo3'), # major minor hypothesis
   list(h=1, o=2.0,t='Pure'), # the cochlear distortion works around the HUP limit
@@ -253,17 +253,17 @@ p = params %>% purrr::map(\(p) {
   
   cat("  \n", description, '\n')
   
-  print(plot_semitone_codi(chords, paste0(p$t, ' (N=', N,' participants) : Consonance-Dissonance: Periodicity + Smoothness'),
+  print(plot_semitone_codi(chords, paste0(p$t, ' (N=', N,' participants) : Consonance-Dissonance: Harmonicity + Smoothness'),
                            goal=experiment,sigma=sigma,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_periodicity_roughness(chords, paste0(p$t, ' (N=', N,' participants) : Consonance: Periodicity & Smoothness'),
+  print(plot_semitone_periodicity_roughness(chords, paste0(p$t, ' (N=', N,' participants) : Consonance: Harmonicity & Smoothness'),
                                             goal=experiment,sigma=sigma,
                                             black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_periodicity_space_time(chords, paste0(p$t, ' (N=', N,' participants) : Periodicity: Place & Time'),
+  print(plot_semitone_periodicity_space_time(chords, paste0(p$t, ' (N=', N,' participants) : Harmonicity: Place & Time'),
                                              goal=experiment,sigma=sigma,
                                              black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
@@ -288,7 +288,7 @@ p = params %>% purrr::map(\(p) {
   print(plot_roughness_periodicity(chords, 
                                    min_semitone=min_semitone,max_semitone=max_semitone,
                                    include_extreme_labels=include_extreme_labels,
-                                   paste0(p$t, ': Smoothness versus Periodicity'), sigma=sigma))
+                                   paste0(p$t, ': Smoothness versus Harmonicity'), sigma=sigma))
   cat("  \n")
   
   par(
@@ -675,7 +675,7 @@ $$
 \lambda_0 = \lambda_{ref} \frac{\mathrm{lcm}(b_1, b_2, \dots, b_N)}{\mathrm{gcd}(a_1, a_2, \dots, a_N)}, \quad \lambda_{ref} = \mathrm{min}(\lambda_1, \lambda_2, \dots, \lambda_N), \quad a_i \perp b_i
 $$
 
-## Stolzenburg Periodicity Perception
+## Stolzenburg Harmonicity Perception
 
 ### Fundamental Cycle Length of a N-Tone Chord
 
@@ -685,13 +685,13 @@ L  = \mathrm{lcm}(b_1,b_2,\dots,b_N)
 \gcd(a_1,\dots,a_N)=1
 $$
 
-### Periodicity: Rational Approximation Cycle Length
+### Harmonicity: Rational Approximation Cycle Length
 
 $$
 P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L_\lambda\bigr) \quad \text{[Proposed Units: Sz]}
 $$
 
-#### Bonang: MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018
+#### Bonang: MaMi.CoDi.Beaty Harmonicity with Harrison & Pearce 2018
 
 We use a simulated Bonang spectrum. Here is an example unison P1 pitch at C4.
 
@@ -732,7 +732,7 @@ cat("  \n")
     consonance_z=z_scores(output)
   )
   
-  print(plot_semitone_periodicity_model_compare(chords, 'Bonang: MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018',
+  print(plot_semitone_periodicity_model_compare(chords, 'Bonang: MaMi.CoDi.Beaty Harmonicity with Harrison & Pearce 2018',
                                              goal=HarrisonPearce2018,model_name='HarrisonPearce2018',
                                              black_vlines=c(),gray_vlines=c()))
   cat("  \n")
@@ -1028,7 +1028,7 @@ We choose $\Lambda_0=1$ to anchor the zero‐point of perception at a single cyc
 
 ## Information-Theoretic Perspective
 
-### Bits of Periodicity as Shannon Information
+### Bits of Harmonicity as Shannon Information
 
 The Stern-Brocot Tree traversals give us many binary encodings:
 
