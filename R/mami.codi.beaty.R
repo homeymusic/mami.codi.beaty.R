@@ -293,7 +293,7 @@ energy_per_cycle <- function(
 # Constants
 
 UNCERTAINTY_LIMIT = 1 / (4 * pi)
-NUMBER_OF_OBSERVATION_PERIODS = 10
+NUMBER_OF_OBSERVATION_PERIODS = 0.10
 
 #' Compute uncertainty
 #'
