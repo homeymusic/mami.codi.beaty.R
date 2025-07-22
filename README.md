@@ -378,7 +378,7 @@ and a minor second (m2).
 | Interval |       f |     ref | Ratio | Uncertainty |
 |:---------|--------:|--------:|------:|------------:|
 | P1       | 261.626 | 261.626 |   1:1 |        1/4π |
-| m2       | 277.183 | 261.626 | 12:11 |        1/4π |
+| m2       | 277.183 | 261.626 | 16:15 |        1/4π |
 
 ## Fundamental Wavelength of a N-Tone Chord
 
