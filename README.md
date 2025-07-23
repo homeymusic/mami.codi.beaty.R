@@ -323,7 +323,9 @@ $$
 0.0796
 $$
 
-![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-7-2.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-7-3.png)<!-- -->
 
 ### Stern–Brocot: Rational Fractions Lowest Terms
 
@@ -386,7 +388,7 @@ $$
 \lambda_0 = \lambda_{ref} \frac{\mathrm{lcm}(b_1, b_2, \dots, b_N)}{\mathrm{gcd}(a_1, a_2, \dots, a_N)}, \quad \lambda_{ref} = \mathrm{min}(\lambda_1, \lambda_2, \dots, \lambda_N), \quad a_i \perp b_i
 $$
 
-## Stolzenburg Periodicity Perception
+## Stolzenburg Harmonicity Perception
 
 ### Fundamental Cycle Length of a N-Tone Chord
 
@@ -396,13 +398,13 @@ L  = \mathrm{lcm}(b_1,b_2,\dots,b_N)
 \gcd(a_1,\dots,a_N)=1
 $$
 
-### Periodicity: Rational Approximation Cycle Length
+### Harmonicity: Rational Approximation Cycle Length
 
 $$
 P_f  = \log_2 \bigl(L_f\bigr) \quad \text{and} \quad P_\lambda  = \log_2 \bigl(L_\lambda\bigr) \quad \text{[Proposed Units: Sz]}
 $$
 
-#### Bonang: MaMi.CoDi.Beaty Periodicity with Harrison & Pearce 2018
+#### Bonang: MaMi.CoDi.Beaty Harmonicity with Harrison & Pearce 2018
 
 We use a simulated Bonang spectrum. Here is an example unison P1 pitch
 at C4.
@@ -675,7 +677,7 @@ cycle.
 
 ## Information-Theoretic Perspective
 
-### Bits of Periodicity as Shannon Information
+### Bits of Harmonicity as Shannon Information
 
 The Stern-Brocot Tree traversals give us many binary encodings:
 
