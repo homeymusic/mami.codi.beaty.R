@@ -161,7 +161,7 @@ p = params %>% purrr::map(\(p) {
     sigma = BEHAVIOURAL_SMOOTH_NARROW
     behavioral_data_available = F
     include_extreme_labels=F
-    title = "Major 6th 10 Harmonics"
+    title = "Minor 6th 10 Harmonics"
   } else if (p$t == 'P1') {
     gray_vlines = c(0.0)
     black_vlines  = c()
@@ -253,22 +253,22 @@ p = params %>% purrr::map(\(p) {
   
   cat("  \n", description, '\n')
   
-  print(plot_semitone_codi(chords, paste0(p$t, ' (N=', N,' participants) : Consonance-Dissonance: Harmonicity + Smoothness'),
+  print(plot_semitone_codi(chords, paste0(p$t, ' (N=', N,' participants) : Consonance: -(Harmonicity + Roughness)'),
                            goal=experiment,sigma=sigma,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_periodicity_roughness(chords, paste0(p$t, ' (N=', N,' participants) : Consonance: Harmonicity & Smoothness'),
+  print(plot_semitone_periodicity_roughness(chords, paste0(p$t, ' (N=', N,' participants) : Consonance: -Harmonicity & -Roughness'),
                                             goal=experiment,sigma=sigma,
                                             black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_periodicity_space_time(chords, paste0(p$t, ' (N=', N,' participants) : Harmonicity: Place & Time'),
+  print(plot_semitone_periodicity_space_time(chords, paste0(p$t, ' (N=', N,' participants) : -Harmonicity: Place & Time'),
                                              goal=experiment,sigma=sigma,
                                              black_vlines=black_vlines,gray_vlines=gray_vlines))
   cat("  \n")
   
-  print(plot_semitone_roughness_space_time(chords,title = paste0(p$t, ' (N=', N,' participants) : Smoothness: Place & Time'),
+  print(plot_semitone_roughness_space_time(chords,title = paste0(p$t, ' (N=', N,' participants) : -Roughness: Place & Time'),
                                           goal=experiment, sigma=sigma,
                                            black_vlines = black_vlines,gray_vlines  = gray_vlines)
   )
@@ -288,7 +288,7 @@ p = params %>% purrr::map(\(p) {
   print(plot_roughness_periodicity(chords, 
                                    min_semitone=min_semitone,max_semitone=max_semitone,
                                    include_extreme_labels=include_extreme_labels,
-                                   paste0(p$t, ': Smoothness versus Harmonicity'), sigma=sigma))
+                                   paste0(p$t, ': -Roughness versus -Harmonicity'), sigma=sigma))
   cat("  \n")
   
   par(
@@ -463,6 +463,11 @@ $$
   coprimer::plot_stern_brocot_tree(sb$depth, sb$path, dark_mode=T)
   cat("  \n")
   
+  coprimer::plot_stern_brocot_tree(3, "RRL", dark_mode=T)
+  cat("  \n")
+  
+  coprimer::plot_stern_brocot_tree(4, "RRLL", dark_mode=T)
+  cat("  \n")
 ```
 
 ### Stern–Brocot: Rational Fractions Lowest Terms

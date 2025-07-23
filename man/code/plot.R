@@ -790,8 +790,8 @@ plot_mami_codi <- function(chords, title = '', sigma = 0.2,
 }
 
 plot_roughness_periodicity <- function(chords, title = '', sigma = 0.2,
-                                       ylab = 'Harmonicity',
-                                       xlab = 'Roughness',
+                                       ylab = '-Harmonicity',
+                                       xlab = '-Roughness',
                                        min_semitone=0,max_semitone=12,
                                        include_extreme_labels = T) {
 
@@ -1094,7 +1094,7 @@ plot_semitone_error_sum_space_time  <- function(chords, title='', include_line=T
 plot_semitone_periodicity_space_time <- function(chords, title='',  sigma=0.2,
                                                  black_vlines=c(),gray_vlines=c(),goal=NULL,
                                                  xlab='Semitone',
-                                                 ylab='-Periodicity (Z-Score)') {
+                                                 ylab='-Harmonicity (Z-Score)') {
 
   chords$smoothed_periodicity  = smoothed(chords$semitone,
                                           chords$periodicity_z,

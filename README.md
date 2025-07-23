@@ -323,7 +323,9 @@ $$
 0.0796
 $$
 
-![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-7-2.png)<!-- -->  
+![](man/figures/README-unnamed-chunk-7-3.png)<!-- -->
 
 ### Stern–Brocot: Rational Fractions Lowest Terms
 
