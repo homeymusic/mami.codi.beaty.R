@@ -124,7 +124,7 @@ experiment.rds = './man/data/input/Stretched.rds'
 grid_10_extra_stretched = tidyr::expand_grid(
   interval = readRDS(experiment.rds)$profile$interval,
   num_harmonics = 10,
-  pseudo_octave = 2.2,
+  pseudo_octave = 2.64,
   timbre = 'ExtraStretched'
 )
 
@@ -133,7 +133,7 @@ experiment.rds = './man/data/input/Compressed.rds'
 grid_10_extra_compressed = tidyr::expand_grid(
   interval = readRDS(experiment.rds)$profile$interval,
   num_harmonics=10,
-  pseudo_octave=1.87,
+  pseudo_octave=1.52,
   timbre = 'ExtraCompressed'
 )
 

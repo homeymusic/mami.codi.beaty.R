@@ -150,8 +150,7 @@ MaMi.CoDi.Beaty: A Model of Harmony Perception
 
 ##### ExtraStretched ~ Partials: 10
 
-Thus, 2.2 is stretched a bit too far, and … (Sethares)
-![](man/figures/README-unnamed-chunk-4-105.png)<!-- -->  
+p= 2.64 ![](man/figures/README-unnamed-chunk-4-105.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-106.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-107.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-108.png)<!-- -->  
@@ -162,8 +161,7 @@ Thus, 2.2 is stretched a bit too far, and … (Sethares)
 
 ##### ExtraCompressed ~ Partials: 10
 
-… 1.87 is squished a bit too much. (Sethares)
-![](man/figures/README-unnamed-chunk-4-113.png)<!-- -->  
+p= 1.52 ![](man/figures/README-unnamed-chunk-4-113.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-114.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-115.png)<!-- -->  
 ![](man/figures/README-unnamed-chunk-4-116.png)<!-- -->  
