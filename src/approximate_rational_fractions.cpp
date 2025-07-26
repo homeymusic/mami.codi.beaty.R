@@ -287,7 +287,7 @@ Rcpp::DataFrame compute_cubic_distortion_products(
   if (amplitude.size() != n)
     Rcpp::stop("frequency and amplitude must have the same length");
 
-  double minFreq  = Rcpp::min(frequency);
+  const double minFreq = min(frequency);
   const int maxPairs = n * (n - 1) / 2;
   std::vector<double> outFreqs;  outFreqs.reserve(maxPairs);
   std::vector<double> outAmps;   outAmps.reserve(maxPairs);
@@ -316,10 +316,10 @@ Rcpp::DataFrame compute_cubic_distortion_products(
 
       // Amplitude: (3/4)·α·A_low²·A_high
       const double A_dp = 0.75 * alpha * A_low * A_low * A_high;
-      if (A_dp <= 0.0)
+      if (A_dp <= 0.0 +  1e-12)
         continue;
 
-      if ((f_high - f_low) < minFreq) {
+      if ((f_high - f_low) < (minFreq - 1e-12)) {
         outFreqs.push_back(lower_cubic);
         outAmps .push_back(A_dp);
       }
