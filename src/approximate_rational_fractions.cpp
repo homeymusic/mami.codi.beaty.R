@@ -263,69 +263,76 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
    return df;
  }
 
- //' Compute cubic distortion products (2 f_low − f_high)
- //'
- //' For each unordered pair of input frequencies, compute the single
- //' lower‐order distortion product at 2 f_low − f_high.
- //'
- //' @param frequency NumericVector of input frequencies
- //' @param amplitude NumericVector of input amplitudes (same length)
- //' @return DataFrame with columns `frequency` (the DP) and `amplitude`
- //' @export
- // [[Rcpp::export]]
- DataFrame compute_cubic_distortion_products(
-     NumericVector& frequency,
-     NumericVector& amplitude
- ) {
-   int n = frequency.size();
-   if (n < 2) {
-     return DataFrame::create(
-       _["frequency"] = NumericVector(),
-       _["amplitude"] = NumericVector()
-     );
-   }
+// Compute cubic distortion products (2 f_low − f_high)
+// For each unordered pair of input frequencies, compute the single
+// lower‐order distortion product at 2 f_low − f_high,
+// using the standard cubic‐nonlinearity amplitude formula.
+//
+// @param frequency NumericVector of input frequencies
+// @param amplitude NumericVector of input amplitudes (same length)
+// @return DataFrame with columns `frequency` (the DP) and `amplitude`
+// @export
+// [[Rcpp::export]]
+DataFrame compute_cubic_distortion_products(
+    NumericVector& frequency,
+    NumericVector& amplitude
+) {
+  int n = frequency.size();
+  if (n < 2) {
+    return DataFrame::create(
+      _["frequency"] = NumericVector(),
+      _["amplitude"] = NumericVector()
+    );
+  }
 
-   double minFreq    = Rcpp::min(frequency);
-   int    maxPairs   = (n * (n - 1) / 2);
-   NumericVector outFreqs(maxPairs), outAmps(maxPairs);
-   int count = 0;
+  // Find the minimum primary frequency
+  double minFreq  = Rcpp::min(frequency);
+  int    maxPairs = (n * (n - 1) / 2);
+  NumericVector outFreqs(maxPairs), outAmps(maxPairs);
+  int count = 0;
 
-   constexpr double ABS_TOL = 1e-15;
-   double eps = std::numeric_limits<double>::epsilon();
+  // Tolerance settings
+  constexpr double ABS_TOL = 1e-15;
+  double eps = std::numeric_limits<double>::epsilon();
 
-   for (int i = 0; i < n; ++i) {
-     double fi = frequency[i];
-     for (int j = i + 1; j < n; ++j) {
-       double fj   = frequency[j];
-       double Aj   = amplitude[j];
+  for (int i = 0; i < n; ++i) {
+    double fi = frequency[i];
+    double Ai = amplitude[i];
+    for (int j = i + 1; j < n; ++j) {
+      double fj = frequency[j];
+      double Aj = amplitude[j];
 
-       // sort into low/high
-       double f_low  = std::min(fi, fj);
-       double f_high = std::max(fi, fj);
+      // Sort into low/high both in frequency and amplitude
+      double f_low   = std::min(fi,   fj);
+      double f_high  = std::max(fi,   fj);
+      double A_low   = std::min(Ai,   Aj);
+      double A_high  = std::max(Ai,   Aj);
 
-       double diff = f_high - f_low;
-       double tol  = std::max(ABS_TOL, eps * f_high);
-       if (diff < minFreq) {
-         double lower_cubic = 2.0 * f_low - f_high;
-         if (lower_cubic > tol) {
-           outFreqs[count] = lower_cubic;
-           outAmps [count] = Aj * 0.1;
-           ++count;
-         }
-       }
-     }
-   }
+      // Only consider distortion products within the cochlear range
+      double diff = f_high - f_low;
+      double tol  = std::max(ABS_TOL, eps * f_high);
+      if (diff < minFreq) {
+        double lower_cubic = 2.0 * f_low - f_high;
+        if (lower_cubic > tol) {
+          outFreqs[count] = lower_cubic;
+          // Use the 3/4·A_low²·A_high amplitude for cubic DP
+          outAmps[count]  = 0.75 * A_low * A_low * A_high;
+          ++count;
+        }
+      }
+    }
+  }
 
-   // trim to actual size
-   NumericVector freqOut = (count > 0)
-     ? outFreqs[ Range(0, count - 1) ]
-   : NumericVector();
-   NumericVector ampOut  = (count > 0)
-     ? outAmps [ Range(0, count - 1) ]
-   : NumericVector();
+  // Trim to actual size
+  NumericVector freqOut = (count > 0)
+    ? outFreqs[ Range(0, count - 1) ]
+  : NumericVector();
+  NumericVector ampOut  = (count > 0)
+    ? outAmps[  Range(0, count - 1) ]
+  : NumericVector();
 
-   return DataFrame::create(
-     _["frequency"] = freqOut,
-     _["amplitude"] = ampOut
-   );
- }
+  return DataFrame::create(
+    _["frequency"] = freqOut,
+    _["amplitude"] = ampOut
+  );
+}

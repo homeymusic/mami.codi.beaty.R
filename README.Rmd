@@ -303,6 +303,7 @@ p = params %>% purrr::map(\(p) {
   plot(chords$source_spectrum[[1]])
   title(paste(title, "Stimulus Spectrum"))
   cat("  \n")
+  
 })
 ```
 
@@ -936,6 +937,32 @@ For all combinations of $f$ partials, we added the cubic distortion products to 
 $$
 2 f_{low} - f_{high}, \quad \text{where} \quad (f_{high} - f_{low}) < f_{min}
 $$
+### Pure Tone Spectra With and Without OAE
+
+```{r, fig.height=8, fig.width=12, echo=F, results='asis', message=F}
+par(
+  bg       = "black",
+  fg       = "white",
+  col      = "white",
+  col.axis = "white",
+  col.lab  = "white",
+  col.main = "white",
+  col.sub  = "white"
+)
+
+m2 = mami.codi.beaty(c(60,61), num_harmonics=1, verbose=T)
+
+plot(m2$source_spectrum[[1]],
+     xlim = c(240, 280))
+title("Pure Tone Minor Second Stimulus Spectrum")
+cat("  \n")
+
+plot(m2$frequency_spectrum[[1]] %>% sparse_fr_spectrum_from_frequency_spectrum(),
+     xlim = c(240, 280))
+title("Pure Tone Minor Second Stimulus + OAE Spectrum")
+cat("  \n")
+
+```
 
 
 # Appendix A: Relative Wavelength Uncertainty

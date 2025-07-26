@@ -143,6 +143,13 @@ sparse_fr_spectrum_from_wavelength_spectrum <- function(x) {
   ))
 }
 
+sparse_fr_spectrum_from_frequency_spectrum <- function(x) {
+  hrep::sparse_fr_spectrum(list(
+    frequency = x$frequency,
+    amplitude = x$amplitude
+  ))
+}
+
 wavelength_spectrum_from_sparse_fr_spectrum <- function(x) {
   tibble::tibble(
     wavelength = SPEED_OF_SOUND / x$x,
