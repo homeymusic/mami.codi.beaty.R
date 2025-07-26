@@ -243,11 +243,11 @@ compute_harmony_perception <- function(x) {
     time_periodicity  = .data$time_cycle_length,   # temporal extent
     periodicity       = .data$space_periodicity + .data$time_periodicity,
 
-    space_dissonance  = .data$space_roughness + .data$space_periodicity, # spatial  energy
-    time_dissonance   = .data$time_roughness  + .data$time_periodicity,  # temporal energy
+    space_dissonance  = log2(.data$space_roughness + .data$space_periodicity), # spatial  energy
+    time_dissonance   = log2(.data$time_roughness  + .data$time_periodicity),  # temporal energy
 
-    dissonance        = log2(.data$space_dissonance + .data$time_dissonance),
-    majorness         = log2(1 + abs(.data$space_dissonance - .data$time_dissonance)) * sign(.data$space_dissonance - .data$time_dissonance)
+    dissonance        = .data$space_dissonance + .data$time_dissonance,
+    majorness         = .data$space_dissonance - .data$time_dissonance
 
   )
 
