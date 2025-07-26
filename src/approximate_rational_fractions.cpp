@@ -273,66 +273,61 @@ DataFrame rational_fraction_dataframe(const IntegerVector &nums,
 // @return DataFrame with columns `frequency` (the DP) and `amplitude`
 // @export
 // [[Rcpp::export]]
-DataFrame compute_cubic_distortion_products(
-    NumericVector& frequency,
-    NumericVector& amplitude
+Rcpp::DataFrame compute_cubic_distortion_products(
+    const Rcpp::NumericVector& frequency,
+    const Rcpp::NumericVector& amplitude,
+    double alpha = 1.0               // cubic coefficient in linear units
 ) {
-  int n = frequency.size();
-  if (n < 2) {
-    return DataFrame::create(
-      _["frequency"] = NumericVector(),
-      _["amplitude"] = NumericVector()
-    );
-  }
+  const int n = frequency.size();
+  if (n < 2)
+    return Rcpp::DataFrame::create(
+      Rcpp::_["frequency"] = Rcpp::NumericVector(),
+      Rcpp::_["amplitude"] = Rcpp::NumericVector());
 
-  // Find the minimum primary frequency
+  if (amplitude.size() != n)
+    Rcpp::stop("frequency and amplitude must have the same length");
+
   double minFreq  = Rcpp::min(frequency);
-  int    maxPairs = (n * (n - 1) / 2);
-  NumericVector outFreqs(maxPairs), outAmps(maxPairs);
-  int count = 0;
+  const int maxPairs = n * (n - 1) / 2;
+  std::vector<double> outFreqs;  outFreqs.reserve(maxPairs);
+  std::vector<double> outAmps;   outAmps.reserve(maxPairs);
 
-  // Tolerance settings
   constexpr double ABS_TOL = 1e-15;
-  double eps = std::numeric_limits<double>::epsilon();
 
-  for (int i = 0; i < n; ++i) {
-    double fi = frequency[i];
-    double Ai = amplitude[i];
+  for (int i = 0; i < n - 1; ++i) {
+    const double fi = frequency[i];
+    const double Ai = amplitude[i];
+
     for (int j = i + 1; j < n; ++j) {
-      double fj = frequency[j];
-      double Aj = amplitude[j];
+      const double fj = frequency[j];
+      const double Aj = amplitude[j];
 
-      // Sort into low/high both in frequency and amplitude
-      double f_low   = std::min(fi,   fj);
-      double f_high  = std::max(fi,   fj);
-      double A_low   = std::min(Ai,   Aj);
-      double A_high  = std::max(Ai,   Aj);
+      // Determine low/high indices by frequency **only**
+      const bool      lowIsI  = (fi <= fj);
+      const double    f_low   =  lowIsI ? fi : fj;
+      const double    f_high  =  lowIsI ? fj : fi;
+      const double    A_low   =  lowIsI ? Ai : Aj;
+      const double    A_high  =  lowIsI ? Aj : Ai;
 
-      // Only consider distortion products within the cochlear range
-      double diff = f_high - f_low;
-      double tol  = std::max(ABS_TOL, eps * f_high);
-      if (diff < minFreq) {
-        double lower_cubic = 2.0 * f_low - f_high;
-        if (lower_cubic > tol) {
-          outFreqs[count] = lower_cubic;
-          // Use the 3/4·A_low²·A_high amplitude for cubic DP
-          outAmps[count]  = 0.75 * A_low * A_low * A_high;
-          ++count;
-        }
+      // Lower cubic product: 2·f_low − f_high
+      const double lower_cubic = 2.0 * f_low - f_high;
+      if (lower_cubic <= ABS_TOL)  // keep positive frequencies only
+        continue;
+
+      // Amplitude: (3/4)·α·A_low²·A_high
+      const double A_dp = 0.75 * alpha * A_low * A_low * A_high;
+      if (A_dp <= 0.0)
+        continue;
+
+      if ((f_high - f_low) < minFreq) {
+        outFreqs.push_back(lower_cubic);
+        outAmps .push_back(A_dp);
       }
     }
   }
 
-  // Trim to actual size
-  NumericVector freqOut = (count > 0)
-    ? outFreqs[ Range(0, count - 1) ]
-  : NumericVector();
-  NumericVector ampOut  = (count > 0)
-    ? outAmps[  Range(0, count - 1) ]
-  : NumericVector();
-
-  return DataFrame::create(
-    _["frequency"] = freqOut,
-    _["amplitude"] = ampOut
-  );
+  // Wrap vectors once into Rcpp objects
+  return Rcpp::DataFrame::create(
+    Rcpp::_["frequency"] = Rcpp::NumericVector(outFreqs.begin(), outFreqs.end()),
+    Rcpp::_["amplitude"] = Rcpp::NumericVector(outAmps .begin(), outAmps .end()));
 }
