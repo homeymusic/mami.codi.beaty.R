@@ -253,6 +253,8 @@ p = params %>% purrr::map(\(p) {
   
   cat("  \n", description, '\n')
   
+    p$t = paste("Sethares (1993) ~ OAEs: YES ~ ", p$t)
+  
   print(plot_semitone_codi(chords, paste0(p$t, ' (N=', N,' participants) : Consonance: -(Harmonicity + Roughness)'),
                            goal=experiment,sigma=sigma,
                            black_vlines=black_vlines,gray_vlines=gray_vlines))
