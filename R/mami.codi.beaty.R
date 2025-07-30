@@ -157,8 +157,7 @@ compute_time_cycles <- function(
 ) {
 
   frequency_spectrum = validate_combine_spectra(
-    x$stimulus_frequency_spectrum[[1]],
-    x$cubic_distortion_frequency_spectrum[[1]]
+    x$stimulus_frequency_spectrum[[1]]
   )
 
   f_min <- min(x$stimulus_frequency_spectrum[[1]]$frequency)
